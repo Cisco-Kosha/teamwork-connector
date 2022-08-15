@@ -67,7 +67,7 @@ func GetAllProjects(url string, username string, password string, params url.Val
 
 func GetSingleProject(url string, id string, username string, password string, params url.Values) *models.SingleProject {
 
-	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/" + id + ".json", nil)
+	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/"+id+".json", nil)
 
 	if err != nil {
 		return nil
@@ -84,7 +84,7 @@ func GetSingleProject(url string, id string, username string, password string, p
 }
 
 func GetProjectTaskLists(url string, id string, username string, password string, params url.Values) *models.MultiTaskList {
-	req, err := http.NewRequest("GET", url+"projects/" + id + "/tasklists.json", nil)
+	req, err := http.NewRequest("GET", url+"projects/"+id+"/tasklists.json", nil)
 
 	if err != nil {
 		return nil
@@ -101,7 +101,7 @@ func GetProjectTaskLists(url string, id string, username string, password string
 }
 
 func GetTasks(url string, id string, username string, password string, params url.Values) *models.Tasks {
-	req, err := http.NewRequest("GET", url+"tasklists/" + id + "/tasks.json", nil)
+	req, err := http.NewRequest("GET", url+"tasklists/"+id+"/tasks.json", nil)
 
 	if err != nil {
 		return nil
@@ -153,14 +153,14 @@ func CreateTaskList(url string, id string, username string, password string, tas
 	if err != nil {
 		return "", err
 	}
-	req, err := http.NewRequest("POST", url+"projects/" + id + "/tasklists.json", bytes.NewBuffer(jsonReq))
+	req, err := http.NewRequest("POST", url+"projects/"+id+"/tasklists.json", bytes.NewBuffer(jsonReq))
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil
 }
 
 func RemoveProject(url string, id string, username string, password string, params url.Values) (string, error) {
-	req, err := http.NewRequest(http.MethodDelete, url+"/projects/" + id + ".json", nil)
+	req, err := http.NewRequest(http.MethodDelete, url+"/projects/"+id+".json", nil)
 	if err != nil {
 		return "", err
 	}
@@ -170,7 +170,7 @@ func RemoveProject(url string, id string, username string, password string, para
 }
 
 func RemoveTaskList(url string, id string, username string, password string, params url.Values) (string, error) {
-	req, err := http.NewRequest(http.MethodDelete, url+"/tasklists/" + id + ".json", nil)
+	req, err := http.NewRequest(http.MethodDelete, url+"/tasklists/"+id+".json", nil)
 	if err != nil {
 		return "", err
 	}
@@ -178,4 +178,3 @@ func RemoveTaskList(url string, id string, username string, password string, par
 	res := makeHttpReq(username, password, req, params)
 	return string(res), nil
 }
-

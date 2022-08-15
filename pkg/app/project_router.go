@@ -25,7 +25,7 @@ func (a *App) getAllProjects(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
 	p := httpclient.GetAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
-	
+
 	respondWithJSON(w, http.StatusOK, p)
 }
 
@@ -129,14 +129,14 @@ func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
 // @Router /api/v1/projects/activity [get]
 func (a *App) getLatestActivityAllProjects(w http.ResponseWriter, r *http.Request) {
 
-		//Allow CORS here By * or specific origin
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Headers", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "*")
-		
-		p := httpclient.GetLatestActivityAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
-		
-		respondWithJSON(w, http.StatusOK, p)
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	p := httpclient.GetLatestActivityAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+
+	respondWithJSON(w, http.StatusOK, p)
 }
 
 // getProjectTasklists godoc
@@ -164,7 +164,6 @@ func (a *App) getProjectTasklists(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, p)
 }
 
-
 // createTaskList godoc
 // @Summary Create new tasklist
 // @Description Create single tasklist in the system
@@ -173,7 +172,7 @@ func (a *App) getProjectTasklists(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param tasklist body models.NewTaskList false "Enter tasklist properties"
-// @Success 200 
+// @Success 200
 // @Router /api/v1/projects/{id}/tasklists [post]
 func (a *App) createTaskList(w http.ResponseWriter, r *http.Request) {
 

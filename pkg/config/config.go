@@ -6,9 +6,9 @@ import (
 )
 
 type Config struct {
-	username     string
-	password     string
-	domainName   string
+	username   string
+	password   string
+	domainName string
 }
 
 func Get() *Config {
