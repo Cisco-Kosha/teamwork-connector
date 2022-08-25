@@ -1,5 +1,9 @@
 package models
 
+type ProjectsTasklists struct {
+	Tasklists []Tasklist
+}
+
 type MultiTaskList struct {
 	Status    string     `json:"STATUS,omitempty"`
 	Tasklists []Tasklist `json:"tasklists,omitempty"`

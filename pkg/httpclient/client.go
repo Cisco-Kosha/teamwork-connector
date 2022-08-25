@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	// "strconv"
+	// "fmt"
 )
 
 func basicAuth(username string, password string) string {
@@ -178,3 +180,82 @@ func RemoveTaskList(url string, id string, username string, password string, par
 	res := makeHttpReq(username, password, req, params)
 	return string(res), nil
 }
+
+func GetSinglePerson(url string, id string, username string, password string, params url.Values) *models.SinglePerson {
+
+	req, err := http.NewRequest("GET", url+"people/"+id+".json", nil)
+
+	if err != nil {
+		return nil
+	}
+	var person *models.SinglePerson
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &person)
+	if err != nil {
+		return nil
+	}
+	return person
+}
+
+func GetCurrentPerson(url string, username string, password string, params url.Values) *models.SinglePerson {
+
+	req, err := http.NewRequest("GET", url+"me.json", nil)
+
+	if err != nil {
+		return nil
+	}
+	var person *models.SinglePerson
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &person)
+	if err != nil {
+		return nil
+	}
+	return person
+}
+
+func GetPeople(url string, id string, username string, password string, params url.Values) *models.People {
+
+	currentPerson := GetCurrentPerson(url, username, password, nil)
+	companyId := currentPerson.Person.CompanyId
+
+	req, err := http.NewRequest("GET", url+"companies/"+companyId+"/people.json", nil)
+
+	if err != nil {
+		return nil
+	}
+	var people *models.People
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &people)
+	if err != nil {
+		return nil
+	}
+	return people
+}
+
+func GetPersonsProjects(url string, id string, username string, password string, params url.Values) *models.MultiProject {
+
+	customParams := make(map[string][]string)
+	customParams["fields[users]"] = append(customParams["fields[users]"], id)
+	projects := GetAllProjects(url, username, password, customParams)
+	return projects
+}
+
+// func GetPersonsTasks(url string, id string, username string, password string, params url.Values) *models.Tasks {
+
+// 	projects := GetPersonsProjects(url, id, username, password, params)
+// 	var tasklists []*models.MultiTaskList
+// 	for _, p := range projects.Projects {
+// 		fmt.Println(strconv.Itoa(p.ID))
+// 		projectTasklists := GetProjectTaskLists(url, string(p.ID), username, password, params)
+// 		fmt.Println(projectTasklists)
+// 		tasklists = append(tasklists, projectTasklists) 
+// 	}
+// 	fmt.Println(tasklists)
+// 	return nil
+// }
