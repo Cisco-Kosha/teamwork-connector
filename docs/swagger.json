@@ -13,6 +13,122 @@
     "host": "localhost:8015",
     "basePath": "/",
     "paths": {
+        "/api/v1/me": {
+            "get": {
+                "description": "Get current person's details\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/de01076fde3a5-get-current-user-details for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "people"
+                ],
+                "summary": "Get current person's details",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SinglePerson"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/people": {
+            "get": {
+                "description": "Get a list of all people in the current user's company.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "people"
+                ],
+                "summary": "Get all people from current user's company.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter company id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.People"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/people/{id}": {
+            "get": {
+                "description": "Get specific persons' details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "people"
+                ],
+                "summary": "Get specific person",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter person id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SinglePerson"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/people/{id}/projects": {
+            "get": {
+                "description": "List projects for specified person",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "people"
+                ],
+                "summary": "List projects for specified person",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter person id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.MultiProject"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/projects": {
             "get": {
                 "description": "List all projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/df7d06840ecdd-returns-a-list-of-projects for more parameter options.",
@@ -255,6 +371,29 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.SingleAccount"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/stats/person/{id}": {
+            "get": {
+                "description": "Get statistics for a particular person id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "people"
+                ],
+                "summary": "Get statistics for a particular person",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.OverallPerson"
                         }
                     }
                 }
@@ -552,6 +691,23 @@
                 }
             }
         },
+        "models.MinimalPerson": {
+            "type": "object",
+            "properties": {
+                "companyId": {
+                    "type": "string"
+                },
+                "deleted": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "models.MultiActivity": {
             "type": "object",
             "properties": {
@@ -608,6 +764,158 @@
                 },
                 "todo-list": {
                     "$ref": "#/definitions/models.ToDoList"
+                }
+            }
+        },
+        "models.OverallPerson": {
+            "type": "object",
+            "properties": {
+                "permissions": {
+                    "$ref": "#/definitions/models.Permissions"
+                },
+                "person": {
+                    "$ref": "#/definitions/models.Person"
+                },
+                "projects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Project"
+                    }
+                }
+            }
+        },
+        "models.People": {
+            "type": "object",
+            "properties": {
+                "STATUS": {
+                    "type": "string"
+                },
+                "people": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.MinimalPerson"
+                    }
+                }
+            }
+        },
+        "models.Permissions": {
+            "type": "object",
+            "properties": {
+                "can-access-templates": {
+                    "type": "boolean"
+                },
+                "can-add-projects": {
+                    "type": "boolean"
+                },
+                "can-manage-people": {
+                    "type": "boolean"
+                },
+                "canAccessCalendar": {
+                    "type": "boolean"
+                },
+                "canManageCustomFields": {
+                    "type": "boolean"
+                },
+                "canManageProjectTemplates": {
+                    "type": "boolean"
+                },
+                "canViewProjectTemplates": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.Person": {
+            "type": "object",
+            "properties": {
+                "administrator": {
+                    "type": "boolean"
+                },
+                "company-name": {
+                    "type": "string"
+                },
+                "companyId": {
+                    "type": "string"
+                },
+                "created-at": {
+                    "type": "string"
+                },
+                "deleted": {
+                    "type": "boolean"
+                },
+                "email-address": {
+                    "type": "string"
+                },
+                "first-name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "im-handle": {
+                    "type": "string"
+                },
+                "im-service": {
+                    "type": "string"
+                },
+                "last-login": {
+                    "type": "string"
+                },
+                "last-name": {
+                    "type": "string"
+                },
+                "lengthOfDay": {
+                    "type": "string"
+                },
+                "marketoId": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "$ref": "#/definitions/models.Permissions"
+                },
+                "phone-number-home": {
+                    "type": "string"
+                },
+                "phone-number-mobile": {
+                    "type": "string"
+                },
+                "phone-number-office": {
+                    "type": "string"
+                },
+                "phone-number-office-ext": {
+                    "type": "string"
+                },
+                "pid": {
+                    "type": "string"
+                },
+                "private-notes": {
+                    "type": "string"
+                },
+                "private-notes-text": {
+                    "type": "string"
+                },
+                "profile": {
+                    "type": "string"
+                },
+                "profile-text": {
+                    "type": "string"
+                },
+                "site-owner": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "twoFactorAuthEnabled": {
+                    "type": "boolean"
+                },
+                "user-name": {
+                    "type": "string"
+                },
+                "user-type": {
+                    "type": "string"
+                },
+                "userUUID": {
+                    "type": "string"
                 }
             }
         },
@@ -909,6 +1217,17 @@
                 },
                 "account": {
                     "$ref": "#/definitions/models.Account"
+                }
+            }
+        },
+        "models.SinglePerson": {
+            "type": "object",
+            "properties": {
+                "STATUS": {
+                    "type": "string"
+                },
+                "person": {
+                    "$ref": "#/definitions/models.Person"
                 }
             }
         },
