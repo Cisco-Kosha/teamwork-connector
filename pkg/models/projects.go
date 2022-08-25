@@ -12,22 +12,6 @@ type SingleProject struct {
 	Included ProjectIncluded `json:"included,omitempty"`
 }
 
-type MultiMinimalProject struct {
-	Projects []MinimalProject       `json:"projects,omitempty"`
-	Metadata Meta            `json:"meta,omitempty"`
-	Included ProjectIncluded `json:"included,omitempty"`
-}
-
-type MinimalProject struct {
-	Name                        string         `json:"name,omitempty"`
-	Description              string         `json:"description,omitempty"`
-	ID                       int            `json:"id,omitempty"`
-	Type                        string         `json:"type,omitempty"`
-	UpdatedAt                   string         `json:"updatedAt,omitempty"`
-	OwnedBy                     int            `json:"ownedBy,omitempty"`
-	FinancialBudget          Relationship   `json:"financialBudgetRelationship,omitempty"`
-}
-
 type Project struct {
 	ActivePages struct {
 		Billing      bool `json:"billing,omitempty"`

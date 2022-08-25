@@ -153,17 +153,6 @@ definitions:
       pageSize:
         type: integer
     type: object
-  models.MinimalPerson:
-    properties:
-      companyId:
-        type: string
-      deleted:
-        type: boolean
-      id:
-        type: string
-      title:
-        type: string
-    type: object
   models.MultiActivity:
     properties:
       activities:
@@ -201,106 +190,6 @@ definitions:
         type: boolean
       todo-list:
         $ref: '#/definitions/models.ToDoList'
-    type: object
-  models.OverallPerson:
-    properties:
-      permissions:
-        $ref: '#/definitions/models.Permissions'
-      person:
-        $ref: '#/definitions/models.Person'
-      projects:
-        items:
-          $ref: '#/definitions/models.Project'
-        type: array
-    type: object
-  models.People:
-    properties:
-      STATUS:
-        type: string
-      people:
-        items:
-          $ref: '#/definitions/models.MinimalPerson'
-        type: array
-    type: object
-  models.Permissions:
-    properties:
-      can-access-templates:
-        type: boolean
-      can-add-projects:
-        type: boolean
-      can-manage-people:
-        type: boolean
-      canAccessCalendar:
-        type: boolean
-      canManageCustomFields:
-        type: boolean
-      canManageProjectTemplates:
-        type: boolean
-      canViewProjectTemplates:
-        type: boolean
-    type: object
-  models.Person:
-    properties:
-      administrator:
-        type: boolean
-      company-name:
-        type: string
-      companyId:
-        type: string
-      created-at:
-        type: string
-      deleted:
-        type: boolean
-      email-address:
-        type: string
-      first-name:
-        type: string
-      id:
-        type: string
-      im-handle:
-        type: string
-      im-service:
-        type: string
-      last-login:
-        type: string
-      last-name:
-        type: string
-      lengthOfDay:
-        type: string
-      marketoId:
-        type: string
-      permissions:
-        $ref: '#/definitions/models.Permissions'
-      phone-number-home:
-        type: string
-      phone-number-mobile:
-        type: string
-      phone-number-office:
-        type: string
-      phone-number-office-ext:
-        type: string
-      pid:
-        type: string
-      private-notes:
-        type: string
-      private-notes-text:
-        type: string
-      profile:
-        type: string
-      profile-text:
-        type: string
-      site-owner:
-        type: boolean
-      title:
-        type: string
-      twoFactorAuthEnabled:
-        type: boolean
-      user-name:
-        type: string
-      user-type:
-        type: string
-      userUUID:
-        type: string
     type: object
   models.Project:
     properties:
@@ -504,13 +393,6 @@ definitions:
         type: string
       account:
         $ref: '#/definitions/models.Account'
-    type: object
-  models.SinglePerson:
-    properties:
-      STATUS:
-        type: string
-      person:
-        $ref: '#/definitions/models.Person'
     type: object
   models.SingleProject:
     properties:
@@ -755,83 +637,6 @@ info:
   title: Teamwork Connector API
   version: "1.0"
 paths:
-  /api/v1/me:
-    get:
-      consumes:
-      - application/json
-      description: |-
-        Get current person's details
-        Please refer to https://apidocs.teamwork.com/docs/teamwork/de01076fde3a5-get-current-user-details for more parameter options.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.SinglePerson'
-      summary: Get current person's details
-      tags:
-      - people
-  /api/v1/people:
-    get:
-      consumes:
-      - application/json
-      description: Get a list of all people in the current user's company.
-      parameters:
-      - description: Enter company id
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.People'
-      summary: Get all people from current user's company.
-      tags:
-      - people
-  /api/v1/people/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get specific persons' details
-      parameters:
-      - description: Enter person id
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.SinglePerson'
-      summary: Get specific person
-      tags:
-      - people
-  /api/v1/people/{id}/projects:
-    get:
-      consumes:
-      - application/json
-      description: List projects for specified person
-      parameters:
-      - description: Enter person id
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.MultiProject'
-      summary: List projects for specified person
-      tags:
-      - people
   /api/v1/projects:
     get:
       consumes:
@@ -1006,21 +811,6 @@ paths:
       summary: Test auth against the specification
       tags:
       - specification
-  /api/v1/stats/person/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get statistics for a particular person id
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.OverallPerson'
-      summary: Get statistics for a particular person
-      tags:
-      - people
   /api/v1/tasklists/{id}:
     delete:
       consumes:
