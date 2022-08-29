@@ -376,7 +376,7 @@
                 }
             }
         },
-        "/api/v1/stats/person/{id}": {
+        "/api/v1/stats/people/{id}": {
             "get": {
                 "description": "Get statistics for a particular person id",
                 "consumes": [
@@ -389,6 +389,14 @@
                     "people"
                 ],
                 "summary": "Get statistics for a particular person",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter person id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

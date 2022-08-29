@@ -358,8 +358,19 @@
         "summary": "Test auth against the specification"
       }
     },
-    "/api/v1/stats/person/{id}": {
+    "/api/v1/stats/people/{id}": {
       "get": {
+        "parameters": [
+          {
+            "description": "Enter person id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {

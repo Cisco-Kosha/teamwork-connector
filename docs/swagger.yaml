@@ -1006,11 +1006,16 @@ paths:
       summary: Test auth against the specification
       tags:
       - specification
-  /api/v1/stats/person/{id}:
+  /api/v1/stats/people/{id}:
     get:
       consumes:
       - application/json
       description: Get statistics for a particular person id
+      parameters:
+      - description: Enter person id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:

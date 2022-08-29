@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Param id path string false "Enter person id"
 // @Success 200 {object} models.OverallPerson
-// @Router /api/v1/stats/person/{id} [get]
+// @Router /api/v1/stats/people/{id} [get]
 func (a *App) getStatsForPerson(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
