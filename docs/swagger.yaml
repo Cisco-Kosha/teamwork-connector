@@ -120,6 +120,21 @@ definitions:
       projects: {}
       users: {}
     type: object
+  models.CreateRisk:
+    properties:
+      risk:
+        $ref: '#/definitions/models.Risk'
+    type: object
+  models.CreateTimeEntry:
+    properties:
+      time-entry:
+        $ref: '#/definitions/models.TimeEntry'
+    type: object
+  models.CreatedTimeEntry:
+    properties:
+      status:
+        type: string
+    type: object
   models.IntegrationsMeta:
     properties:
       account:
@@ -489,6 +504,13 @@ definitions:
       tags: {}
       users: {}
     type: object
+  models.ProjectUpdate:
+    properties:
+      notifyIds:
+        type: string
+      update:
+        $ref: '#/definitions/models.Update'
+    type: object
   models.Relationship:
     properties:
       id:
@@ -497,6 +519,155 @@ definitions:
         $ref: '#/definitions/models.Meta'
       type:
         type: string
+    type: object
+  models.ReturnedRisks:
+    properties:
+      included: {}
+      meta: {}
+      risks:
+        items:
+          $ref: '#/definitions/models.Risks'
+        type: array
+    type: object
+  models.ReturnedTimeEntries:
+    properties:
+      STATUS:
+        type: string
+      time-entries:
+        items:
+          $ref: '#/definitions/models.ReturnedTimeEntryObject'
+        type: array
+    type: object
+  models.ReturnedTimeEntryObject:
+    properties:
+      company-id:
+        description: |-
+          TicketId string `json:"ticket-id,omitempty"`
+          CreatedAt string `json:"createdAt,omitempty"`
+          TaskIsPrivate string `json:"taskIsPrivate,omitempty"`
+          ParentTaskId string `json:"parentTaskId,omitempty"`
+        type: string
+      company-name:
+        description: |-
+          CanEdit bool `json:"canEdit,omitempty"`
+          TaskEstimatedTime string `json:"taskEstimatedTime,omitempty"`
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      has-start-time:
+        type: string
+      hours:
+        type: string
+      id:
+        type: string
+      invoiceNo:
+        type: string
+      isbillable:
+        type: string
+      minutes:
+        description: |-
+          ParentTaskName string `json:"parentTaskName,omitempty"`
+          DateUserPerspective string `json:"dateUserPerspective,omitempty"`
+        type: string
+      person-first-name:
+        type: string
+      person-id:
+        type: string
+      person-last-name:
+        type: string
+      project-id:
+        type: string
+      project-name:
+        type: string
+      project-status:
+        type: string
+      tags: {}
+      todo-item-id:
+        description: |-
+          TaskTags interface{} `json:"task-tags,omitempty"`
+          TaskIsSubTask string `json:"taskIsSubTask,omitempty"`
+        type: string
+      todo-item-name:
+        type: string
+      todo-list-id:
+        description: |-
+          IsBilled string `json:"isbilled,omitempty"`
+          UpdatedDate string `json:"updated-date,omitempty"`
+        type: string
+      todo-list-name:
+        description: TaskListId string `json:"tasklistId,omitempty"`
+        type: string
+    type: object
+  models.Risk:
+    properties:
+      impactCost:
+        type: boolean
+      impactPerformance:
+        type: boolean
+      impactSchedule:
+        type: boolean
+      impactValue:
+        type: string
+      mitigationPlan:
+        type: string
+      probabilityValue:
+        type: string
+      source:
+        type: string
+      status:
+        type: string
+    type: object
+  models.Risks:
+    properties:
+      canEdit:
+        type: boolean
+      createdAt:
+        type: string
+      createdBy:
+        type: integer
+      createdByUserId:
+        type: integer
+      createdOn:
+        type: string
+      deleted:
+        type: boolean
+      id:
+        type: integer
+      impact:
+        type: string
+      impactCost:
+        type: boolean
+      impactPerformance:
+        type: boolean
+      impactSchedule:
+        type: boolean
+      impactValue:
+        type: integer
+      lastChangedByUserId:
+        type: integer
+      lastChangedOn:
+        type: string
+      mitigationPlan:
+        type: string
+      probability:
+        type: string
+      probabilityValue:
+        type: integer
+      project: {}
+      projectId:
+        type: integer
+      result:
+        type: integer
+      source:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+      updatedBy:
+        type: integer
     type: object
   models.SingleAccount:
     properties:
@@ -566,6 +737,25 @@ definitions:
         items:
           $ref: '#/definitions/models.ToDoItem'
         type: array
+    type: object
+  models.TimeEntry:
+    properties:
+      date:
+        type: string
+      description:
+        type: string
+      hours:
+        type: integer
+      isbillable:
+        type: boolean
+      minutes:
+        type: integer
+      person-id:
+        type: integer
+      tags:
+        type: string
+      time:
+        type: string
     type: object
   models.ToDoItem:
     properties:
@@ -744,6 +934,13 @@ definitions:
             type: object
         type: object
     type: object
+  models.Update:
+    properties:
+      health:
+        type: string
+      text:
+        type: string
+    type: object
 host: localhost:8015
 info:
   contact:
@@ -755,6 +952,31 @@ info:
   title: Teamwork Connector API
   version: "1.0"
 paths:
+  /api/v1//projects/{id}/update:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Update a project in the system
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.
+      parameters:
+      - description: Enter project update properties
+        in: body
+        name: project
+        schema:
+          $ref: '#/definitions/models.ProjectUpdate'
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Add an update for a project
+      tags:
+      - projects
   /api/v1/me:
     get:
       consumes:
@@ -832,6 +1054,88 @@ paths:
       summary: List projects for specified person
       tags:
       - people
+  /api/v1/project/{project_id}/risks:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        List all risks in the project
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/3f3555d7cd5d0-get-risks-for-a-specific-project for more parameter options.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedRisks'
+      summary: Get all risks associated with specified project
+      tags:
+      - risks
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Create a risk for a project in the system
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/f6dfef8ed1b7f-create-a-risk-on-a-project for more parameter options.
+      parameters:
+      - description: Enter project risk properties
+        in: body
+        name: project
+        schema:
+          $ref: '#/definitions/models.Risk'
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create a risk for a project
+      tags:
+      - risks
+  /api/v1/project/{project_id}/timeentry:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        List all time entries in the project
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/aa65992887407-retrieve-all-time-entries-for-a-project for more parameter options.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedTimeEntries'
+      summary: Get all time entries associated with specified project
+      tags:
+      - timeentry
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Create a time entry for a project in the system
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/0a02f6155b979-create-a-time-entry for more parameter options.
+      parameters:
+      - description: Enter time entry properties
+        in: body
+        name: project
+        schema:
+          $ref: '#/definitions/models.CreateTimeEntry'
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create a time entry for a project
+      tags:
+      - timeentry
   /api/v1/projects:
     get:
       consumes:
@@ -970,6 +1274,58 @@ paths:
       summary: List latest activity across all projects
       tags:
       - projects
+  /api/v1/risks:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        List all risks across projects
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/64d22ab985a58-get-all-risks for more parameter options.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedRisks'
+      summary: Get all risks
+      tags:
+      - risks
+  /api/v1/risks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: |-
+        Remove a risk
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/a2a40cec66701-deleting-a-risk-on-a-project for more parameter options.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete a risk
+      tags:
+      - risks
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Add an update to a project's risk
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/a1d50e01411b8-updating-a-risk-on-a-project for more parameter options.
+      parameters:
+      - description: Enter project risk properties
+        in: body
+        name: project
+        schema:
+          $ref: '#/definitions/models.CreateRisk'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update a project risk
+      tags:
+      - risks
   /api/v1/specification/list:
     get:
       consumes:
@@ -1069,4 +1425,58 @@ paths:
       summary: Retrieve a tasklist's tasks
       tags:
       - tasklists
+  /api/v1/timeentries:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        List all time entries across projects and tasks
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/4ea39d569915b-retrieve-all-time-entries-across-all-projects for more parameter options.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedTimeEntries'
+      summary: Get all time entries
+      tags:
+      - timeentry
+  /api/v1/timeentries/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: |-
+        Remove a time entry
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/c16cf6a573f70-delete-a-time-entry for more parameter options.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete a time entry
+      tags:
+      - timeentry
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Add an update to a time entry
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/e1320843e680e-update-a-time-entry for more parameter options.
+      parameters:
+      - description: Enter time entry properties
+        in: body
+        name: project
+        schema:
+          $ref: '#/definitions/models.CreateTimeEntry'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CreatedTimeEntry'
+      summary: Update a time entry
+      tags:
+      - timeentry
 swagger: "2.0"

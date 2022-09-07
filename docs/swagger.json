@@ -13,6 +13,42 @@
     "host": "localhost:8015",
     "basePath": "/",
     "paths": {
+        "/api/v1//projects/{id}/update": {
+            "post": {
+                "description": "Update a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Add an update for a project",
+                "parameters": [
+                    {
+                        "description": "Enter project update properties",
+                        "name": "project",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ProjectUpdate"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/me": {
             "get": {
                 "description": "Get current person's details\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/de01076fde3a5-get-current-user-details for more parameter options.",
@@ -125,6 +161,120 @@
                         "schema": {
                             "$ref": "#/definitions/models.MultiProject"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/project/{project_id}/risks": {
+            "get": {
+                "description": "List all risks in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3f3555d7cd5d0-get-risks-for-a-specific-project for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "risks"
+                ],
+                "summary": "Get all risks associated with specified project",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnedRisks"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a risk for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/f6dfef8ed1b7f-create-a-risk-on-a-project for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "risks"
+                ],
+                "summary": "Create a risk for a project",
+                "parameters": [
+                    {
+                        "description": "Enter project risk properties",
+                        "name": "project",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.Risk"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/project/{project_id}/timeentry": {
+            "get": {
+                "description": "List all time entries in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/aa65992887407-retrieve-all-time-entries-for-a-project for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timeentry"
+                ],
+                "summary": "Get all time entries associated with specified project",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnedTimeEntries"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a time entry for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/0a02f6155b979-create-a-time-entry for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timeentry"
+                ],
+                "summary": "Create a time entry for a project",
+                "parameters": [
+                    {
+                        "description": "Enter time entry properties",
+                        "name": "project",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateTimeEntry"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -320,6 +470,77 @@
                 }
             }
         },
+        "/api/v1/risks": {
+            "get": {
+                "description": "List all risks across projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/64d22ab985a58-get-all-risks for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "risks"
+                ],
+                "summary": "Get all risks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnedRisks"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/risks/{id}": {
+            "put": {
+                "description": "Add an update to a project's risk\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/a1d50e01411b8-updating-a-risk-on-a-project for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "risks"
+                ],
+                "summary": "Update a project risk",
+                "parameters": [
+                    {
+                        "description": "Enter project risk properties",
+                        "name": "project",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateRisk"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove a risk\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/a2a40cec66701-deleting-a-risk-on-a-project for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "risks"
+                ],
+                "summary": "Delete a risk",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/specification/list": {
             "get": {
                 "description": "Retrieve necessary environment variables",
@@ -463,6 +684,80 @@
                         "schema": {
                             "$ref": "#/definitions/models.Tasks"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/timeentries": {
+            "get": {
+                "description": "List all time entries across projects and tasks\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/4ea39d569915b-retrieve-all-time-entries-across-all-projects for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timeentry"
+                ],
+                "summary": "Get all time entries",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnedTimeEntries"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/timeentries/{id}": {
+            "put": {
+                "description": "Add an update to a time entry\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/e1320843e680e-update-a-time-entry for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timeentry"
+                ],
+                "summary": "Update a time entry",
+                "parameters": [
+                    {
+                        "description": "Enter time entry properties",
+                        "name": "project",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateTimeEntry"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.CreatedTimeEntry"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove a time entry\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/c16cf6a573f70-delete-a-time-entry for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timeentry"
+                ],
+                "summary": "Delete a time entry",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -646,6 +941,30 @@
                 "companies": {},
                 "projects": {},
                 "users": {}
+            }
+        },
+        "models.CreateRisk": {
+            "type": "object",
+            "properties": {
+                "risk": {
+                    "$ref": "#/definitions/models.Risk"
+                }
+            }
+        },
+        "models.CreateTimeEntry": {
+            "type": "object",
+            "properties": {
+                "time-entry": {
+                    "$ref": "#/definitions/models.TimeEntry"
+                }
+            }
+        },
+        "models.CreatedTimeEntry": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
             }
         },
         "models.IntegrationsMeta": {
@@ -1203,6 +1522,17 @@
                 "users": {}
             }
         },
+        "models.ProjectUpdate": {
+            "type": "object",
+            "properties": {
+                "notifyIds": {
+                    "type": "string"
+                },
+                "update": {
+                    "$ref": "#/definitions/models.Update"
+                }
+            }
+        },
         "models.Relationship": {
             "type": "object",
             "properties": {
@@ -1214,6 +1544,209 @@
                 },
                 "type": {
                     "type": "string"
+                }
+            }
+        },
+        "models.ReturnedRisks": {
+            "type": "object",
+            "properties": {
+                "included": {},
+                "meta": {},
+                "risks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Risks"
+                    }
+                }
+            }
+        },
+        "models.ReturnedTimeEntries": {
+            "type": "object",
+            "properties": {
+                "STATUS": {
+                    "type": "string"
+                },
+                "time-entries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ReturnedTimeEntryObject"
+                    }
+                }
+            }
+        },
+        "models.ReturnedTimeEntryObject": {
+            "type": "object",
+            "properties": {
+                "company-id": {
+                    "description": "TicketId string `json:\"ticket-id,omitempty\"`\nCreatedAt string `json:\"createdAt,omitempty\"`\nTaskIsPrivate string `json:\"taskIsPrivate,omitempty\"`\nParentTaskId string `json:\"parentTaskId,omitempty\"`",
+                    "type": "string"
+                },
+                "company-name": {
+                    "description": "CanEdit bool `json:\"canEdit,omitempty\"`\nTaskEstimatedTime string `json:\"taskEstimatedTime,omitempty\"`",
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "has-start-time": {
+                    "type": "string"
+                },
+                "hours": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "invoiceNo": {
+                    "type": "string"
+                },
+                "isbillable": {
+                    "type": "string"
+                },
+                "minutes": {
+                    "description": "ParentTaskName string `json:\"parentTaskName,omitempty\"`\nDateUserPerspective string `json:\"dateUserPerspective,omitempty\"`",
+                    "type": "string"
+                },
+                "person-first-name": {
+                    "type": "string"
+                },
+                "person-id": {
+                    "type": "string"
+                },
+                "person-last-name": {
+                    "type": "string"
+                },
+                "project-id": {
+                    "type": "string"
+                },
+                "project-name": {
+                    "type": "string"
+                },
+                "project-status": {
+                    "type": "string"
+                },
+                "tags": {},
+                "todo-item-id": {
+                    "description": "TaskTags interface{} `json:\"task-tags,omitempty\"`\nTaskIsSubTask string `json:\"taskIsSubTask,omitempty\"`",
+                    "type": "string"
+                },
+                "todo-item-name": {
+                    "type": "string"
+                },
+                "todo-list-id": {
+                    "description": "IsBilled string `json:\"isbilled,omitempty\"`\nUpdatedDate string `json:\"updated-date,omitempty\"`",
+                    "type": "string"
+                },
+                "todo-list-name": {
+                    "description": "TaskListId string `json:\"tasklistId,omitempty\"`",
+                    "type": "string"
+                }
+            }
+        },
+        "models.Risk": {
+            "type": "object",
+            "properties": {
+                "impactCost": {
+                    "type": "boolean"
+                },
+                "impactPerformance": {
+                    "type": "boolean"
+                },
+                "impactSchedule": {
+                    "type": "boolean"
+                },
+                "impactValue": {
+                    "type": "string"
+                },
+                "mitigationPlan": {
+                    "type": "string"
+                },
+                "probabilityValue": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Risks": {
+            "type": "object",
+            "properties": {
+                "canEdit": {
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "integer"
+                },
+                "createdByUserId": {
+                    "type": "integer"
+                },
+                "createdOn": {
+                    "type": "string"
+                },
+                "deleted": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "impact": {
+                    "type": "string"
+                },
+                "impactCost": {
+                    "type": "boolean"
+                },
+                "impactPerformance": {
+                    "type": "boolean"
+                },
+                "impactSchedule": {
+                    "type": "boolean"
+                },
+                "impactValue": {
+                    "type": "integer"
+                },
+                "lastChangedByUserId": {
+                    "type": "integer"
+                },
+                "lastChangedOn": {
+                    "type": "string"
+                },
+                "mitigationPlan": {
+                    "type": "string"
+                },
+                "probability": {
+                    "type": "string"
+                },
+                "probabilityValue": {
+                    "type": "integer"
+                },
+                "project": {},
+                "projectId": {
+                    "type": "integer"
+                },
+                "result": {
+                    "type": "integer"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "integer"
                 }
             }
         },
@@ -1320,6 +1853,35 @@
                     "items": {
                         "$ref": "#/definitions/models.ToDoItem"
                     }
+                }
+            }
+        },
+        "models.TimeEntry": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "hours": {
+                    "type": "integer"
+                },
+                "isbillable": {
+                    "type": "boolean"
+                },
+                "minutes": {
+                    "type": "integer"
+                },
+                "person-id": {
+                    "type": "integer"
+                },
+                "tags": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
                 }
             }
         },
@@ -1586,6 +2148,17 @@
                             }
                         }
                     }
+                }
+            }
+        },
+        "models.Update": {
+            "type": "object",
+            "properties": {
+                "health": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
                 }
             }
         }
