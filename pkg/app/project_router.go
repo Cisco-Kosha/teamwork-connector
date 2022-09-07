@@ -6,6 +6,7 @@ import (
 	"github.com/kosha/teamwork-connector/pkg/httpclient"
 	"github.com/kosha/teamwork-connector/pkg/models"
 	"net/http"
+	// "fmt"
 )
 
 // getAllProjects godoc
@@ -180,10 +181,41 @@ func (a *App) createTaskList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
-
 	var t models.NewTaskList
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&t); err != nil {
+		a.Log.Errorf("Error parsing json payload", err)
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+	defer r.Body.Close()
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	res, err := httpclient.CreateTaskList(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), &t, r.URL.Query())
+	if err != nil {
+		a.Log.Errorf("Error creating a tasklist", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	respondWithJSON(w, http.StatusOK, res)
+}
+
+// createProjectUpdate godoc
+// @Summary Add an update for a project
+// @Description Update a project in the system
+// @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.
+// @Tags projects
+// @Accept json
+// @Produce json
+// @Param project body models.ProjectUpdate false "Enter project update properties"
+// @Param id path string false "Enter project id"
+// @Success 200
+// @Router /api/v1//projects/{id}/update [post]
+func (a *App) createProjectUpdate(w http.ResponseWriter, r *http.Request) {
+	var p models.ProjectUpdate
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&p); err != nil {
 		a.Log.Errorf("Error parsing json payload", err)
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
@@ -193,9 +225,9 @@ func (a *App) createTaskList(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	res, err := httpclient.CreateTaskList(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), &t, r.URL.Query())
+	res, err := httpclient.CreateProjectUpdate(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), &p, r.URL.Query())
 	if err != nil {
-		a.Log.Errorf("Error creating a tasklist", err)
+		a.Log.Errorf("Error creating a project update", err)
 		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}

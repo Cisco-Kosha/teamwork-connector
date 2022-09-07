@@ -136,3 +136,13 @@ type ProjectIncluded struct {
 	Tags                interface{}
 	Users               interface{}
 }
+
+type ProjectUpdate struct {
+	Update Update `json:"update,omitempty"`
+	NotifyIds string  `json:"notifyIds,omitempty"`
+}
+
+type Update struct {
+	Text string `json:"text,omitempty"`
+	Health string `json:"health,omitempty"`
+}
