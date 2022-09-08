@@ -20,42 +20,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1//projects/{id}/update": {
-            "post": {
-                "description": "Update a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "projects"
-                ],
-                "summary": "Add an update for a project",
-                "parameters": [
-                    {
-                        "description": "Enter project update properties",
-                        "name": "project",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/models.ProjectUpdate"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Enter project id",
-                        "name": "id",
-                        "in": "path"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
         "/api/v1/me": {
             "get": {
                 "description": "Get current person's details\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/de01076fde3a5-get-current-user-details for more parameter options.",
@@ -168,120 +132,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.MultiProject"
                         }
-                    }
-                }
-            }
-        },
-        "/api/v1/project/{project_id}/risks": {
-            "get": {
-                "description": "List all risks in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3f3555d7cd5d0-get-risks-for-a-specific-project for more parameter options.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "risks"
-                ],
-                "summary": "Get all risks associated with specified project",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.ReturnedRisks"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create a risk for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/f6dfef8ed1b7f-create-a-risk-on-a-project for more parameter options.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "risks"
-                ],
-                "summary": "Create a risk for a project",
-                "parameters": [
-                    {
-                        "description": "Enter project risk properties",
-                        "name": "project",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/models.Risk"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Enter project id",
-                        "name": "id",
-                        "in": "path"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/api/v1/project/{project_id}/timeentry": {
-            "get": {
-                "description": "List all time entries in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/aa65992887407-retrieve-all-time-entries-for-a-project for more parameter options.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "timeentry"
-                ],
-                "summary": "Get all time entries associated with specified project",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.ReturnedTimeEntries"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Create a time entry for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/0a02f6155b979-create-a-time-entry for more parameter options.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "timeentry"
-                ],
-                "summary": "Create a time entry for a project",
-                "parameters": [
-                    {
-                        "description": "Enter time entry properties",
-                        "name": "project",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/models.CreateTimeEntry"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Enter project id",
-                        "name": "id",
-                        "in": "path"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
                     }
                 }
             }
@@ -418,6 +268,71 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/projects/{id}/risks": {
+            "get": {
+                "description": "List all risks in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3f3555d7cd5d0-get-risks-for-a-specific-project for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "risks"
+                ],
+                "summary": "Get all risks associated with specified project",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnedRisks"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a risk for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/f6dfef8ed1b7f-create-a-risk-on-a-project for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "risks"
+                ],
+                "summary": "Create a risk for a project",
+                "parameters": [
+                    {
+                        "description": "Enter project risk properties",
+                        "name": "project",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateRisk"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/projects/{id}/tasklists": {
             "get": {
                 "description": "Lists task lists based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/7ee4827082194-get-all-task-lists-for-a-project for more parameter options.",
@@ -477,6 +392,71 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/projects/{project_id}/timeentry": {
+            "get": {
+                "description": "List all time entries in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/aa65992887407-retrieve-all-time-entries-for-a-project for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timeentry"
+                ],
+                "summary": "Get all time entries associated with specified project",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnedTimeEntries"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a time entry for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/0a02f6155b979-create-a-time-entry for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timeentry"
+                ],
+                "summary": "Create a time entry for a project",
+                "parameters": [
+                    {
+                        "description": "Enter time entry properties",
+                        "name": "project",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateTimeEntry"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/risks": {
             "get": {
                 "description": "List all risks across projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/64d22ab985a58-get-all-risks for more parameter options.",
@@ -521,6 +501,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.CreateRisk"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Enter risk id",
+                        "name": "id",
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -541,6 +527,14 @@ const docTemplate = `{
                     "risks"
                 ],
                 "summary": "Delete a risk",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter risk id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -739,6 +733,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.CreateTimeEntry"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Enter time entry id",
+                        "name": "id",
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -762,6 +762,14 @@ const docTemplate = `{
                     "timeentry"
                 ],
                 "summary": "Delete a time entry",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter time entry id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -1529,17 +1537,6 @@ const docTemplate = `{
                 "users": {}
             }
         },
-        "models.ProjectUpdate": {
-            "type": "object",
-            "properties": {
-                "notifyIds": {
-                    "type": "string"
-                },
-                "update": {
-                    "$ref": "#/definitions/models.Update"
-                }
-            }
-        },
         "models.Relationship": {
             "type": "object",
             "properties": {
@@ -2155,17 +2152,6 @@ const docTemplate = `{
                             }
                         }
                     }
-                }
-            }
-        },
-        "models.Update": {
-            "type": "object",
-            "properties": {
-                "health": {
-                    "type": "string"
-                },
-                "text": {
-                    "type": "string"
                 }
             }
         }

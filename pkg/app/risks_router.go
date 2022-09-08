@@ -15,10 +15,10 @@ import (
 // @Tags risks
 // @Accept json
 // @Produce json
-// @Param project body models.Risk false "Enter project risk properties"
+// @Param project body models.CreateRisk false "Enter project risk properties"
 // @Param id path string false "Enter project id"
 // @Success 200
-// @Router /api/v1/project/{project_id}/risks [post]
+// @Router /api/v1/projects/{id}/risks [post]
 func (a *App) createProjectRisk(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -73,8 +73,9 @@ func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
 // @Tags risks
 // @Accept  json
 // @Produce  json
+// @Param id path string false "Enter project id"
 // @Success 200 {object} models.ReturnedRisks
-// @Router /api/v1/project/{project_id}/risks [get]
+// @Router /api/v1/projects/{id}/risks [get]
 func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
 
 	//Allow CORS here By * or specific origin
@@ -98,6 +99,7 @@ func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param project body models.CreateRisk false "Enter project risk properties"
+// @Param id path string false "Enter risk id"
 // @Success 200
 // @Router /api/v1/risks/{id} [put]
 func (a *App) updateRisks(w http.ResponseWriter, r *http.Request) {
@@ -106,7 +108,7 @@ func (a *App) updateRisks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
-	
+
 	var t models.CreateRisk
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&t); err != nil {
@@ -135,6 +137,7 @@ func (a *App) updateRisks(w http.ResponseWriter, r *http.Request) {
 // @Tags risks
 // @Accept  json
 // @Produce  json
+// @Param id path string false "Enter risk id"
 // @Success 200
 // @Router /api/v1/risks/{id} [delete]
 func (a *App) deleteRisks(w http.ResponseWriter, r *http.Request) {

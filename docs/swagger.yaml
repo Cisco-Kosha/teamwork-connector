@@ -504,13 +504,6 @@ definitions:
       tags: {}
       users: {}
     type: object
-  models.ProjectUpdate:
-    properties:
-      notifyIds:
-        type: string
-      update:
-        $ref: '#/definitions/models.Update'
-    type: object
   models.Relationship:
     properties:
       id:
@@ -934,13 +927,6 @@ definitions:
             type: object
         type: object
     type: object
-  models.Update:
-    properties:
-      health:
-        type: string
-      text:
-        type: string
-    type: object
 host: localhost:8015
 info:
   contact:
@@ -952,31 +938,6 @@ info:
   title: Teamwork Connector API
   version: "1.0"
 paths:
-  /api/v1//projects/{id}/update:
-    post:
-      consumes:
-      - application/json
-      description: |-
-        Update a project in the system
-        Please refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.
-      parameters:
-      - description: Enter project update properties
-        in: body
-        name: project
-        schema:
-          $ref: '#/definitions/models.ProjectUpdate'
-      - description: Enter project id
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Add an update for a project
-      tags:
-      - projects
   /api/v1/me:
     get:
       consumes:
@@ -1054,88 +1015,6 @@ paths:
       summary: List projects for specified person
       tags:
       - people
-  /api/v1/project/{project_id}/risks:
-    get:
-      consumes:
-      - application/json
-      description: |-
-        List all risks in the project
-        Please refer to https://apidocs.teamwork.com/docs/teamwork/3f3555d7cd5d0-get-risks-for-a-specific-project for more parameter options.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.ReturnedRisks'
-      summary: Get all risks associated with specified project
-      tags:
-      - risks
-    post:
-      consumes:
-      - application/json
-      description: |-
-        Create a risk for a project in the system
-        Please refer to https://apidocs.teamwork.com/docs/teamwork/f6dfef8ed1b7f-create-a-risk-on-a-project for more parameter options.
-      parameters:
-      - description: Enter project risk properties
-        in: body
-        name: project
-        schema:
-          $ref: '#/definitions/models.Risk'
-      - description: Enter project id
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Create a risk for a project
-      tags:
-      - risks
-  /api/v1/project/{project_id}/timeentry:
-    get:
-      consumes:
-      - application/json
-      description: |-
-        List all time entries in the project
-        Please refer to https://apidocs.teamwork.com/docs/teamwork/aa65992887407-retrieve-all-time-entries-for-a-project for more parameter options.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.ReturnedTimeEntries'
-      summary: Get all time entries associated with specified project
-      tags:
-      - timeentry
-    post:
-      consumes:
-      - application/json
-      description: |-
-        Create a time entry for a project in the system
-        Please refer to https://apidocs.teamwork.com/docs/teamwork/0a02f6155b979-create-a-time-entry for more parameter options.
-      parameters:
-      - description: Enter time entry properties
-        in: body
-        name: project
-        schema:
-          $ref: '#/definitions/models.CreateTimeEntry'
-      - description: Enter project id
-        in: path
-        name: id
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Create a time entry for a project
-      tags:
-      - timeentry
   /api/v1/projects:
     get:
       consumes:
@@ -1215,6 +1094,52 @@ paths:
       summary: Get single project
       tags:
       - projects
+  /api/v1/projects/{id}/risks:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        List all risks in the project
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/3f3555d7cd5d0-get-risks-for-a-specific-project for more parameter options.
+      parameters:
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedRisks'
+      summary: Get all risks associated with specified project
+      tags:
+      - risks
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Create a risk for a project in the system
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/f6dfef8ed1b7f-create-a-risk-on-a-project for more parameter options.
+      parameters:
+      - description: Enter project risk properties
+        in: body
+        name: project
+        schema:
+          $ref: '#/definitions/models.CreateRisk'
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create a risk for a project
+      tags:
+      - risks
   /api/v1/projects/{id}/tasklists:
     get:
       consumes:
@@ -1257,6 +1182,52 @@ paths:
       summary: Create new tasklist
       tags:
       - tasklists
+  /api/v1/projects/{project_id}/timeentry:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        List all time entries in the project
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/aa65992887407-retrieve-all-time-entries-for-a-project for more parameter options.
+      parameters:
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedTimeEntries'
+      summary: Get all time entries associated with specified project
+      tags:
+      - timeentry
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Create a time entry for a project in the system
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/0a02f6155b979-create-a-time-entry for more parameter options.
+      parameters:
+      - description: Enter time entry properties
+        in: body
+        name: project
+        schema:
+          $ref: '#/definitions/models.CreateTimeEntry'
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create a time entry for a project
+      tags:
+      - timeentry
   /api/v1/projects/activity:
     get:
       consumes:
@@ -1298,6 +1269,11 @@ paths:
       description: |-
         Remove a risk
         Please refer to https://apidocs.teamwork.com/docs/teamwork/a2a40cec66701-deleting-a-risk-on-a-project for more parameter options.
+      parameters:
+      - description: Enter risk id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:
@@ -1318,6 +1294,10 @@ paths:
         name: project
         schema:
           $ref: '#/definitions/models.CreateRisk'
+      - description: Enter risk id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:
@@ -1449,6 +1429,11 @@ paths:
       description: |-
         Remove a time entry
         Please refer to https://apidocs.teamwork.com/docs/teamwork/c16cf6a573f70-delete-a-time-entry for more parameter options.
+      parameters:
+      - description: Enter time entry id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:
@@ -1469,6 +1454,10 @@ paths:
         name: project
         schema:
           $ref: '#/definitions/models.CreateTimeEntry'
+      - description: Enter time entry id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:

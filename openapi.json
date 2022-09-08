@@ -16,41 +16,6 @@
     }
   ],
   "paths": {
-    "/api/v1//projects/{id}/update": {
-      "post": {
-        "parameters": [
-          {
-            "description": "Enter project id",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "projects"
-        ],
-        "description": "Update a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/models.ProjectUpdate"
-              }
-            }
-          },
-          "description": "Enter project update properties"
-        },
-        "summary": "Add an update for a project"
-      }
-    },
     "/api/v1/me": {
       "get": {
         "responses": {
@@ -166,114 +131,6 @@
         ],
         "description": "List projects for specified person",
         "summary": "List projects for specified person"
-      }
-    },
-    "/api/v1/project/{project_id}/risks": {
-      "get": {
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/models.ReturnedRisks"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "risks"
-        ],
-        "description": "List all risks in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3f3555d7cd5d0-get-risks-for-a-specific-project for more parameter options.",
-        "summary": "Get all risks associated with specified project"
-      },
-      "post": {
-        "parameters": [
-          {
-            "description": "Enter project id",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "risks"
-        ],
-        "description": "Create a risk for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/f6dfef8ed1b7f-create-a-risk-on-a-project for more parameter options.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/models.Risk"
-              }
-            }
-          },
-          "description": "Enter project risk properties"
-        },
-        "summary": "Create a risk for a project"
-      }
-    },
-    "/api/v1/project/{project_id}/timeentry": {
-      "get": {
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/models.ReturnedTimeEntries"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "timeentry"
-        ],
-        "description": "List all time entries in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/aa65992887407-retrieve-all-time-entries-for-a-project for more parameter options.",
-        "summary": "Get all time entries associated with specified project"
-      },
-      "post": {
-        "parameters": [
-          {
-            "description": "Enter project id",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "timeentry"
-        ],
-        "description": "Create a time entry for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/0a02f6155b979-create-a-time-entry for more parameter options.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/models.CreateTimeEntry"
-              }
-            }
-          },
-          "description": "Enter time entry properties"
-        },
-        "summary": "Create a time entry for a project"
       }
     },
     "/api/v1/projects": {
@@ -395,6 +252,71 @@
         "summary": "Get single project"
       }
     },
+    "/api/v1/projects/{id}/risks": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ReturnedRisks"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "risks"
+        ],
+        "description": "List all risks in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3f3555d7cd5d0-get-risks-for-a-specific-project for more parameter options.",
+        "summary": "Get all risks associated with specified project"
+      },
+      "post": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "risks"
+        ],
+        "description": "Create a risk for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/f6dfef8ed1b7f-create-a-risk-on-a-project for more parameter options.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.CreateRisk"
+              }
+            }
+          },
+          "description": "Enter project risk properties"
+        },
+        "summary": "Create a risk for a project"
+      }
+    },
     "/api/v1/projects/{id}/tasklists": {
       "get": {
         "parameters": [
@@ -449,6 +371,71 @@
         "summary": "Create new tasklist"
       }
     },
+    "/api/v1/projects/{project_id}/timeentry": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ReturnedTimeEntries"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "timeentry"
+        ],
+        "description": "List all time entries in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/aa65992887407-retrieve-all-time-entries-for-a-project for more parameter options.",
+        "summary": "Get all time entries associated with specified project"
+      },
+      "post": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "timeentry"
+        ],
+        "description": "Create a time entry for a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/0a02f6155b979-create-a-time-entry for more parameter options.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.CreateTimeEntry"
+              }
+            }
+          },
+          "description": "Enter time entry properties"
+        },
+        "summary": "Create a time entry for a project"
+      }
+    },
     "/api/v1/risks": {
       "get": {
         "responses": {
@@ -472,6 +459,17 @@
     },
     "/api/v1/risks/{id}": {
       "delete": {
+        "parameters": [
+          {
+            "description": "Enter risk id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -484,6 +482,17 @@
         "summary": "Delete a risk"
       },
       "put": {
+        "parameters": [
+          {
+            "description": "Enter risk id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -670,6 +679,17 @@
     },
     "/api/v1/timeentries/{id}": {
       "delete": {
+        "parameters": [
+          {
+            "description": "Enter time entry id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -682,6 +702,17 @@
         "summary": "Delete a time entry"
       },
       "put": {
+        "parameters": [
+          {
+            "description": "Enter time entry id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -714,6 +745,16 @@
   },
   "components": {
     "requestBodies": {
+      "models.CreateRisk": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/models.CreateRisk"
+            }
+          }
+        },
+        "description": "Enter project risk properties"
+      },
       "models.CreateTimeEntry": {
         "content": {
           "application/json": {
@@ -1484,17 +1525,6 @@
         },
         "type": "object"
       },
-      "models.ProjectUpdate": {
-        "properties": {
-          "notifyIds": {
-            "type": "string"
-          },
-          "update": {
-            "$ref": "#/components/schemas/models.Update"
-          }
-        },
-        "type": "object"
-      },
       "models.Relationship": {
         "properties": {
           "id": {
@@ -2109,17 +2139,6 @@
               }
             },
             "type": "object"
-          }
-        },
-        "type": "object"
-      },
-      "models.Update": {
-        "properties": {
-          "health": {
-            "type": "string"
-          },
-          "text": {
-            "type": "string"
           }
         },
         "type": "object"
