@@ -213,6 +213,10 @@ func (a *App) createTaskList(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1//projects/{id}/update [post]
 func (a *App) createProjectUpdate(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
 	var p models.ProjectUpdate
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&p); err != nil {

@@ -20,6 +20,10 @@ import (
 // @Success 200
 // @Router /api/v1/project/{project_id}/risks [post]
 func (a *App) createProjectRisk(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
 	var t models.CreateRisk
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&t); err != nil {
@@ -97,6 +101,12 @@ func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/risks/{id} [put]
 func (a *App) updateRisks(w http.ResponseWriter, r *http.Request) {
+
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+	
 	var t models.CreateRisk
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&t); err != nil {

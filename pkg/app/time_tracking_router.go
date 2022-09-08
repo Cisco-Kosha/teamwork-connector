@@ -20,6 +20,11 @@ import (
 // @Success 200
 // @Router /api/v1/project/{project_id}/timeentry [post]
 func (a *App) createProjectTimeEntry(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
 	var t models.CreateTimeEntry
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&t); err != nil {
@@ -97,6 +102,11 @@ func (a *App) getProjectTimeEntries(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} models.CreatedTimeEntry
 // @Router /api/v1/timeentries/{id} [put]
 func (a *App) updateTimeEntry(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+	
 	var t models.CreateTimeEntry
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&t); err != nil {
