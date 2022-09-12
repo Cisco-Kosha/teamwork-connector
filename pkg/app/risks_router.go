@@ -52,6 +52,7 @@ func (a *App) createProjectRisk(w http.ResponseWriter, r *http.Request) {
 // @Tags risks
 // @Accept  json
 // @Produce  json
+// @Param page query string false "Page number"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/risks [get]
 func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
@@ -62,7 +63,7 @@ func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
 	p := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
-	
+
 	respondWithJSON(w, http.StatusOK, p)
 }
 
@@ -74,6 +75,7 @@ func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param id path string false "Enter project id"
+// @Param page query string false "Page number"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/projects/{id}/risks [get]
 func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {

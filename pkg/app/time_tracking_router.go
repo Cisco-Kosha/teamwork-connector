@@ -53,6 +53,7 @@ func (a *App) createProjectTimeEntry(w http.ResponseWriter, r *http.Request) {
 // @Tags timeentry
 // @Accept  json
 // @Produce  json
+// @Param page query string false "Page number"
 // @Success 200 {object} models.ReturnedTimeEntries
 // @Router /api/v1/timeentries [get]
 func (a *App) getAllTimeEntries(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +64,7 @@ func (a *App) getAllTimeEntries(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
 	p := httpclient.GetAllTimeEntries(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
-	
+
 	respondWithJSON(w, http.StatusOK, p)
 }
 
@@ -75,6 +76,7 @@ func (a *App) getAllTimeEntries(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param id path string false "Enter project id"
+// @Param page query string false "Page number"
 // @Success 200 {object} models.ReturnedTimeEntries
 // @Router /api/v1/projects/{project_id}/timeentry [get]
 func (a *App) getProjectTimeEntries(w http.ResponseWriter, r *http.Request) {

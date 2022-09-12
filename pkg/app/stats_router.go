@@ -28,10 +28,10 @@ func (a *App) getStatsForPerson(w http.ResponseWriter, r *http.Request) {
 	person := httpclient.GetSinglePerson(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
 	permissions := person.Person.Permissions
 	projects := httpclient.GetPersonsProjects(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
-	
+
 	overallPerson := models.OverallPerson{
-		Person:     person.Person,
-		Projects:   projects.Projects,
+		Person:      person.Person,
+		Projects:    projects.Projects,
 		Permissions: permissions,
 	}
 

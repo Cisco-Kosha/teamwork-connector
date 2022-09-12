@@ -31,11 +31,11 @@ func (a *App) getCurrentPerson(w http.ResponseWriter, r *http.Request) {
 
 // getPeople godoc
 // @Summary Get all people from current user's company.
-// @Description Get a list of all people in the current user's company. 
+// @Description Get a list of all people in the current user's company.
 // @Tags people
 // @Accept json
 // @Produce json
-// @Param id path string false "Enter company id"
+// @Param page query string false "Page number"
 // @Success 200 {object} models.People
 // @Router /api/v1/people [get]
 func (a *App) getPeople(w http.ResponseWriter, r *http.Request) {
@@ -44,10 +44,7 @@ func (a *App) getPeople(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	vars := mux.Vars(r)
-	id := vars["id"]
-	
-	p := httpclient.GetPeople(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	p := httpclient.GetPeople(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
 
 	respondWithJSON(w, http.StatusOK, p)
 }
@@ -99,27 +96,3 @@ func (a *App) getPersonsProjects(w http.ResponseWriter, r *http.Request) {
 
 	respondWithJSON(w, http.StatusOK, p)
 }
-
-// // getPersonsTasks godoc
-// // @Summary List tasks for specified person
-// // @Description List tasks for specified person
-// // @Tags people
-// // @Accept json
-// // @Produce json
-// // @Param id path string false "Enter person id"
-// // @Success 200 {object} models.Tasks
-// // @Router /api/v1/people/{id}/tasks [get]
-// func (a *App) getPersonsTasks(w http.ResponseWriter, r *http.Request) {
-
-// 	//Allow CORS here By * or specific origin
-// 	w.Header().Set("Access-Control-Allow-Origin", "*")
-// 	w.Header().Set("Access-Control-Allow-Headers", "*")
-// 	w.Header().Set("Access-Control-Allow-Methods", "*")
-
-// 	vars := mux.Vars(r)
-// 	id := vars["id"]
-
-// 	p := httpclient.GetPersonsTasks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
-
-// 	respondWithJSON(w, http.StatusOK, p)
-// }

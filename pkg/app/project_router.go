@@ -16,6 +16,7 @@ import (
 // @Tags projects
 // @Accept  json
 // @Produce  json
+// @Param page query string false "Page number"
 // @Success 200 {object} models.MultiProject
 // @Router /api/v1/projects [get]
 func (a *App) getAllProjects(w http.ResponseWriter, r *http.Request) {
@@ -126,6 +127,7 @@ func (a *App) deleteProject(w http.ResponseWriter, r *http.Request) {
 // @Tags projects
 // @Accept  json
 // @Produce  json
+// @Param page query string false "Page number"
 // @Success 200 {object} models.MultiActivity
 // @Router /api/v1/projects/activity [get]
 func (a *App) getLatestActivityAllProjects(w http.ResponseWriter, r *http.Request) {
@@ -148,6 +150,7 @@ func (a *App) getLatestActivityAllProjects(w http.ResponseWriter, r *http.Reques
 // @Accept  json
 // @Produce  json
 // @Param id path string false "Enter project id"
+// @Param page query string false "Page number"
 // @Success 200 {object} models.MultiTaskList
 // @Router /api/v1/projects/{id}/tasklists [get]
 func (a *App) getProjectTasklists(w http.ResponseWriter, r *http.Request) {
@@ -201,39 +204,128 @@ func (a *App) createTaskList(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, res)
 }
 
-// // createProjectUpdate godoc
-// // @Summary Add an update for a project
-// // @Description Update a project in the system
-// // @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.
-// // @Tags projects
-// // @Accept json
-// // @Produce json
-// // @Param project body models.ProjectUpdate false "Enter project update properties"
-// // @Param id path string false "Enter project id"
-// // @Success 200
-// // @Router /api/v1/projects/{id}/update [post]
-// func (a *App) createProjectUpdate(w http.ResponseWriter, r *http.Request) {
-// 	//Allow CORS here By * or specific origin
-// 	w.Header().Set("Access-Control-Allow-Origin", "*")
-// 	w.Header().Set("Access-Control-Allow-Headers", "*")
-// 	w.Header().Set("Access-Control-Allow-Methods", "*")
-// 	var p models.ProjectUpdate
-// 	decoder := json.NewDecoder(r.Body)
-// 	if err := decoder.Decode(&p); err != nil {
-// 		a.Log.Errorf("Error parsing json payload", err)
-// 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-// 		return
-// 	}
-// 	defer r.Body.Close()
+// createProjectUpdate godoc
+// @Summary Add an update for a project
+// @Description Update a project in the system
+// @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.
+// @Tags projects
+// @Accept json
+// @Produce json
+// @Param project body models.ProjectUpdate false "Enter project update properties"
+// @Param id path string false "Enter project id"
+// @Success 200
+// @Router /api/v1/projects/{id}/update [post]
+func (a *App) createProjectUpdate(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+	var p models.ProjectUpdate
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&p); err != nil {
+		a.Log.Errorf("Error parsing json payload", err)
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+	defer r.Body.Close()
 
-// 	vars := mux.Vars(r)
-// 	id := vars["id"]
+	vars := mux.Vars(r)
+	id := vars["id"]
 
-// 	res, err := httpclient.CreateProjectUpdate(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), &p, r.URL.Query())
-// 	if err != nil {
-// 		a.Log.Errorf("Error creating a project update", err)
-// 		respondWithError(w, http.StatusBadRequest, err.Error())
-// 		return
-// 	}
-// 	respondWithJSON(w, http.StatusOK, res)
-// }
+	res, err := httpclient.CreateProjectUpdate(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), &p, r.URL.Query())
+	if err != nil {
+		a.Log.Errorf("Error creating a project update", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	respondWithJSON(w, http.StatusOK, res)
+}
+
+// getAllProjectUpdates godoc
+// @Summary Get all project updates
+// @Description List all updates across projects that the logged-in user can access.
+// @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Param page query string false "Page number"
+// @Success 200 {object} models.ReturnedRisks
+// @Router /api/v1/projects/updates [get]
+func (a *App) getAllProjectUpdates(w http.ResponseWriter, r *http.Request) {
+
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	p := httpclient.GetAllProjectUpdates(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+
+	respondWithJSON(w, http.StatusOK, p)
+}
+
+// modifyProjectUpdate godoc
+// @Summary Modify a project update
+// @Description Change an update made to a project
+// @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/aa0bc9bb0fd37-modify-a-project-update for more parameter options.
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Param project body models.ProjectUpdate false "Enter project update properties"
+// @Param id path string false "Enter project update id"
+// @Success 200
+// @Router /api/v1/projects/update/{id} [put]
+func (a *App) modifyProjectUpdate(w http.ResponseWriter, r *http.Request) {
+
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	var t models.ProjectUpdate
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&t); err != nil {
+		a.Log.Errorf("Error parsing json payload", err)
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+	defer r.Body.Close()
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	res, err := httpclient.ModifyProjectUpdate(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), &t, r.URL.Query())
+	if err != nil {
+		a.Log.Errorf("Error modifying a project update", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	respondWithJSON(w, http.StatusOK, res)
+}
+
+// deleteProjectUpdate godoc
+// @Summary Delete a project update
+// @Description Remove an update made to a project
+// @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/cfdb775e8ade2-delete-a-project-update for more parameter options.
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Param id path string false "Enter project update id"
+// @Success 200
+// @Router /api/v1/projects/update/{id} [delete]
+func (a *App) deleteProjectUpdate(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	t, err := httpclient.DeleteProjectUpdate(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	if err != nil {
+		a.Log.Errorf("Error deleting a project update", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+	}
+
+	respondWithJSON(w, http.StatusOK, t)
+}

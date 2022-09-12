@@ -61,7 +61,7 @@ package app
 // 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
 // 	p := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
-	
+
 // 	respondWithJSON(w, http.StatusOK, p)
 // }
 
@@ -105,7 +105,7 @@ package app
 // 	w.Header().Set("Access-Control-Allow-Origin", "*")
 // 	w.Header().Set("Access-Control-Allow-Headers", "*")
 // 	w.Header().Set("Access-Control-Allow-Methods", "*")
-	
+
 // 	var t models.CreateRisk
 // 	decoder := json.NewDecoder(r.Body)
 // 	if err := decoder.Decode(&t); err != nil {

@@ -86,6 +86,7 @@ func GetSingleProject(url string, id string, username string, password string, p
 }
 
 func GetProjectTaskLists(url string, id string, username string, password string, params url.Values) *models.MultiTaskList {
+
 	req, err := http.NewRequest("GET", url+"projects/"+id+"/tasklists.json", nil)
 
 	if err != nil {
@@ -217,7 +218,7 @@ func GetCurrentPerson(url string, username string, password string, params url.V
 	return person
 }
 
-func GetPeople(url string, id string, username string, password string, params url.Values) *models.People {
+func GetPeople(url string, username string, password string, params url.Values) *models.People {
 
 	currentPerson := GetCurrentPerson(url, username, password, nil)
 	companyId := currentPerson.Person.CompanyId
@@ -246,20 +247,6 @@ func GetPersonsProjects(url string, id string, username string, password string,
 	return projects
 }
 
-// func GetPersonsTasks(url string, id string, username string, password string, params url.Values) *models.Tasks {
-
-// 	projects := GetPersonsProjects(url, id, username, password, params)
-// 	var tasklists []*models.MultiTaskList
-// 	for _, p := range projects.Projects {
-// 		fmt.Println(strconv.Itoa(p.ID))
-// 		projectTasklists := GetProjectTaskLists(url, string(p.ID), username, password, params)
-// 		fmt.Println(projectTasklists)
-// 		tasklists = append(tasklists, projectTasklists) 
-// 	}
-// 	fmt.Println(tasklists)
-// 	return nil
-// }
-
 func CreateProjectTimeEntry(url string, project_id string, username string, password string, timeentry *models.CreateTimeEntry, params url.Values) (*models.CreatedTimeEntry, error) {
 
 	jsonReq, err := json.Marshal(timeentry)
@@ -268,7 +255,7 @@ func CreateProjectTimeEntry(url string, project_id string, username string, pass
 	}
 	req, err := http.NewRequest("POST", url+"projects/"+project_id+"/time_entries.json", bytes.NewBuffer(jsonReq))
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	
+
 	var createReply *models.CreatedTimeEntry
 	res := makeHttpReq(username, password, req, params)
 	// Convert response body to target struct
@@ -321,7 +308,7 @@ func UpdateTimeEntry(url string, id string, username string, password string, ti
 	}
 	req, err := http.NewRequest("PUT", url+"time_entries/"+id+".json", bytes.NewBuffer(jsonReq))
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	
+
 	var createReply *models.CreatedTimeEntry
 	res := makeHttpReq(username, password, req, params)
 	// Convert response body to target struct
@@ -347,10 +334,49 @@ func CreateProjectUpdate(url string, id string, username string, password string
 	if err != nil {
 		return "", err
 	}
-	req, err := http.NewRequest("POST", url+"/projects/"+id+"/update.json", bytes.NewBuffer(jsonReq))
+	req, err := http.NewRequest("POST", url+"projects/"+id+"/update.json", bytes.NewBuffer(jsonReq))
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil
+}
+
+func GetAllProjectUpdates(url string, username string, password string, params url.Values) *models.ProjectUpdateResponse {
+	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/updates.json", nil)
+
+	if err != nil {
+		return nil
+	}
+	var updates *models.ProjectUpdateResponse
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &updates)
+	if err != nil {
+		return nil
+	}
+	return updates
+}
+
+func ModifyProjectUpdate(url string, id string, username string, password string, update *models.ProjectUpdate, params url.Values) (string, error) {
+
+	jsonReq, err := json.Marshal(update)
+	if err != nil {
+		return "", err
+	}
+	req, err := http.NewRequest("PUT", url+"projects/updates/"+id+".json", bytes.NewBuffer(jsonReq))
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
+
+	return string(makeHttpReq(username, password, req, params)), nil
+}
+
+func DeleteProjectUpdate(url string, id string, username string, password string, params url.Values) (string, error) {
+	req, err := http.NewRequest("DELETE", url+"projects/updates/"+id+".json", nil)
+
+	if err != nil {
+		return "", err
+	}
+	res := makeHttpReq(username, password, req, params)
+	return string(res), nil
 }
 
 func CreateProjectRisk(url string, id string, username string, password string, risk *models.CreateRisk, params url.Values) (string, error) {
@@ -358,7 +384,7 @@ func CreateProjectRisk(url string, id string, username string, password string, 
 	if err != nil {
 		return "", err
 	}
-	req, err := http.NewRequest("POST", url+"/projects/"+id+"/risks.json", bytes.NewBuffer(jsonReq))
+	req, err := http.NewRequest("POST", url+"projects/"+id+"/risks.json", bytes.NewBuffer(jsonReq))
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil
@@ -404,7 +430,7 @@ func UpdateRisks(url string, id string, username string, password string, risk *
 	if err != nil {
 		return "", err
 	}
-	req, err := http.NewRequest("PUT", url+"/risks/"+id+".json", bytes.NewBuffer(jsonReq))
+	req, err := http.NewRequest("PUT", url+"risks/"+id+".json", bytes.NewBuffer(jsonReq))
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil

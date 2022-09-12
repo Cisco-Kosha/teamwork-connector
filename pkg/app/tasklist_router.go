@@ -43,6 +43,7 @@ func (a *App) deleteTaskList(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param id path string false "Enter tasklist id"
+// @Param page query string false "Page number"
 // @Success 200 {object} models.Tasks
 // @Router /api/v1/tasklists/{id}/tasks [get]
 func (a *App) getTasks(w http.ResponseWriter, r *http.Request) {

@@ -13,19 +13,19 @@ type SingleProject struct {
 }
 
 type MultiMinimalProject struct {
-	Projects []MinimalProject       `json:"projects,omitempty"`
-	Metadata Meta            `json:"meta,omitempty"`
-	Included ProjectIncluded `json:"included,omitempty"`
+	Projects []MinimalProject `json:"projects,omitempty"`
+	Metadata Meta             `json:"meta,omitempty"`
+	Included ProjectIncluded  `json:"included,omitempty"`
 }
 
 type MinimalProject struct {
-	Name                        string         `json:"name,omitempty"`
-	Description              string         `json:"description,omitempty"`
-	ID                       int            `json:"id,omitempty"`
-	Type                        string         `json:"type,omitempty"`
-	UpdatedAt                   string         `json:"updatedAt,omitempty"`
-	OwnedBy                     int            `json:"ownedBy,omitempty"`
-	FinancialBudget          Relationship   `json:"financialBudgetRelationship,omitempty"`
+	Name            string       `json:"name,omitempty"`
+	Description     string       `json:"description,omitempty"`
+	ID              int          `json:"id,omitempty"`
+	Type            string       `json:"type,omitempty"`
+	UpdatedAt       string       `json:"updatedAt,omitempty"`
+	OwnedBy         int          `json:"ownedBy,omitempty"`
+	FinancialBudget Relationship `json:"financialBudgetRelationship,omitempty"`
 }
 
 type Project struct {
@@ -138,11 +138,36 @@ type ProjectIncluded struct {
 }
 
 type ProjectUpdate struct {
-	Update Update `json:"update,omitempty"`
-	NotifyIds string  `json:"notifyIds,omitempty"`
+	Update    Update `json:"update,omitempty"`
+	NotifyIds string `json:"notifyIds,omitempty"`
 }
 
 type Update struct {
-	Text string `json:"text,omitempty"`
+	Text   string `json:"text,omitempty"`
 	Health string `json:"health,omitempty"`
+}
+
+type ProjectUpdateResponse struct {
+	Included       interface{}        `json:"included,omitempty"`
+	Meta           interface{}        `json:"meta,omitempty"`
+	ProjectUpdates MultiProjectUpdate `json:"projectUpdates,omitempty"`
+}
+
+type MultiProjectUpdate struct {
+	Color           string      `json:"color,omitempty"`
+	CreatedAt       string      `json:"createdAt,omitempty"`
+	CreatedBy       int         `json:"createdBy,omitempty"`
+	Deleted         bool        `json:"deleted,omitempty"`
+	DeletedAt       string      `json:"deletedAt,omitempty"`
+	DeletedBy       int         `json:"deletedBy,omitempty"`
+	Health          int         `json:"health,omitempty"`
+	HealthLabel     string      `json:"healthLabel,omitempty"`
+	Id              int         `json:"id,omitempty"`
+	LikeFromUserIDs interface{} `json:"likeFromUserIDs,omitempty"`
+	LikeFromUsers   interface{} `json:"likeFromUsers,omitempty"`
+	Project         interface{} `json:"project,omitempty"`
+	ProjectId       int         `json:"projectId,omitempty"`
+	Reactions       interface{} `json:"reactions,omitempty"`
+	Text            string      `json:"text,omitempty"`
+	UpdatedAt       string      `json:"updatedAt,omitempty"`
 }
