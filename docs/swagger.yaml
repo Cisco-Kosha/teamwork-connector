@@ -504,6 +504,13 @@ definitions:
       tags: {}
       users: {}
     type: object
+  models.ProjectUpdate:
+    properties:
+      notifyIds:
+        type: string
+      update:
+        $ref: '#/definitions/models.Update'
+    type: object
   models.Relationship:
     properties:
       id:
@@ -927,6 +934,13 @@ definitions:
             type: object
         type: object
     type: object
+  models.Update:
+    properties:
+      health:
+        type: string
+      text:
+        type: string
+    type: object
 host: localhost:8015
 info:
   contact:
@@ -961,9 +975,9 @@ paths:
       - application/json
       description: Get a list of all people in the current user's company.
       parameters:
-      - description: Enter company id
-        in: path
-        name: id
+      - description: Page number
+        in: query
+        name: page
         type: string
       produces:
       - application/json
@@ -1022,6 +1036,11 @@ paths:
       description: |-
         List all projects
         Please refer to https://apidocs.teamwork.com/docs/teamwork/df7d06840ecdd-returns-a-list-of-projects for more parameter options.
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: string
       produces:
       - application/json
       responses:
@@ -1106,6 +1125,10 @@ paths:
         in: path
         name: id
         type: string
+      - description: Page number
+        in: query
+        name: page
+        type: string
       produces:
       - application/json
       responses:
@@ -1152,6 +1175,10 @@ paths:
         in: path
         name: id
         type: string
+      - description: Page number
+        in: query
+        name: page
+        type: string
       produces:
       - application/json
       responses:
@@ -1182,6 +1209,31 @@ paths:
       summary: Create new tasklist
       tags:
       - tasklists
+  /api/v1/projects/{id}/update:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Update a project in the system
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.
+      parameters:
+      - description: Enter project update properties
+        in: body
+        name: project
+        schema:
+          $ref: '#/definitions/models.ProjectUpdate'
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Add an update for a project
+      tags:
+      - projects
   /api/v1/projects/{project_id}/timeentry:
     get:
       consumes:
@@ -1193,6 +1245,10 @@ paths:
       - description: Enter project id
         in: path
         name: id
+        type: string
+      - description: Page number
+        in: query
+        name: page
         type: string
       produces:
       - application/json
@@ -1235,6 +1291,11 @@ paths:
       description: |-
         Lists the latest activity across all projects ordered chronologically.
         Please refer to https://apidocs.teamwork.com/docs/teamwork/f207f625bd76e-latest-activity-all-projects for more parameter options.
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: string
       produces:
       - application/json
       responses:
@@ -1245,6 +1306,72 @@ paths:
       summary: List latest activity across all projects
       tags:
       - projects
+  /api/v1/projects/update/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: |-
+        Remove an update made to a project
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/cfdb775e8ade2-delete-a-project-update for more parameter options.
+      parameters:
+      - description: Enter project update id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete a project update
+      tags:
+      - projects
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Change an update made to a project
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/aa0bc9bb0fd37-modify-a-project-update for more parameter options.
+      parameters:
+      - description: Enter project update properties
+        in: body
+        name: project
+        schema:
+          $ref: '#/definitions/models.ProjectUpdate'
+      - description: Enter project update id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Modify a project update
+      tags:
+      - projects
+  /api/v1/projects/updates:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        List all updates across projects that the logged-in user can access.
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedRisks'
+      summary: Get all project updates
+      tags:
+      - projects
   /api/v1/risks:
     get:
       consumes:
@@ -1252,6 +1379,11 @@ paths:
       description: |-
         List all risks across projects
         Please refer to https://apidocs.teamwork.com/docs/teamwork/64d22ab985a58-get-all-risks for more parameter options.
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: string
       produces:
       - application/json
       responses:
@@ -1395,6 +1527,10 @@ paths:
         in: path
         name: id
         type: string
+      - description: Page number
+        in: query
+        name: page
+        type: string
       produces:
       - application/json
       responses:
@@ -1412,6 +1548,11 @@ paths:
       description: |-
         List all time entries across projects and tasks
         Please refer to https://apidocs.teamwork.com/docs/teamwork/4ea39d569915b-retrieve-all-time-entries-across-all-projects for more parameter options.
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: string
       produces:
       - application/json
       responses:

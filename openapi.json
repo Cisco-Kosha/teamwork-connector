@@ -41,10 +41,9 @@
       "get": {
         "parameters": [
           {
-            "description": "Enter company id",
-            "in": "path",
-            "name": "id",
-            "required": true,
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
             "schema": {
               "type": "string"
             }
@@ -135,6 +134,16 @@
     },
     "/api/v1/projects": {
       "get": {
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -178,6 +187,16 @@
     },
     "/api/v1/projects/activity": {
       "get": {
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -195,6 +214,95 @@
         ],
         "description": "Lists the latest activity across all projects ordered chronologically.\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/f207f625bd76e-latest-activity-all-projects for more parameter options.",
         "summary": "List latest activity across all projects"
+      }
+    },
+    "/api/v1/projects/update/{id}": {
+      "delete": {
+        "parameters": [
+          {
+            "description": "Enter project update id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Remove an update made to a project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/cfdb775e8ade2-delete-a-project-update for more parameter options.",
+        "summary": "Delete a project update"
+      },
+      "put": {
+        "parameters": [
+          {
+            "description": "Enter project update id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Change an update made to a project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/aa0bc9bb0fd37-modify-a-project-update for more parameter options.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.ProjectUpdate"
+              }
+            }
+          },
+          "description": "Enter project update properties"
+        },
+        "summary": "Modify a project update"
+      }
+    },
+    "/api/v1/projects/updates": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ReturnedRisks"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "List all updates across projects that the logged-in user can access.\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.",
+        "summary": "Get all project updates"
       }
     },
     "/api/v1/projects/{id}": {
@@ -263,6 +371,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -328,6 +444,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -371,6 +495,41 @@
         "summary": "Create new tasklist"
       }
     },
+    "/api/v1/projects/{id}/update": {
+      "post": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Update a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.ProjectUpdate"
+              }
+            }
+          },
+          "description": "Enter project update properties"
+        },
+        "summary": "Add an update for a project"
+      }
+    },
     "/api/v1/projects/{project_id}/timeentry": {
       "get": {
         "parameters": [
@@ -379,6 +538,14 @@
             "in": "path",
             "name": "id",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
             "schema": {
               "type": "string"
             }
@@ -438,6 +605,16 @@
     },
     "/api/v1/risks": {
       "get": {
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -635,6 +812,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -658,6 +843,16 @@
     },
     "/api/v1/timeentries": {
       "get": {
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -764,6 +959,16 @@
           }
         },
         "description": "Enter time entry properties"
+      },
+      "models.ProjectUpdate": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/models.ProjectUpdate"
+            }
+          }
+        },
+        "description": "Enter project update properties"
       }
     },
     "schemas": {
@@ -1525,6 +1730,17 @@
         },
         "type": "object"
       },
+      "models.ProjectUpdate": {
+        "properties": {
+          "notifyIds": {
+            "type": "string"
+          },
+          "update": {
+            "$ref": "#/components/schemas/models.Update"
+          }
+        },
+        "type": "object"
+      },
       "models.Relationship": {
         "properties": {
           "id": {
@@ -2139,6 +2355,17 @@
               }
             },
             "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "models.Update": {
+        "properties": {
+          "health": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
           }
         },
         "type": "object"

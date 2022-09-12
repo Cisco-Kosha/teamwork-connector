@@ -59,9 +59,9 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Enter company id",
-                        "name": "id",
-                        "in": "path"
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -149,6 +149,14 @@ const docTemplate = `{
                     "projects"
                 ],
                 "summary": "Get all projects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -200,11 +208,112 @@ const docTemplate = `{
                     "projects"
                 ],
                 "summary": "List latest activity across all projects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.MultiActivity"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/update/{id}": {
+            "put": {
+                "description": "Change an update made to a project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/aa0bc9bb0fd37-modify-a-project-update for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Modify a project update",
+                "parameters": [
+                    {
+                        "description": "Enter project update properties",
+                        "name": "project",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ProjectUpdate"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Enter project update id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove an update made to a project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/cfdb775e8ade2-delete-a-project-update for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Delete a project update",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project update id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/updates": {
+            "get": {
+                "description": "List all updates across projects that the logged-in user can access.\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Get all project updates",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnedRisks"
                         }
                     }
                 }
@@ -287,6 +396,12 @@ const docTemplate = `{
                         "description": "Enter project id",
                         "name": "id",
                         "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -352,6 +467,12 @@ const docTemplate = `{
                         "description": "Enter project id",
                         "name": "id",
                         "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -392,6 +513,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/projects/{id}/update": {
+            "post": {
+                "description": "Update a project in the system\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/3a875e7157506-create-a-project-update for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Add an update for a project",
+                "parameters": [
+                    {
+                        "description": "Enter project update properties",
+                        "name": "project",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ProjectUpdate"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/projects/{project_id}/timeentry": {
             "get": {
                 "description": "List all time entries in the project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/aa65992887407-retrieve-all-time-entries-for-a-project for more parameter options.",
@@ -411,6 +568,12 @@ const docTemplate = `{
                         "description": "Enter project id",
                         "name": "id",
                         "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -470,6 +633,14 @@ const docTemplate = `{
                     "risks"
                 ],
                 "summary": "Get all risks",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -677,6 +848,12 @@ const docTemplate = `{
                         "description": "Enter tasklist id",
                         "name": "id",
                         "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -702,6 +879,14 @@ const docTemplate = `{
                     "timeentry"
                 ],
                 "summary": "Get all time entries",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1537,6 +1722,17 @@ const docTemplate = `{
                 "users": {}
             }
         },
+        "models.ProjectUpdate": {
+            "type": "object",
+            "properties": {
+                "notifyIds": {
+                    "type": "string"
+                },
+                "update": {
+                    "$ref": "#/definitions/models.Update"
+                }
+            }
+        },
         "models.Relationship": {
             "type": "object",
             "properties": {
@@ -2152,6 +2348,17 @@ const docTemplate = `{
                             }
                         }
                     }
+                }
+            }
+        },
+        "models.Update": {
+            "type": "object",
+            "properties": {
+                "health": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
                 }
             }
         }
