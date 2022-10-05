@@ -43,6 +43,7 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc(apiV1+"/projects/{id}/update", a.createProjectUpdate).Methods("POST", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/update/{id}", a.modifyProjectUpdate).Methods("PUT", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/update/{id}", a.deleteProjectUpdate).Methods("DELETE", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/{id}/tasks", a.getProjectTasks).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}", a.getSingleProject).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects", a.getAllProjects).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}", a.deleteProject).Methods("DELETE", "OPTIONS")

@@ -4,12 +4,11 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"github.com/kosha/teamwork-connector/pkg/models"
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	// "fmt"
-	// "strconv"
+
+	"github.com/kosha/teamwork-connector/pkg/models"
 )
 
 func basicAuth(username string, password string) string {
@@ -27,11 +26,30 @@ func makeHttpReq(username string, password string, req *http.Request, params url
 	if err != nil {
 		return nil
 	}
-
 	defer resp.Body.Close()
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 
 	return bodyBytes
+}
+
+func GetResponseHeaders(username string, password string, path string, params url.Values) http.Header {
+	req, err := http.NewRequest("GET", path, nil)
+	if err != nil {
+		return nil
+	}
+
+	req.Header.Add("Authorization", "Basic "+basicAuth(username, password))
+	req.URL.RawQuery = params.Encode()
+
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil
+	}
+
+	defer resp.Body.Close()
+	return resp.Header
 }
 
 func GetAccount(url string, username string, password string, params url.Values) *models.SingleAccount {
@@ -103,6 +121,29 @@ func GetProjectTaskLists(url string, id string, username string, password string
 	return tasklists
 }
 
+func GetProjectTasks(url string, id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.Tasks) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/"+id+"/tasks.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"projects/"+id+"/tasks.json", nil)
+
+	if err != nil {
+		return nil, nil
+	}
+	var tasks *models.Tasks
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &tasks)
+	if err != nil {
+		return nil, nil
+	}
+
+	return nil, tasks
+}
+
 func GetTasks(url string, id string, username string, password string, params url.Values) *models.Tasks {
 	req, err := http.NewRequest("GET", url+"tasklists/"+id+"/tasks.json", nil)
 
@@ -144,7 +185,10 @@ func CreateProject(url string, username string, password string, project *models
 	if err != nil {
 		return "", err
 	}
-	req, err := http.NewRequest("POST", url+"/projects.json", bytes.NewBuffer(jsonReq))
+	req, err := http.NewRequest("POST", url+"projects.json", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		return "", err
+	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil

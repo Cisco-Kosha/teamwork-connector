@@ -32,8 +32,8 @@ type NewTaskList struct {
 }
 
 type Tasks struct {
-	Status    string `json:"STATUS,omitempty"`
-	ToDoItems []ToDoItem
+	Status    string     `json:"STATUS,omitempty"`
+	ToDoItems []ToDoItem `json:"todo-items,omitempty"`
 }
 
 type ToDoList struct {

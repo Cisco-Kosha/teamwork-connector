@@ -2,12 +2,50 @@ package app
 
 import (
 	"encoding/json"
+	"net/http"
+	"net/url"
+	"strconv"
+
 	"github.com/gorilla/mux"
 	"github.com/kosha/teamwork-connector/pkg/httpclient"
 	"github.com/kosha/teamwork-connector/pkg/models"
-	"net/http"
-	// "fmt"
 )
+
+func (a *App) getPageRange(params url.Values, respHeaders http.Header) (int, int, error) {
+	var err error
+	pageStart := 1
+	pageEnd := 1
+	numPages := 1
+
+	if val, ok := params["pageStart"]; ok {
+		pageStart, err = strconv.Atoi(val[0])
+		if err != nil {
+			return 0, 0, err
+		}
+	}
+	if val, ok := params["pageEnd"]; ok {
+		pageEnd, err = strconv.Atoi(val[0])
+		if err != nil {
+			return 0, 0, err
+		}
+	}
+
+	numPages, err = strconv.Atoi(respHeaders.Get("X-Pages"))
+	if err != nil {
+		return 0, 0, err
+	}
+
+	if pageStart > numPages || pageEnd > numPages || pageStart < 1 {
+		return 0, 0, err
+	}
+
+	if val, ok := params["allPages"]; ok && val[0] == "True" {
+		pageStart = 1
+		pageEnd = numPages
+	}
+
+	return pageStart, pageEnd, nil
+}
 
 // getAllProjects godoc
 // @Summary Get all projects
@@ -166,6 +204,50 @@ func (a *App) getProjectTasklists(w http.ResponseWriter, r *http.Request) {
 	p := httpclient.GetProjectTaskLists(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
 
 	respondWithJSON(w, http.StatusOK, p)
+}
+
+// getProjectTasks godoc
+// @Summary Retrieves all tasks in a project
+// @Description Lists all tasks based on project ID
+// @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Param id path string false "Enter project id"
+// @Param page query string false "Page number"
+// @Success 200 {object} models.Tasks
+// @Router /api/v1/projects/{id}/tasks [get]
+func (a *App) getProjectTasks(w http.ResponseWriter, r *http.Request) {
+
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	var tasks []*models.Tasks
+
+	respHeaders, _ := httpclient.GetProjectTasks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+
+	//get page range data from headers
+	pageStart, pageEnd, err := a.getPageRange(r.URL.Query(), respHeaders)
+	if err != nil {
+		a.Log.Errorf("Invalid pageStart or pageEnd header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, t := httpclient.GetProjectTasks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		tasks = append(tasks, t)
+	}
+
+	respondWithJSON(w, http.StatusOK, tasks)
 }
 
 // createTaskList godoc
