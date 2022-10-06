@@ -1,11 +1,12 @@
 package app
 
 import (
-	// "encoding/json"
+	"strconv"
+
 	"github.com/gorilla/mux"
 	"github.com/kosha/teamwork-connector/pkg/httpclient"
-	// "github.com/kosha/teamwork-connector/pkg/models"
-	// "fmt"
+	"github.com/kosha/teamwork-connector/pkg/models"
+
 	"net/http"
 )
 
@@ -44,9 +45,51 @@ func (a *App) getPeople(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	p := httpclient.GetPeople(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	var people []*models.People
 
-	respondWithJSON(w, http.StatusOK, p)
+	respHeaders, _ := httpclient.GetPeople(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, p := httpclient.GetPeople(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		people = append(people, p)
+	}
+
+	respondWithJSON(w, http.StatusOK, people)
+
+}
+
+// getPeopleMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags people
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/people/metadata [get]
+func (a *App) getPeopleMetadata(w http.ResponseWriter, r *http.Request) {
+	respHeaders, _ := httpclient.GetPeople(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
+	if err != nil {
+		a.Log.Errorf("Error getting x-pages header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: pageCount,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
 
 // getPerson godoc

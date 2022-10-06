@@ -17,7 +17,7 @@ type Risk struct {
 
 type ReturnedRisks struct {
 	Included interface{} `json:"included,omitempty"`
-	Meta     interface{} `json:"meta,omitempty"`
+	Metadata Meta        `json:"meta,omitempty"`
 	Risks    []Risks     `json:"risks,omitempty"`
 }
 

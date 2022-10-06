@@ -2,10 +2,12 @@ package app
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/gorilla/mux"
 	"github.com/kosha/teamwork-connector/pkg/httpclient"
 	"github.com/kosha/teamwork-connector/pkg/models"
-	"net/http"
 )
 
 // createProjectTimeEntry godoc
@@ -63,9 +65,51 @@ func (a *App) getAllTimeEntries(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	p := httpclient.GetAllTimeEntries(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	var timeEntries []*models.ReturnedTimeEntries
 
-	respondWithJSON(w, http.StatusOK, p)
+	respHeaders, _ := httpclient.GetAllTimeEntries(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, t := httpclient.GetAllTimeEntries(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		timeEntries = append(timeEntries, t)
+	}
+
+	respondWithJSON(w, http.StatusOK, timeEntries)
+}
+
+// getAllTimeEntriesMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags timeentry
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/timeentries/metadata [get]
+func (a *App) getAllTimeEntriesMetadata(w http.ResponseWriter, r *http.Request) {
+
+	respHeaders, _ := httpclient.GetAllTimeEntries(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
+	if err != nil {
+		a.Log.Errorf("Error getting x-pages header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: pageCount,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
 
 // getProjectTimeEntries godoc
@@ -89,9 +133,58 @@ func (a *App) getProjectTimeEntries(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["project_id"]
 
-	p := httpclient.GetProjectTimeEntries(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	var timeEntries []*models.ReturnedTimeEntries
 
-	respondWithJSON(w, http.StatusOK, p)
+	respHeaders, _ := httpclient.GetProjectTimeEntries(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, t := httpclient.GetProjectTimeEntries(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		timeEntries = append(timeEntries, t)
+	}
+
+	respondWithJSON(w, http.StatusOK, timeEntries)
+}
+
+// getProjectTimeEntriesMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags timeentry
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/projects/{project_id}/timeentry/metadata [get]
+func (a *App) getProjectTimeEntriesMetadata(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	pageCount := 1
+	var err error
+
+	respHeaders, _ := httpclient.GetProjectTimeEntries(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	if respHeaders.Get("X-Pages") != "" {
+		pageCount, err = strconv.Atoi(respHeaders.Get("X-Pages"))
+		if err != nil {
+			a.Log.Errorf("Error getting x-pages header", err)
+			respondWithError(w, http.StatusBadRequest, err.Error())
+			return
+		}
+	}
+
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: pageCount,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
 
 // updateTimeEntry godoc
