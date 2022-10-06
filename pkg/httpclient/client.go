@@ -4,12 +4,11 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"github.com/kosha/teamwork-connector/pkg/models"
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	// "fmt"
-	// "strconv"
+
+	"github.com/kosha/teamwork-connector/pkg/models"
 )
 
 func basicAuth(username string, password string) string {
@@ -27,11 +26,30 @@ func makeHttpReq(username string, password string, req *http.Request, params url
 	if err != nil {
 		return nil
 	}
-
 	defer resp.Body.Close()
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 
 	return bodyBytes
+}
+
+func GetResponseHeaders(username string, password string, path string, params url.Values) http.Header {
+	req, err := http.NewRequest("GET", path, nil)
+	if err != nil {
+		return nil
+	}
+
+	req.Header.Add("Authorization", "Basic "+basicAuth(username, password))
+	req.URL.RawQuery = params.Encode()
+
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil
+	}
+
+	defer resp.Body.Close()
+	return resp.Header
 }
 
 func GetAccount(url string, username string, password string, params url.Values) *models.SingleAccount {
@@ -50,21 +68,25 @@ func GetAccount(url string, username string, password string, params url.Values)
 	return account
 }
 
-func GetAllProjects(url string, username string, password string, params url.Values) *models.MultiProject {
+func GetAllProjects(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.MultiProject) {
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/api/v3/projects.json", params), nil
+	}
+
 	req, err := http.NewRequest("GET", url+"projects/api/v3/projects.json", nil)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	var project *models.MultiProject
+	var projects *models.MultiProject
 
 	res := makeHttpReq(username, password, req, params)
 
 	// Convert response body to target struct
-	err = json.Unmarshal(res, &project)
+	err = json.Unmarshal(res, &projects)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	return project
+	return nil, projects
 }
 
 func GetSingleProject(url string, id string, username string, password string, params url.Values) *models.SingleProject {
@@ -85,12 +107,16 @@ func GetSingleProject(url string, id string, username string, password string, p
 	return project
 }
 
-func GetProjectTaskLists(url string, id string, username string, password string, params url.Values) *models.MultiTaskList {
+func GetProjectTaskLists(url string, id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.MultiTaskList) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/"+id+"/tasklists.json", params), nil
+	}
 
 	req, err := http.NewRequest("GET", url+"projects/"+id+"/tasklists.json", nil)
 
 	if err != nil {
-		return nil
+		return nil, nil
 	}
 	var tasklists *models.MultiTaskList
 
@@ -98,16 +124,21 @@ func GetProjectTaskLists(url string, id string, username string, password string
 	// Convert response body to target struct
 	err = json.Unmarshal(res, &tasklists)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	return tasklists
+	return nil, tasklists
 }
 
-func GetTasks(url string, id string, username string, password string, params url.Values) *models.Tasks {
-	req, err := http.NewRequest("GET", url+"tasklists/"+id+"/tasks.json", nil)
+func GetProjectTasks(url string, id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.Tasks) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/"+id+"/tasks.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"projects/"+id+"/tasks.json", nil)
 
 	if err != nil {
-		return nil
+		return nil, nil
 	}
 	var tasks *models.Tasks
 
@@ -115,9 +146,32 @@ func GetTasks(url string, id string, username string, password string, params ur
 	// Convert response body to target struct
 	err = json.Unmarshal(res, &tasks)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	return tasks
+
+	return nil, tasks
+}
+
+func GetTasks(url string, id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.Tasks) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"tasklists/"+id+"/tasks.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"tasklists/"+id+"/tasks.json", nil)
+
+	if err != nil {
+		return nil, nil
+	}
+	var tasks *models.Tasks
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &tasks)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, tasks
 }
 
 func GetLatestActivityAllProjects(url string, username string, password string, params url.Values) *models.MultiActivity {
@@ -144,7 +198,10 @@ func CreateProject(url string, username string, password string, project *models
 	if err != nil {
 		return "", err
 	}
-	req, err := http.NewRequest("POST", url+"/projects.json", bytes.NewBuffer(jsonReq))
+	req, err := http.NewRequest("POST", url+"projects.json", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		return "", err
+	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil
@@ -218,15 +275,19 @@ func GetCurrentPerson(url string, username string, password string, params url.V
 	return person
 }
 
-func GetPeople(url string, username string, password string, params url.Values) *models.People {
+func GetPeople(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.People) {
 
 	currentPerson := GetCurrentPerson(url, username, password, nil)
 	companyId := currentPerson.Person.CompanyId
 
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"companies/"+companyId+"/people.json", params), nil
+	}
+
 	req, err := http.NewRequest("GET", url+"companies/"+companyId+"/people.json", nil)
 
 	if err != nil {
-		return nil
+		return nil, nil
 	}
 	var people *models.People
 
@@ -234,16 +295,16 @@ func GetPeople(url string, username string, password string, params url.Values) 
 	// Convert response body to target struct
 	err = json.Unmarshal(res, &people)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	return people
+	return nil, people
 }
 
 func GetPersonsProjects(url string, id string, username string, password string, params url.Values) *models.MultiProject {
 
 	customParams := make(map[string][]string)
 	customParams["fields[users]"] = append(customParams["fields[users]"], id)
-	projects := GetAllProjects(url, username, password, customParams)
+	_, projects := GetAllProjects(url, username, password, customParams, false)
 	return projects
 }
 
@@ -266,38 +327,48 @@ func CreateProjectTimeEntry(url string, project_id string, username string, pass
 	return createReply, nil
 }
 
-func GetAllTimeEntries(url string, username string, password string, params url.Values) *models.ReturnedTimeEntries {
+func GetAllTimeEntries(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedTimeEntries) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"time_entries.json", params), nil
+	}
+
 	req, err := http.NewRequest("GET", url+"time_entries.json", nil)
 
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	var tasks *models.ReturnedTimeEntries
+	var timeEntries *models.ReturnedTimeEntries
 
 	res := makeHttpReq(username, password, req, params)
 	// Convert response body to target struct
-	err = json.Unmarshal(res, &tasks)
+	err = json.Unmarshal(res, &timeEntries)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	return tasks
+	return nil, timeEntries
 }
 
-func GetProjectTimeEntries(url string, project_id string, username string, password string, params url.Values) *models.ReturnedTimeEntries {
+func GetProjectTimeEntries(url string, project_id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedTimeEntries) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/"+project_id+"/time_entries.json", params), nil
+	}
+
 	req, err := http.NewRequest("GET", url+"projects/"+project_id+"/time_entries.json", nil)
 
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	var tasks *models.ReturnedTimeEntries
+	var timeEntries *models.ReturnedTimeEntries
 
 	res := makeHttpReq(username, password, req, params)
 	// Convert response body to target struct
-	err = json.Unmarshal(res, &tasks)
+	err = json.Unmarshal(res, &timeEntries)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	return tasks
+	return nil, timeEntries
 }
 
 func UpdateTimeEntry(url string, id string, username string, password string, timeentry *models.CreateTimeEntry, params url.Values) (*models.CreatedTimeEntry, error) {
@@ -340,11 +411,15 @@ func CreateProjectUpdate(url string, id string, username string, password string
 	return string(makeHttpReq(username, password, req, params)), nil
 }
 
-func GetAllProjectUpdates(url string, username string, password string, params url.Values) *models.ProjectUpdateResponse {
+func GetAllProjectUpdates(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ProjectUpdateResponse) {
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/api/v3/projects/updates.json", params), nil
+	}
+
 	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/updates.json", nil)
 
 	if err != nil {
-		return nil
+		return nil, nil
 	}
 	var updates *models.ProjectUpdateResponse
 
@@ -352,9 +427,9 @@ func GetAllProjectUpdates(url string, username string, password string, params u
 	// Convert response body to target struct
 	err = json.Unmarshal(res, &updates)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	return updates
+	return nil, updates
 }
 
 func ModifyProjectUpdate(url string, id string, username string, password string, update *models.ProjectUpdate, params url.Values) (string, error) {
@@ -385,16 +460,23 @@ func CreateProjectRisk(url string, id string, username string, password string, 
 		return "", err
 	}
 	req, err := http.NewRequest("POST", url+"projects/"+id+"/risks.json", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		return "", err
+	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil
 }
 
-func GetAllRisks(url string, username string, password string, params url.Values) *models.ReturnedRisks {
+func GetAllRisks(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisks) {
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/api/v3/risks.json", params), nil
+	}
+
 	req, err := http.NewRequest("GET", url+"projects/api/v3/risks.json", nil)
 
 	if err != nil {
-		return nil
+		return nil, nil
 	}
 	var risks *models.ReturnedRisks
 
@@ -402,16 +484,21 @@ func GetAllRisks(url string, username string, password string, params url.Values
 	// Convert response body to target struct
 	err = json.Unmarshal(res, &risks)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	return risks
+	return nil, risks
 }
 
-func GetProjectRisks(url string, project_id string, username string, password string, params url.Values) *models.ReturnedRisks {
+func GetProjectRisks(url string, project_id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisks) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/api/v3/projects/"+project_id+"/risks.json", params), nil
+	}
+
 	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/"+project_id+"/risks.json", nil)
 
 	if err != nil {
-		return nil
+		return nil, nil
 	}
 	var tasks *models.ReturnedRisks
 
@@ -419,9 +506,9 @@ func GetProjectRisks(url string, project_id string, username string, password st
 	// Convert response body to target struct
 	err = json.Unmarshal(res, &tasks)
 	if err != nil {
-		return nil
+		return nil, nil
 	}
-	return tasks
+	return nil, tasks
 }
 
 func UpdateRisks(url string, id string, username string, password string, risk *models.CreateRisk, params url.Values) (string, error) {

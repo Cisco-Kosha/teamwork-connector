@@ -12,13 +12,16 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc(apiV1+"/specification/test", a.testConnectorSpecification).Methods("POST", "OPTIONS")
 
 	// tasklists
+	a.Router.HandleFunc(apiV1+"/projects/{id}/tasklists/metadata", a.getProjectTasklistsMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}/tasklists", a.getProjectTasklists).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}/tasklists", a.createTaskList).Methods("POST", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/tasklists/{id}/tasks/metadata", a.getTasksMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/tasklists/{id}/tasks", a.getTasks).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/tasklists/{id}", a.deleteTaskList).Methods("DELETE", "OPTIONS")
 
 	//people
 	a.Router.HandleFunc(apiV1+"/me", a.getCurrentPerson).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/people/metadata", a.getPeopleMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/people/{id}/projects", a.getPersonsProjects).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/people/{id}", a.getPerson).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/people", a.getPeople).Methods("GET", "OPTIONS")
@@ -26,23 +29,31 @@ func (a *App) initializeRoutes() {
 	// time tracking
 	a.Router.HandleFunc(apiV1+"/timeentries/{id}", a.updateTimeEntry).Methods("PUT", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/timeentries/{id}", a.deleteTimeEntry).Methods("DELETE", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/timeentries/metadata", a.getAllTimeEntriesMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/timeentries", a.getAllTimeEntries).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/{project_id}/timeentry/metadata", a.getProjectTimeEntriesMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{project_id}/timeentry", a.getProjectTimeEntries).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{project_id}/timeentry", a.createProjectTimeEntry).Methods("POST", "OPTIONS")
 
 	// risks
+	a.Router.HandleFunc(apiV1+"/projects/{id}/risks/metadata", a.getProjectRisksMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}/risks", a.createProjectRisk).Methods("POST", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}/risks", a.getProjectRisks).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/risks/metadata", a.getAllRisksMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/risks/{id}", a.updateRisks).Methods("PUT", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/risks/{id}", a.deleteRisks).Methods("DELETE", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/risks", a.getAllRisks).Methods("GET", "OPTIONS")
 
 	// projects
+	a.Router.HandleFunc(apiV1+"/projects/metadata", a.getAllProjectsMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/activity", a.getLatestActivityAllProjects).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/updates/metadata", a.getAllProjectUpdatesMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/updates", a.getAllProjectUpdates).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}/update", a.createProjectUpdate).Methods("POST", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/update/{id}", a.modifyProjectUpdate).Methods("PUT", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/update/{id}", a.deleteProjectUpdate).Methods("DELETE", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/{id}/tasks/metadata", a.getProjectTasksMetadata).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/{id}/tasks", a.getProjectTasks).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}", a.getSingleProject).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects", a.getAllProjects).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}", a.deleteProject).Methods("DELETE", "OPTIONS")

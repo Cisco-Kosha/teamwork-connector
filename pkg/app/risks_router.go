@@ -2,10 +2,12 @@ package app
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/gorilla/mux"
 	"github.com/kosha/teamwork-connector/pkg/httpclient"
 	"github.com/kosha/teamwork-connector/pkg/models"
-	"net/http"
 )
 
 // createProjectRisk godoc
@@ -53,6 +55,9 @@ func (a *App) createProjectRisk(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/risks [get]
 func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
@@ -62,9 +67,45 @@ func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	p := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	var risks []*models.ReturnedRisks
+	var pageStart, pageEnd int
+	var err error
 
-	respondWithJSON(w, http.StatusOK, p)
+	_, data := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+	pageStart, pageEnd, err = getPageRange(r.URL.Query(), nil, data.Metadata.Page.Count)
+
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, r := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		risks = append(risks, r)
+	}
+
+	respondWithJSON(w, http.StatusOK, risks)
+}
+
+// getAllRisksMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags risks
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/risks/metadata [get]
+func (a *App) getAllRisksMetadata(w http.ResponseWriter, r *http.Request) {
+
+	_, data := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: data.Metadata.Page.Count,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
 
 // getProjectRisks godoc
@@ -76,6 +117,9 @@ func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
 // @Produce  json
 // @Param id path string false "Enter project id"
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/projects/{id}/risks [get]
 func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
@@ -88,9 +132,47 @@ func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	p := httpclient.GetProjectRisks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	var risks []*models.ReturnedRisks
 
-	respondWithJSON(w, http.StatusOK, p)
+	respHeaders, _ := httpclient.GetProjectRisks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, r := httpclient.GetProjectRisks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		risks = append(risks, r)
+	}
+
+	respondWithJSON(w, http.StatusOK, risks)
+
+}
+
+// getProjectRisksMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags risks
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/projects/{id}/risks/metadata [get]
+func (a *App) getProjectRisksMetadata(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	_, data := httpclient.GetProjectRisks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: data.Metadata.Page.Count,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
 
 // updateRisks godoc

@@ -7,10 +7,11 @@ type Relationship struct {
 }
 
 type Meta struct {
-	Limit      int      `json:"limit,omitempty"`
-	NextCursor string   `json:"nextCursor,omitempty"`
-	Page       MetaPage `json:"page,omitempty"`
-	PrevCursor string   `json:"prevCursor,omitempty"`
+	Limit         int      `json:"limit,omitempty"`
+	NextCursor    string   `json:"nextCursor,omitempty"`
+	Page          MetaPage `json:"page,omitempty"`
+	PrevCursor    string   `json:"prevCursor,omitempty"`
+	TotalCapacity int      `json:"totalCapacity,omitempty"`
 }
 
 type MetaPage struct {
@@ -63,4 +64,8 @@ type Specification struct {
 	Username   string `json:"username,omitempty"`
 	Password   string `json:"password,omitempty"`
 	DomainName string `json:"domain_name,omitempty"`
+}
+
+type EndpointMetadata struct {
+	PageCount int
 }

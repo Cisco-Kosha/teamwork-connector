@@ -2,11 +2,12 @@ package app
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/gorilla/mux"
 	"github.com/kosha/teamwork-connector/pkg/httpclient"
 	"github.com/kosha/teamwork-connector/pkg/models"
-	"net/http"
-	// "fmt"
 )
 
 // getAllProjects godoc
@@ -17,6 +18,9 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.MultiProject
 // @Router /api/v1/projects [get]
 func (a *App) getAllProjects(w http.ResponseWriter, r *http.Request) {
@@ -26,9 +30,44 @@ func (a *App) getAllProjects(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	p := httpclient.GetAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	var projects []*models.MultiProject
+	var pageStart, pageEnd int
+	var err error
 
-	respondWithJSON(w, http.StatusOK, p)
+	_, data := httpclient.GetAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+	pageStart, pageEnd, err = getPageRange(r.URL.Query(), nil, data.Metadata.Page.Count)
+
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, p := httpclient.GetAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		projects = append(projects, p)
+	}
+
+	respondWithJSON(w, http.StatusOK, projects)
+}
+
+// getAllProjectsMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/projects/metadata [get]
+func (a *App) getAllProjectsMetadata(w http.ResponseWriter, r *http.Request) {
+	_, data := httpclient.GetAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: data.Metadata.Page.Count,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
 
 // getSingleProject godoc
@@ -137,9 +176,9 @@ func (a *App) getLatestActivityAllProjects(w http.ResponseWriter, r *http.Reques
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	p := httpclient.GetLatestActivityAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	activity := httpclient.GetLatestActivityAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
 
-	respondWithJSON(w, http.StatusOK, p)
+	respondWithJSON(w, http.StatusOK, activity)
 }
 
 // getProjectTasklists godoc
@@ -151,6 +190,9 @@ func (a *App) getLatestActivityAllProjects(w http.ResponseWriter, r *http.Reques
 // @Produce  json
 // @Param id path string false "Enter project id"
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.MultiTaskList
 // @Router /api/v1/projects/{id}/tasklists [get]
 func (a *App) getProjectTasklists(w http.ResponseWriter, r *http.Request) {
@@ -163,9 +205,126 @@ func (a *App) getProjectTasklists(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	p := httpclient.GetProjectTaskLists(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	var tasklists []*models.MultiTaskList
 
-	respondWithJSON(w, http.StatusOK, p)
+	respHeaders, _ := httpclient.GetProjectTaskLists(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, t := httpclient.GetProjectTaskLists(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		tasklists = append(tasklists, t)
+	}
+
+	respondWithJSON(w, http.StatusOK, tasklists)
+}
+
+// getProjectTasklistsMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags tasklists
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/projects/{id}/tasklists/metadata [get]
+func (a *App) getProjectTasklistsMetadata(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	respHeaders, _ := httpclient.GetProjectTaskLists(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
+	if err != nil {
+		a.Log.Errorf("Error getting x-pages header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: pageCount,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
+}
+
+// getProjectTasks godoc
+// @Summary Retrieves all tasks in a project
+// @Description Lists all tasks based on project ID
+// @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Param id path string false "Enter project id"
+// @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
+// @Success 200 {object} models.Tasks
+// @Router /api/v1/projects/{id}/tasks [get]
+func (a *App) getProjectTasks(w http.ResponseWriter, r *http.Request) {
+
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	var tasks []*models.Tasks
+
+	respHeaders, _ := httpclient.GetProjectTasks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Invalid pageStart or pageEnd header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, t := httpclient.GetProjectTasks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		tasks = append(tasks, t)
+	}
+
+	respondWithJSON(w, http.StatusOK, tasks)
+}
+
+// getProjectTasksMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/projects/{id}/tasks/metadata [get]
+func (a *App) getProjectTasksMetadata(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	respHeaders, _ := httpclient.GetProjectTasks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
+	if err != nil {
+		a.Log.Errorf("Error getting x-pages header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: pageCount,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
 
 // createTaskList godoc
@@ -249,6 +408,9 @@ func (a *App) createProjectUpdate(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/projects/updates [get]
 func (a *App) getAllProjectUpdates(w http.ResponseWriter, r *http.Request) {
@@ -258,9 +420,53 @@ func (a *App) getAllProjectUpdates(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	p := httpclient.GetAllProjectUpdates(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query())
+	var projectUpdates []*models.ProjectUpdateResponse
+	var pageStart, pageEnd int
+	var err error
 
-	respondWithJSON(w, http.StatusOK, p)
+	_, data := httpclient.GetAllProjectUpdates(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+	pageStart, pageEnd, err = getPageRange(r.URL.Query(), nil, data.Metadata.Page.Count)
+
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, p := httpclient.GetAllProjectUpdates(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+
+		projectUpdates = append(projectUpdates, p)
+	}
+
+	respondWithJSON(w, http.StatusOK, projectUpdates)
+}
+
+// getAllProjectUpdatesMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/projects/updates/metadata [get]
+func (a *App) getAllProjectUpdatesMetadata(w http.ResponseWriter, r *http.Request) {
+	var pageCount int
+	_, data := httpclient.GetAllProjectUpdates(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+
+	if data.Metadata.Page.Count == 0 {
+		pageCount = 1
+	} else {
+		pageCount = data.Metadata.Page.Count
+	}
+
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: pageCount,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
 
 // modifyProjectUpdate godoc
