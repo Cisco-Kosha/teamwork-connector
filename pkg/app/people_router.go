@@ -37,6 +37,9 @@ func (a *App) getCurrentPerson(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.People
 // @Router /api/v1/people [get]
 func (a *App) getPeople(w http.ResponseWriter, r *http.Request) {

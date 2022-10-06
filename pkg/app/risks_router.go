@@ -55,6 +55,9 @@ func (a *App) createProjectRisk(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/risks [get]
 func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
@@ -114,6 +117,9 @@ func (a *App) getAllRisksMetadata(w http.ResponseWriter, r *http.Request) {
 // @Produce  json
 // @Param id path string false "Enter project id"
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/projects/{id}/risks [get]
 func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {

@@ -56,6 +56,9 @@ func (a *App) createProjectTimeEntry(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedTimeEntries
 // @Router /api/v1/timeentries [get]
 func (a *App) getAllTimeEntries(w http.ResponseWriter, r *http.Request) {
@@ -121,6 +124,9 @@ func (a *App) getAllTimeEntriesMetadata(w http.ResponseWriter, r *http.Request) 
 // @Produce  json
 // @Param id path string false "Enter project id"
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedTimeEntries
 // @Router /api/v1/projects/{project_id}/timeentry [get]
 func (a *App) getProjectTimeEntries(w http.ResponseWriter, r *http.Request) {

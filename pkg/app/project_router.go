@@ -18,6 +18,9 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.MultiProject
 // @Router /api/v1/projects [get]
 func (a *App) getAllProjects(w http.ResponseWriter, r *http.Request) {
@@ -187,6 +190,9 @@ func (a *App) getLatestActivityAllProjects(w http.ResponseWriter, r *http.Reques
 // @Produce  json
 // @Param id path string false "Enter project id"
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.MultiTaskList
 // @Router /api/v1/projects/{id}/tasklists [get]
 func (a *App) getProjectTasklists(w http.ResponseWriter, r *http.Request) {
@@ -257,6 +263,9 @@ func (a *App) getProjectTasklistsMetadata(w http.ResponseWriter, r *http.Request
 // @Produce  json
 // @Param id path string false "Enter project id"
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.Tasks
 // @Router /api/v1/projects/{id}/tasks [get]
 func (a *App) getProjectTasks(w http.ResponseWriter, r *http.Request) {
@@ -399,6 +408,9 @@ func (a *App) createProjectUpdate(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/projects/updates [get]
 func (a *App) getAllProjectUpdates(w http.ResponseWriter, r *http.Request) {

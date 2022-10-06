@@ -47,6 +47,9 @@ func (a *App) deleteTaskList(w http.ResponseWriter, r *http.Request) {
 // @Produce  json
 // @Param id path string false "Enter tasklist id"
 // @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.Tasks
 // @Router /api/v1/tasklists/{id}/tasks [get]
 func (a *App) getTasks(w http.ResponseWriter, r *http.Request) {
