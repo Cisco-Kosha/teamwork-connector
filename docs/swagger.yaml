@@ -1220,6 +1220,11 @@ paths:
       consumes:
       - application/json
       description: Get page metadata for endpoint
+      parameters:
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:
@@ -1291,6 +1296,11 @@ paths:
       consumes:
       - application/json
       description: Get page metadata for endpoint
+      parameters:
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:
@@ -1342,6 +1352,11 @@ paths:
       consumes:
       - application/json
       description: Get page metadata for endpoint
+      parameters:
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:
@@ -1442,6 +1457,11 @@ paths:
       consumes:
       - application/json
       description: Get page metadata for endpoint
+      parameters:
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:
@@ -1787,6 +1807,11 @@ paths:
       consumes:
       - application/json
       description: Get page metadata for endpoint
+      parameters:
+      - description: Enter tasklist id
+        in: path
+        name: id
+        type: string
       produces:
       - application/json
       responses:

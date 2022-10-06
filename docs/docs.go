@@ -593,6 +593,14 @@ const docTemplate = `{
                     "risks"
                 ],
                 "summary": "Get number of pages and page length data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -696,6 +704,14 @@ const docTemplate = `{
                     "tasklists"
                 ],
                 "summary": "Get number of pages and page length data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -771,6 +787,14 @@ const docTemplate = `{
                     "projects"
                 ],
                 "summary": "Get number of pages and page length data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -916,6 +940,14 @@ const docTemplate = `{
                     "timeentry"
                 ],
                 "summary": "Get number of pages and page length data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -1238,6 +1270,14 @@ const docTemplate = `{
                     "tasklists"
                 ],
                 "summary": "Get number of pages and page length data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter tasklist id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"

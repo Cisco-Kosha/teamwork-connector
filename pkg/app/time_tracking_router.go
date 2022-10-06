@@ -172,6 +172,7 @@ func (a *App) getProjectTimeEntries(w http.ResponseWriter, r *http.Request) {
 // @Tags timeentry
 // @Accept  json
 // @Produce  json
+// @Param id path string false "Enter project id"
 // @Success 200
 // @Router /api/v1/projects/{project_id}/timeentry/metadata [get]
 func (a *App) getProjectTimeEntriesMetadata(w http.ResponseWriter, r *http.Request) {

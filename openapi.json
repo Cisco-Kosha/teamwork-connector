@@ -573,6 +573,17 @@
     },
     "/api/v1/projects/{id}/risks/metadata": {
       "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -673,6 +684,17 @@
     },
     "/api/v1/projects/{id}/tasklists/metadata": {
       "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -751,6 +773,17 @@
     },
     "/api/v1/projects/{id}/tasks/metadata": {
       "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -897,6 +930,17 @@
     },
     "/api/v1/projects/{project_id}/timeentry/metadata": {
       "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -1211,6 +1255,17 @@
     },
     "/api/v1/tasklists/{id}/tasks/metadata": {
       "get": {
+        "parameters": [
+          {
+            "description": "Enter tasklist id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"

@@ -166,6 +166,7 @@ func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
 // @Tags risks
 // @Accept  json
 // @Produce  json
+// @Param id path string false "Enter project id"
 // @Success 200
 // @Router /api/v1/projects/{id}/risks/metadata [get]
 func (a *App) getProjectRisksMetadata(w http.ResponseWriter, r *http.Request) {

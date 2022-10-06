@@ -92,6 +92,7 @@ func (a *App) getTasks(w http.ResponseWriter, r *http.Request) {
 // @Tags tasklists
 // @Accept  json
 // @Produce  json
+// @Param id path string false "Enter tasklist id"
 // @Success 200
 // @Router /api/v1/tasklists/{id}/tasks/metadata [get]
 func (a *App) getTasksMetadata(w http.ResponseWriter, r *http.Request) {

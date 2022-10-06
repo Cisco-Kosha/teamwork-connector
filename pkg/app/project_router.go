@@ -239,6 +239,7 @@ func (a *App) getProjectTasklists(w http.ResponseWriter, r *http.Request) {
 // @Tags tasklists
 // @Accept  json
 // @Produce  json
+// @Param id path string false "Enter project id"
 // @Success 200
 // @Router /api/v1/projects/{id}/tasklists/metadata [get]
 func (a *App) getProjectTasklistsMetadata(w http.ResponseWriter, r *http.Request) {
@@ -317,6 +318,7 @@ func (a *App) getProjectTasks(w http.ResponseWriter, r *http.Request) {
 // @Tags projects
 // @Accept  json
 // @Produce  json
+// @Param id path string false "Enter project id"
 // @Success 200
 // @Router /api/v1/projects/{id}/tasks/metadata [get]
 func (a *App) getProjectTasksMetadata(w http.ResponseWriter, r *http.Request) {
