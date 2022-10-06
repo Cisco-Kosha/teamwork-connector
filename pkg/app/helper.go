@@ -55,7 +55,7 @@ func getPageRange(params url.Values, respHeaders http.Header, pageCount int) (in
 		return 0, 0, errors.New("invalid pageStart or pageEnd value")
 	}
 
-	if val, ok := params["allPages"]; ok && val[0] == "True" {
+	if val, ok := params["allPages"]; ok && val[0] == "true" {
 		pageStart = 1
 		pageEnd = numPages
 	}
