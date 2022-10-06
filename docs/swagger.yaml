@@ -156,6 +156,8 @@ definitions:
         $ref: '#/definitions/models.MetaPage'
       prevCursor:
         type: string
+      totalCapacity:
+        type: integer
     type: object
   models.MetaPage:
     properties:
@@ -523,7 +525,8 @@ definitions:
   models.ReturnedRisks:
     properties:
       included: {}
-      meta: {}
+      meta:
+        $ref: '#/definitions/models.Meta'
       risks:
         items:
           $ref: '#/definitions/models.Risks'
@@ -733,7 +736,7 @@ definitions:
     properties:
       STATUS:
         type: string
-      toDoItems:
+      todo-items:
         items:
           $ref: '#/definitions/models.ToDoItem'
         type: array
@@ -979,6 +982,18 @@ paths:
         in: query
         name: page
         type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
       produces:
       - application/json
       responses:
@@ -1029,6 +1044,19 @@ paths:
       summary: List projects for specified person
       tags:
       - people
+  /api/v1/people/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
+      tags:
+      - people
   /api/v1/projects:
     get:
       consumes:
@@ -1041,6 +1069,18 @@ paths:
         in: query
         name: page
         type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
       produces:
       - application/json
       responses:
@@ -1129,6 +1169,18 @@ paths:
         in: query
         name: page
         type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
       produces:
       - application/json
       responses:
@@ -1163,6 +1215,19 @@ paths:
       summary: Create a risk for a project
       tags:
       - risks
+  /api/v1/projects/{id}/risks/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
+      tags:
+      - risks
   /api/v1/projects/{id}/tasklists:
     get:
       consumes:
@@ -1179,6 +1244,18 @@ paths:
         in: query
         name: page
         type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
       produces:
       - application/json
       responses:
@@ -1209,6 +1286,70 @@ paths:
       summary: Create new tasklist
       tags:
       - tasklists
+  /api/v1/projects/{id}/tasklists/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
+      tags:
+      - tasklists
+  /api/v1/projects/{id}/tasks:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Lists all tasks based on project ID
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project
+      parameters:
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tasks'
+      summary: Retrieves all tasks in a project
+      tags:
+      - projects
+  /api/v1/projects/{id}/tasks/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
+      tags:
+      - projects
   /api/v1/projects/{id}/update:
     post:
       consumes:
@@ -1250,6 +1391,18 @@ paths:
         in: query
         name: page
         type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
       produces:
       - application/json
       responses:
@@ -1284,6 +1437,19 @@ paths:
       summary: Create a time entry for a project
       tags:
       - timeentry
+  /api/v1/projects/{project_id}/timeentry/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
+      tags:
+      - timeentry
   /api/v1/projects/activity:
     get:
       consumes:
@@ -1304,6 +1470,19 @@ paths:
           schema:
             $ref: '#/definitions/models.MultiActivity'
       summary: List latest activity across all projects
+      tags:
+      - projects
+  /api/v1/projects/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
       tags:
       - projects
   /api/v1/projects/update/{id}:
@@ -1362,6 +1541,18 @@ paths:
         in: query
         name: page
         type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
       produces:
       - application/json
       responses:
@@ -1370,6 +1561,19 @@ paths:
           schema:
             $ref: '#/definitions/models.ReturnedRisks'
       summary: Get all project updates
+      tags:
+      - projects
+  /api/v1/projects/updates/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
       tags:
       - projects
   /api/v1/risks:
@@ -1384,6 +1588,18 @@ paths:
         in: query
         name: page
         type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
       produces:
       - application/json
       responses:
@@ -1436,6 +1652,19 @@ paths:
         "200":
           description: OK
       summary: Update a project risk
+      tags:
+      - risks
+  /api/v1/risks/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
       tags:
       - risks
   /api/v1/specification/list:
@@ -1531,6 +1760,18 @@ paths:
         in: query
         name: page
         type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
       produces:
       - application/json
       responses:
@@ -1539,6 +1780,19 @@ paths:
           schema:
             $ref: '#/definitions/models.Tasks'
       summary: Retrieve a tasklist's tasks
+      tags:
+      - tasklists
+  /api/v1/tasklists/{id}/tasks/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
       tags:
       - tasklists
   /api/v1/timeentries:
@@ -1553,6 +1807,18 @@ paths:
         in: query
         name: page
         type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
       produces:
       - application/json
       responses:
@@ -1607,6 +1873,19 @@ paths:
           schema:
             $ref: '#/definitions/models.CreatedTimeEntry'
       summary: Update a time entry
+      tags:
+      - timeentry
+  /api/v1/timeentries/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
       tags:
       - timeentry
 swagger: "2.0"

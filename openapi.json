@@ -47,6 +47,30 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -66,6 +90,20 @@
         ],
         "description": "Get a list of all people in the current user's company.",
         "summary": "Get all people from current user's company."
+      }
+    },
+    "/api/v1/people/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "people"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
       }
     },
     "/api/v1/people/{id}": {
@@ -142,6 +180,30 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -216,6 +278,20 @@
         "summary": "List latest activity across all projects"
       }
     },
+    "/api/v1/projects/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
+      }
+    },
     "/api/v1/projects/update/{id}": {
       "delete": {
         "parameters": [
@@ -284,6 +360,30 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -303,6 +403,20 @@
         ],
         "description": "List all updates across projects that the logged-in user can access.\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.",
         "summary": "Get all project updates"
+      }
+    },
+    "/api/v1/projects/updates/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
       }
     },
     "/api/v1/projects/{id}": {
@@ -379,6 +493,30 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -433,6 +571,20 @@
         "summary": "Create a risk for a project"
       }
     },
+    "/api/v1/projects/{id}/risks/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "risks"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
+      }
+    },
     "/api/v1/projects/{id}/tasklists": {
       "get": {
         "parameters": [
@@ -451,6 +603,30 @@
             "name": "page",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -493,6 +669,98 @@
           "description": "Enter tasklist properties"
         },
         "summary": "Create new tasklist"
+      }
+    },
+    "/api/v1/projects/{id}/tasklists/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "tasklists"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
+      }
+    },
+    "/api/v1/projects/{id}/tasks": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.Tasks"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Lists all tasks based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project",
+        "summary": "Retrieves all tasks in a project"
+      }
+    },
+    "/api/v1/projects/{id}/tasks/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
       }
     },
     "/api/v1/projects/{id}/update": {
@@ -549,6 +817,30 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -603,6 +895,20 @@
         "summary": "Create a time entry for a project"
       }
     },
+    "/api/v1/projects/{project_id}/timeentry/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "timeentry"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
+      }
+    },
     "/api/v1/risks": {
       "get": {
         "parameters": [
@@ -612,6 +918,30 @@
             "name": "page",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -632,6 +962,20 @@
         ],
         "description": "List all risks across projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/64d22ab985a58-get-all-risks for more parameter options.",
         "summary": "Get all risks"
+      }
+    },
+    "/api/v1/risks/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "risks"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
       }
     },
     "/api/v1/risks/{id}": {
@@ -820,6 +1164,30 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -841,6 +1209,20 @@
         "summary": "Retrieve a tasklist's tasks"
       }
     },
+    "/api/v1/tasklists/{id}/tasks/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "tasklists"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
+      }
+    },
     "/api/v1/timeentries": {
       "get": {
         "parameters": [
@@ -850,6 +1232,30 @@
             "name": "page",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -870,6 +1276,20 @@
         ],
         "description": "List all time entries across projects and tasks\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/4ea39d569915b-retrieve-all-time-entries-across-all-projects for more parameter options.",
         "summary": "Get all time entries"
+      }
+    },
+    "/api/v1/timeentries/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "timeentry"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
       }
     },
     "/api/v1/timeentries/{id}": {
@@ -1205,6 +1625,9 @@
           },
           "prevCursor": {
             "type": "string"
+          },
+          "totalCapacity": {
+            "type": "integer"
           }
         },
         "type": "object"
@@ -1758,7 +2181,9 @@
       "models.ReturnedRisks": {
         "properties": {
           "included": {},
-          "meta": {},
+          "meta": {
+            "$ref": "#/components/schemas/models.Meta"
+          },
           "risks": {
             "items": {
               "$ref": "#/components/schemas/models.Risks"
@@ -2055,7 +2480,7 @@
           "STATUS": {
             "type": "string"
           },
-          "toDoItems": {
+          "todo-items": {
             "items": {
               "$ref": "#/components/schemas/models.ToDoItem"
             },

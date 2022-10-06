@@ -62,6 +62,24 @@ const docTemplate = `{
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -70,6 +88,26 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.People"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/people/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "people"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -155,6 +193,24 @@ const docTemplate = `{
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -222,6 +278,26 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.MultiActivity"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -307,6 +383,24 @@ const docTemplate = `{
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -315,6 +409,26 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.ReturnedRisks"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/updates/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -402,6 +516,24 @@ const docTemplate = `{
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -448,6 +580,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/projects/{id}/risks/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "risks"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/projects/{id}/tasklists": {
             "get": {
                 "description": "Lists task lists based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/7ee4827082194-get-all-task-lists-for-a-project for more parameter options.",
@@ -472,6 +624,24 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Page number",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
                         "in": "query"
                     }
                 ],
@@ -506,6 +676,101 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/{id}/tasklists/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasklists"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/{id}/tasks": {
+            "get": {
+                "description": "Lists all tasks based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Retrieves all tasks in a project",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Tasks"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/{id}/tasks/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Get number of pages and page length data",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -574,6 +839,24 @@ const docTemplate = `{
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -620,6 +903,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/projects/{project_id}/timeentry/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timeentry"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/risks": {
             "get": {
                 "description": "List all risks across projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/64d22ab985a58-get-all-risks for more parameter options.",
@@ -639,6 +942,24 @@ const docTemplate = `{
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -647,6 +968,26 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.ReturnedRisks"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/risks/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "risks"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -854,6 +1195,24 @@ const docTemplate = `{
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -862,6 +1221,26 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Tasks"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/tasklists/{id}/tasks/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasklists"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -885,6 +1264,24 @@ const docTemplate = `{
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -893,6 +1290,26 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.ReturnedTimeEntries"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/timeentries/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "timeentry"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -1198,6 +1615,9 @@ const docTemplate = `{
                 },
                 "prevCursor": {
                     "type": "string"
+                },
+                "totalCapacity": {
+                    "type": "integer"
                 }
             }
         },
@@ -1751,7 +2171,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "included": {},
-                "meta": {},
+                "meta": {
+                    "$ref": "#/definitions/models.Meta"
+                },
                 "risks": {
                     "type": "array",
                     "items": {
@@ -2048,7 +2470,7 @@ const docTemplate = `{
                 "STATUS": {
                     "type": "string"
                 },
-                "toDoItems": {
+                "todo-items": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.ToDoItem"
