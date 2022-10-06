@@ -100,6 +100,10 @@ func (a *App) getAllTimeEntries(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/timeentries/metadata [get]
 func (a *App) getAllTimeEntriesMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
 
 	respHeaders, _ := httpclient.GetAllTimeEntries(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
 	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
@@ -171,6 +175,11 @@ func (a *App) getProjectTimeEntries(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/projects/{project_id}/timeentry/metadata [get]
 func (a *App) getProjectTimeEntriesMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
 	vars := mux.Vars(r)
 	id := vars["id"]
 

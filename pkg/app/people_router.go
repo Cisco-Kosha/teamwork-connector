@@ -81,6 +81,11 @@ func (a *App) getPeople(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/people/metadata [get]
 func (a *App) getPeopleMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
 	respHeaders, _ := httpclient.GetPeople(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
 	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
 	if err != nil {

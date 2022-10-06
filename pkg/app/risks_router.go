@@ -100,6 +100,10 @@ func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/risks/metadata [get]
 func (a *App) getAllRisksMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
 
 	_, data := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
 	endpointMetadata := models.EndpointMetadata{
@@ -165,6 +169,11 @@ func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/projects/{id}/risks/metadata [get]
 func (a *App) getProjectRisksMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
 	vars := mux.Vars(r)
 	id := vars["id"]
 

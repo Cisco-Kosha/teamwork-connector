@@ -63,6 +63,11 @@ func (a *App) getAllProjects(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/projects/metadata [get]
 func (a *App) getAllProjectsMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
 	_, data := httpclient.GetAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
 	endpointMetadata := models.EndpointMetadata{
 		PageCount: data.Metadata.Page.Count,
@@ -237,6 +242,11 @@ func (a *App) getProjectTasklists(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/projects/{id}/tasklists/metadata [get]
 func (a *App) getProjectTasklistsMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
 	vars := mux.Vars(r)
 	id := vars["id"]
 
@@ -310,6 +320,11 @@ func (a *App) getProjectTasks(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/projects/{id}/tasks/metadata [get]
 func (a *App) getProjectTasksMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
 	vars := mux.Vars(r)
 	id := vars["id"]
 
@@ -454,6 +469,11 @@ func (a *App) getAllProjectUpdates(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/projects/updates/metadata [get]
 func (a *App) getAllProjectUpdatesMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
 	var pageCount int
 	_, data := httpclient.GetAllProjectUpdates(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
 

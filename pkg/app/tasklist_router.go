@@ -95,6 +95,11 @@ func (a *App) getTasks(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Router /api/v1/tasklists/{id}/tasks/metadata [get]
 func (a *App) getTasksMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
 	vars := mux.Vars(r)
 	id := vars["id"]
 
