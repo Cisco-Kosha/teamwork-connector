@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type MultiActivity struct {
 	Activities []Activity       `json:"activities,omitempty"`
 	Metadata   Meta             `json:"meta,omitempty"`
@@ -38,4 +40,34 @@ type ActivityIncluded struct {
 	Companies interface{} `json:"companies,omitempty"`
 	Projects  interface{} `json:"projects,omitempty"`
 	Users     interface{} `json:"users,omitempty"`
+}
+
+type ActivityResponseV1 struct {
+	Activity []ActivityV1 `json:"activity"`
+	Message  string       `json:"MESSAGE,omitempty"`
+	Status   string       `json:"STATUS"`
+}
+
+type ActivityV1 struct {
+	ProjectID         string    `json:"project-id"`
+	Itemid            string    `json:"itemid"`
+	TodoListName      string    `json:"todo-list-name"`
+	FromUserAvatarURL string    `json:"from-user-avatar-url"`
+	Description       string    `json:"description"`
+	Forusername       string    `json:"forusername"`
+	Publicinfo        string    `json:"publicinfo"`
+	Foruserid         string    `json:"foruserid"`
+	Itemlink          string    `json:"itemlink"`
+	Datetime          time.Time `json:"datetime"`
+	Activitytype      string    `json:"activitytype"`
+	ProjectName       string    `json:"project-name"`
+	Link              string    `json:"link"`
+	Extradescription  string    `json:"extradescription"`
+	Isprivate         string    `json:"isprivate"`
+	ID                string    `json:"id"`
+	DueDate           string    `json:"due-date"`
+	Fromusername      string    `json:"fromusername"`
+	Type              string    `json:"type"`
+	ForUserAvatarURL  string    `json:"for-user-avatar-url"`
+	Userid            string    `json:"userid"`
 }

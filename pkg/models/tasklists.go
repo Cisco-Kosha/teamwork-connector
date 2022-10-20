@@ -6,6 +6,7 @@ type ProjectsTasklists struct {
 
 type MultiTaskList struct {
 	Status    string     `json:"STATUS,omitempty"`
+	Message   string     `json:"MESSAGE,omitempty"`
 	Tasklists []Tasklist `json:"tasklists,omitempty"`
 }
 
@@ -33,6 +34,7 @@ type NewTaskList struct {
 
 type Tasks struct {
 	Status    string     `json:"STATUS,omitempty"`
+	Message   string     `json:"MESSAGE,omitempty"`
 	ToDoItems []ToDoItem `json:"todo-items,omitempty"`
 }
 

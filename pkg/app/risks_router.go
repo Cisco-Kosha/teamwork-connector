@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -60,7 +61,36 @@ func (a *App) createProjectRisk(w http.ResponseWriter, r *http.Request) {
 // @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/risks [get]
-func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
+func (a *App) getAllRisksV1(w http.ResponseWriter, r *http.Request) {
+
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	var risks []*models.ReturnedRisksV1
+
+	respHeaders, _ := httpclient.GetAllRisksV1(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, r := httpclient.GetAllRisksV1(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		risks = append(risks, r)
+	}
+
+	respondWithJSON(w, http.StatusOK, risks)
+}
+
+func (a *App) getAllRisksV3(w http.ResponseWriter, r *http.Request) {
 
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -71,7 +101,7 @@ func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
 	var pageStart, pageEnd int
 	var err error
 
-	_, data := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+	_, data := httpclient.GetAllRisksV3(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
 	pageStart, pageEnd, err = getPageRange(r.URL.Query(), nil, data.Metadata.Page.Count)
 
 	if err != nil {
@@ -84,7 +114,7 @@ func (a *App) getAllRisks(w http.ResponseWriter, r *http.Request) {
 	params := r.URL.Query()
 	for i := pageStart; i <= pageEnd; i++ {
 		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
-		_, r := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		_, r := httpclient.GetAllRisksV3(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
 		risks = append(risks, r)
 	}
 
@@ -105,9 +135,16 @@ func (a *App) getAllRisksMetadata(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	_, data := httpclient.GetAllRisks(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+	respHeaders, _ := httpclient.GetAllRisksV1(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
+	if err != nil {
+		a.Log.Errorf("Error getting x-pages header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
 	endpointMetadata := models.EndpointMetadata{
-		PageCount: data.Metadata.Page.Count,
+		PageCount: pageCount,
 	}
 	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
@@ -126,7 +163,41 @@ func (a *App) getAllRisksMetadata(w http.ResponseWriter, r *http.Request) {
 // @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedRisks
 // @Router /api/v1/projects/{id}/risks [get]
-func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
+func (a *App) getProjectRisksV1(w http.ResponseWriter, r *http.Request) {
+
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	var risks []*models.ReturnedRisksV1
+
+	respHeaders, _ := httpclient.GetProjectRisksV1(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	fmt.Println(respHeaders)
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, r := httpclient.GetProjectRisksV1(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		risks = append(risks, r)
+	}
+
+	respondWithJSON(w, http.StatusOK, risks)
+
+}
+
+func (a *App) getProjectRisksV3(w http.ResponseWriter, r *http.Request) {
 
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -138,7 +209,7 @@ func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
 
 	var risks []*models.ReturnedRisks
 
-	respHeaders, _ := httpclient.GetProjectRisks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	respHeaders, _ := httpclient.GetProjectRisksV3(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
 
 	//get page range data from headers
 	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
@@ -152,7 +223,7 @@ func (a *App) getProjectRisks(w http.ResponseWriter, r *http.Request) {
 	params := r.URL.Query()
 	for i := pageStart; i <= pageEnd; i++ {
 		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
-		_, r := httpclient.GetProjectRisks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		_, r := httpclient.GetProjectRisksV3(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
 		risks = append(risks, r)
 	}
 
@@ -178,9 +249,16 @@ func (a *App) getProjectRisksMetadata(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	_, data := httpclient.GetProjectRisks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
+	respHeaders, _ := httpclient.GetProjectRisksV1(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
+	if err != nil {
+		a.Log.Errorf("Error getting x-pages header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
 	endpointMetadata := models.EndpointMetadata{
-		PageCount: data.Metadata.Page.Count,
+		PageCount: pageCount,
 	}
 	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }

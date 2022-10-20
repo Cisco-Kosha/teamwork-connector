@@ -1,5 +1,10 @@
 package models
 
+type Error struct {
+	Status  string `json:"STATUS,omitempty"`
+	Message string `json:"MESSAGE,omitempty"`
+}
+
 type Relationship struct {
 	ID       int    `json:"id,omitempty"`
 	Metadata Meta   `json:"meta,omitempty"`

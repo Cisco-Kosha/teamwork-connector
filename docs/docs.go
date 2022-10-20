@@ -176,7 +176,7 @@ const docTemplate = `{
         },
         "/api/v1/projects": {
             "get": {
-                "description": "List all projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/df7d06840ecdd-returns-a-list-of-projects for more parameter options.",
+                "description": "V1 Teamwork API: list all projects\nPlease refer to hhttps://apidocs.teamwork.com/docs/teamwork/626f30d917e1c-retrieve-all-projects for more parameter options.",
                 "consumes": [
                     "application/json"
                 ],
@@ -217,7 +217,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.MultiProject"
+                            "$ref": "#/definitions/models.ProjectResponseV1"
                         }
                     }
                 }
@@ -253,7 +253,7 @@ const docTemplate = `{
         },
         "/api/v1/projects/activity": {
             "get": {
-                "description": "Lists the latest activity across all projects ordered chronologically.\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/f207f625bd76e-latest-activity-all-projects for more parameter options.",
+                "description": "Lists the latest activity across all projects ordered chronologically.\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/e8d592debf406-latest-activity-across-all-projects for more parameter options.",
                 "consumes": [
                     "application/json"
                 ],
@@ -366,7 +366,7 @@ const docTemplate = `{
         },
         "/api/v1/projects/updates": {
             "get": {
-                "description": "List all updates across projects that the logged-in user can access.\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.",
+                "description": "List all updates for a specific project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/277672affb50e-get-project-updates for more parameter options.",
                 "consumes": [
                     "application/json"
                 ],
@@ -376,8 +376,14 @@ const docTemplate = `{
                 "tags": [
                     "projects"
                 ],
-                "summary": "Get all project updates",
+                "summary": "Get all  updates for a specific project",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    },
                     {
                         "type": "string",
                         "description": "Page number",
@@ -426,6 +432,14 @@ const docTemplate = `{
                     "projects"
                 ],
                 "summary": "Get number of pages and page length data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -435,7 +449,7 @@ const docTemplate = `{
         },
         "/api/v1/projects/{id}": {
             "get": {
-                "description": "List single project based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/9daa306fff1d2-returns-a-project for more parameter options.",
+                "description": "List single project based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/da79573311f8a-retrieve-a-single-project for more parameter options.",
                 "consumes": [
                     "application/json"
                 ],
@@ -458,7 +472,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.SingleProject"
+                            "$ref": "#/definitions/models.SingleProjectResponseV1"
                         }
                     }
                 }
@@ -1512,6 +1526,94 @@ const docTemplate = `{
                 }
             }
         },
+        "models.ActivePages": {
+            "type": "object",
+            "properties": {
+                "billing": {
+                    "type": "boolean"
+                },
+                "board": {
+                    "type": "boolean"
+                },
+                "comments": {
+                    "type": "boolean"
+                },
+                "files": {
+                    "type": "boolean"
+                },
+                "finance": {
+                    "type": "boolean"
+                },
+                "forms": {
+                    "type": "boolean"
+                },
+                "gantt": {
+                    "type": "boolean"
+                },
+                "links": {
+                    "type": "boolean"
+                },
+                "list": {
+                    "type": "boolean"
+                },
+                "messages": {
+                    "type": "boolean"
+                },
+                "milestones": {
+                    "type": "boolean"
+                },
+                "notebooks": {
+                    "type": "boolean"
+                },
+                "riskRegister": {
+                    "type": "boolean"
+                },
+                "table": {
+                    "type": "boolean"
+                },
+                "tasks": {
+                    "type": "boolean"
+                },
+                "time": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.ActivePagesV1": {
+            "type": "object",
+            "properties": {
+                "billing": {
+                    "type": "string"
+                },
+                "comments": {
+                    "type": "string"
+                },
+                "files": {
+                    "type": "string"
+                },
+                "links": {
+                    "type": "string"
+                },
+                "messages": {
+                    "type": "string"
+                },
+                "milestones": {
+                    "type": "string"
+                },
+                "notebooks": {
+                    "type": "string"
+                },
+                "riskRegister": {
+                    "type": "string"
+                },
+                "tasks": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Activity": {
             "type": "object",
             "properties": {
@@ -1624,6 +1726,73 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Integrations": {
+            "type": "object",
+            "properties": {
+                "microsoftConnectors": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "onedrivebusiness": {
+                    "type": "object",
+                    "properties": {
+                        "account": {
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "folder": {
+                            "type": "string"
+                        },
+                        "foldername": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "sharepoint": {
+                    "type": "object",
+                    "properties": {
+                        "account": {
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "folder": {
+                            "type": "string"
+                        },
+                        "foldername": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "xero": {
+                    "type": "object",
+                    "properties": {
+                        "basecurrency": {
+                            "type": "string"
+                        },
+                        "connected": {
+                            "type": "string"
+                        },
+                        "countrycode": {
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "organisation": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "models.IntegrationsMeta": {
             "type": "object",
             "properties": {
@@ -1732,6 +1901,9 @@ const docTemplate = `{
         "models.MultiTaskList": {
             "type": "object",
             "properties": {
+                "MESSAGE": {
+                    "type": "string"
+                },
                 "STATUS": {
                     "type": "string"
                 },
@@ -1766,7 +1938,7 @@ const docTemplate = `{
                 "projects": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Project"
+                        "$ref": "#/definitions/models.ProjectV3"
                     }
                 }
             }
@@ -1774,6 +1946,9 @@ const docTemplate = `{
         "models.People": {
             "type": "object",
             "properties": {
+                "MESSAGE": {
+                    "type": "string"
+                },
                 "STATUS": {
                     "type": "string"
                 },
@@ -2182,6 +2357,23 @@ const docTemplate = `{
                 "users": {}
             }
         },
+        "models.ProjectResponseV1": {
+            "type": "object",
+            "properties": {
+                "MESSAGE": {
+                    "type": "string"
+                },
+                "STATUS": {
+                    "type": "string"
+                },
+                "projects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ProjectV1"
+                    }
+                }
+            }
+        },
         "models.ProjectUpdate": {
             "type": "object",
             "properties": {
@@ -2190,6 +2382,543 @@ const docTemplate = `{
                 },
                 "update": {
                     "$ref": "#/definitions/models.Update"
+                }
+            }
+        },
+        "models.ProjectV1": {
+            "type": "object",
+            "properties": {
+                "active-pages": {
+                    "$ref": "#/definitions/models.ActivePagesV1"
+                },
+                "announcement": {
+                    "type": "string"
+                },
+                "announcementHTML": {
+                    "type": "string"
+                },
+                "boardData": {
+                    "type": "object"
+                },
+                "category": {
+                    "type": "object",
+                    "properties": {
+                        "color": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "company": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "is-owner": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "created-on": {
+                    "type": "string"
+                },
+                "defaultPrivacy": {
+                    "type": "string"
+                },
+                "defaults": {
+                    "type": "object",
+                    "properties": {
+                        "privacy": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "filesAutoNewVersion": {
+                    "type": "boolean"
+                },
+                "harvest-timers-enabled": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "integrations": {
+                    "$ref": "#/definitions/models.Integrations"
+                },
+                "isProjectAdmin": {
+                    "type": "boolean"
+                },
+                "last-changed-on": {
+                    "type": "string"
+                },
+                "logo": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "notifyeveryone": {
+                    "type": "boolean"
+                },
+                "overview-start-page": {
+                    "type": "string"
+                },
+                "privacyEnabled": {
+                    "type": "boolean"
+                },
+                "replyByEmailEnabled": {
+                    "type": "boolean"
+                },
+                "show-announcement": {
+                    "type": "boolean"
+                },
+                "starred": {
+                    "type": "boolean"
+                },
+                "start-page": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "subStatus": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {}
+                },
+                "tasks-start-page": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ProjectV3": {
+            "type": "object",
+            "properties": {
+                "activePages": {
+                    "$ref": "#/definitions/models.ActivePages"
+                },
+                "announcement": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "meta": {
+                            "type": "object"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "categoryId": {
+                    "type": "integer"
+                },
+                "company": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "meta": {
+                            "type": "object"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "companyId": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "integer"
+                },
+                "customFieldValueIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "customFieldValues": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "meta": {
+                                "type": "object"
+                            },
+                            "type": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "customfieldValues": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "meta": {
+                                "type": "object"
+                            },
+                            "type": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "defaultPrivacy": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "directFileUploadsEnabled": {
+                    "type": "boolean"
+                },
+                "endAt": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "financialBudget": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "meta": {
+                            "type": "object"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "financialBudgetId": {
+                    "type": "integer"
+                },
+                "harvestTimersEnabled": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "integrations": {
+                    "type": "object",
+                    "properties": {
+                        "oneDriveBusiness": {
+                            "type": "object",
+                            "properties": {
+                                "account": {
+                                    "type": "string"
+                                },
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "folderName": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "sharepoint": {
+                            "type": "object",
+                            "properties": {
+                                "account": {
+                                    "type": "string"
+                                },
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "folder": {
+                                    "type": "string"
+                                },
+                                "folderName": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "xero": {
+                            "type": "object",
+                            "properties": {
+                                "baseCurrency": {
+                                    "type": "string"
+                                },
+                                "connected": {
+                                    "type": "boolean"
+                                },
+                                "countryCode": {
+                                    "type": "string"
+                                },
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "organisation": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "isBillable": {
+                    "type": "boolean"
+                },
+                "isOnBoardingProject": {
+                    "type": "boolean"
+                },
+                "isProjectAdmin": {
+                    "type": "boolean"
+                },
+                "isSampleProject": {
+                    "type": "boolean"
+                },
+                "isStarred": {
+                    "type": "boolean"
+                },
+                "lastWorkedOn": {
+                    "type": "string"
+                },
+                "latestActivity": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "meta": {
+                            "type": "object"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "logo": {
+                    "type": "string"
+                },
+                "minMaxAvailableDates": {
+                    "type": "object",
+                    "properties": {
+                        "deadlinesFound": {
+                            "type": "boolean"
+                        },
+                        "maxEndDate": {
+                            "type": "string"
+                        },
+                        "minStartDate": {
+                            "type": "string"
+                        },
+                        "suggestedEndDate": {
+                            "type": "string"
+                        },
+                        "suggestedStartDate": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "notifyCommentIncludeCreator": {
+                    "type": "boolean"
+                },
+                "notifyEveryone": {
+                    "type": "boolean"
+                },
+                "notifyTaskAssignee": {
+                    "type": "boolean"
+                },
+                "overviewStartPage": {
+                    "type": "string"
+                },
+                "ownedBy": {
+                    "type": "integer"
+                },
+                "ownerId": {
+                    "type": "integer"
+                },
+                "portfolioCards": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "meta": {
+                                "type": "object"
+                            },
+                            "type": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "privacyEnabled": {
+                    "type": "boolean"
+                },
+                "projectOwner": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "meta": {
+                            "type": "object"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "projectOwnerId": {
+                    "type": "integer"
+                },
+                "replyByEmailEnabled": {
+                    "type": "boolean"
+                },
+                "showAnnouncement": {
+                    "type": "boolean"
+                },
+                "skipWeekends": {
+                    "type": "boolean"
+                },
+                "startAt": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "startPage": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "subStatus": {
+                    "type": "string"
+                },
+                "tagIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "meta": {
+                                "type": "object"
+                            },
+                            "type": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "tasksStartPage": {
+                    "type": "string"
+                },
+                "timeBudget": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "meta": {
+                            "type": "object"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "timeBudgetId": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "update": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "meta": {
+                            "type": "object"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "updateId": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "meta": {
+                                "type": "object"
+                            },
+                            "type": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -2426,6 +3155,9 @@ const docTemplate = `{
         "models.SinglePerson": {
             "type": "object",
             "properties": {
+                "MESSAGE": {
+                    "type": "string"
+                },
                 "STATUS": {
                     "type": "string"
                 },
@@ -2445,6 +3177,20 @@ const docTemplate = `{
                 },
                 "project": {
                     "$ref": "#/definitions/models.Project"
+                }
+            }
+        },
+        "models.SingleProjectResponseV1": {
+            "type": "object",
+            "properties": {
+                "MESSAGE": {
+                    "type": "string"
+                },
+                "STATUS": {
+                    "type": "string"
+                },
+                "project": {
+                    "$ref": "#/definitions/models.ProjectV1"
                 }
             }
         },
@@ -2507,6 +3253,9 @@ const docTemplate = `{
         "models.Tasks": {
             "type": "object",
             "properties": {
+                "MESSAGE": {
+                    "type": "string"
+                },
                 "STATUS": {
                     "type": "string"
                 },

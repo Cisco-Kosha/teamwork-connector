@@ -48,6 +48,9 @@ func getPageRange(params url.Values, respHeaders http.Header, pageCount int) (in
 			if err != nil {
 				return 0, 0, err
 			}
+			if numPages == 0 {
+				numPages = 1
+			}
 		}
 	}
 
@@ -59,6 +62,5 @@ func getPageRange(params url.Values, respHeaders http.Header, pageCount int) (in
 		pageStart = 1
 		pageEnd = numPages
 	}
-
 	return pageStart, pageEnd, nil
 }

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -23,7 +24,9 @@ func makeHttpReq(username string, password string, req *http.Request, params url
 	client := &http.Client{}
 
 	resp, err := client.Do(req)
+
 	if err != nil {
+		fmt.Println("There was an error: ", err)
 		return nil
 	}
 	defer resp.Body.Close()
@@ -35,6 +38,7 @@ func makeHttpReq(username string, password string, req *http.Request, params url
 func GetResponseHeaders(username string, password string, path string, params url.Values) http.Header {
 	req, err := http.NewRequest("GET", path, nil)
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil
 	}
 
@@ -45,6 +49,7 @@ func GetResponseHeaders(username string, password string, path string, params ur
 
 	resp, err := client.Do(req)
 	if err != nil {
+		fmt.Println("Error executing http client: ", err)
 		return nil
 	}
 
@@ -55,6 +60,7 @@ func GetResponseHeaders(username string, password string, path string, params ur
 func GetAccount(url string, username string, password string, params url.Values) *models.SingleAccount {
 	req, err := http.NewRequest("GET", url+"account.json", nil)
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil
 	}
 	var account *models.SingleAccount
@@ -63,40 +69,97 @@ func GetAccount(url string, username string, password string, params url.Values)
 	// Convert response body to target struct
 	err = json.Unmarshal(res, &account)
 	if err != nil {
+		fmt.Println("There is an issue with unmarshaling: ", err)
 		return nil
 	}
 	return account
 }
 
-func GetAllProjects(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.MultiProject) {
+func GetAllProjectsV3(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ProjectResponseV3) {
 	if getRespHeaders {
 		return GetResponseHeaders(username, password, url+"projects/api/v3/projects.json", params), nil
 	}
 
 	req, err := http.NewRequest("GET", url+"projects/api/v3/projects.json", nil)
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
-	var projects *models.MultiProject
+
+	var projects *models.ProjectResponseV3
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &projects)
+	if err != nil {
+		fmt.Println("There is an issue with unmarshaling: ", err)
+		return nil, nil
+	}
+
+	// var error *models.Error
+	// d := json.NewDecoder(strings.NewReader(string(res)))
+	// d.DisallowUnknownFields()
+
+	// if err := d.Decode(&error); err == nil {
+	// 	return err
+	// }
+
+	return nil, projects
+}
+
+func GetAllProjectsV1(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ProjectResponseV1) {
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"projects.json", nil)
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil, nil
+	}
+
+	var projects *models.ProjectResponseV1
 
 	res := makeHttpReq(username, password, req, params)
 
 	// Convert response body to target struct
 	err = json.Unmarshal(res, &projects)
 	if err != nil {
+		fmt.Println("There is an issue with unmarshaling")
 		return nil, nil
 	}
+
 	return nil, projects
 }
 
-func GetSingleProject(url string, id string, username string, password string, params url.Values) *models.SingleProject {
+func GetSingleProjectV3(url string, id string, username string, password string, params url.Values) *models.SingleProject {
 
 	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/"+id+".json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil
 	}
 	var project *models.SingleProject
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &project)
+	if err != nil {
+		return nil
+	}
+	return project
+}
+
+func GetSingleProjectV1(url string, id string, username string, password string, params url.Values) *models.SingleProjectResponseV1 {
+
+	req, err := http.NewRequest("GET", url+"projects/"+id+".json", nil)
+
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil
+	}
+	var project *models.SingleProjectResponseV1
 
 	res := makeHttpReq(username, password, req, params)
 	// Convert response body to target struct
@@ -116,6 +179,7 @@ func GetProjectTaskLists(url string, id string, username string, password string
 	req, err := http.NewRequest("GET", url+"projects/"+id+"/tasklists.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
 	var tasklists *models.MultiTaskList
@@ -138,6 +202,7 @@ func GetProjectTasks(url string, id string, username string, password string, pa
 	req, err := http.NewRequest("GET", url+"projects/"+id+"/tasks.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
 	var tasks *models.Tasks
@@ -161,6 +226,7 @@ func GetTasks(url string, id string, username string, password string, params ur
 	req, err := http.NewRequest("GET", url+"tasklists/"+id+"/tasks.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
 	var tasks *models.Tasks
@@ -174,10 +240,11 @@ func GetTasks(url string, id string, username string, password string, params ur
 	return nil, tasks
 }
 
-func GetLatestActivityAllProjects(url string, username string, password string, params url.Values) *models.MultiActivity {
+func GetLatestActivityAllProjectsV3(url string, username string, password string, params url.Values) *models.MultiActivity {
 
 	req, err := http.NewRequest("GET", url+"projects/api/v3/latestactivity.json", nil)
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil
 	}
 	var activity *models.MultiActivity
@@ -192,10 +259,29 @@ func GetLatestActivityAllProjects(url string, username string, password string, 
 	return activity
 }
 
+func GetLatestActivityAllProjectsV1(url string, username string, password string, params url.Values) *models.ActivityResponseV1 {
+
+	req, err := http.NewRequest("GET", url+"latestactivity.json", nil)
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil
+	}
+	var activity *models.ActivityResponseV1
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &activity)
+	if err != nil {
+		return nil
+	}
+	return activity
+}
+
 func CreateProject(url string, username string, password string, project *models.SingleProject, params url.Values) (string, error) {
 
 	jsonReq, err := json.Marshal(project)
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return "", err
 	}
 	req, err := http.NewRequest("POST", url+"projects.json", bytes.NewBuffer(jsonReq))
@@ -211,9 +297,13 @@ func CreateTaskList(url string, id string, username string, password string, tas
 
 	jsonReq, err := json.Marshal(tasklist)
 	if err != nil {
+		fmt.Println("Error marshaling json")
 		return "", err
 	}
 	req, err := http.NewRequest("POST", url+"projects/"+id+"/tasklists.json", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil
@@ -222,6 +312,7 @@ func CreateTaskList(url string, id string, username string, password string, tas
 func RemoveProject(url string, id string, username string, password string, params url.Values) (string, error) {
 	req, err := http.NewRequest(http.MethodDelete, url+"/projects/"+id+".json", nil)
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return "", err
 	}
 
@@ -232,6 +323,7 @@ func RemoveProject(url string, id string, username string, password string, para
 func RemoveTaskList(url string, id string, username string, password string, params url.Values) (string, error) {
 	req, err := http.NewRequest(http.MethodDelete, url+"/tasklists/"+id+".json", nil)
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return "", err
 	}
 
@@ -244,6 +336,7 @@ func GetSinglePerson(url string, id string, username string, password string, pa
 	req, err := http.NewRequest("GET", url+"people/"+id+".json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil
 	}
 	var person *models.SinglePerson
@@ -262,6 +355,7 @@ func GetCurrentPerson(url string, username string, password string, params url.V
 	req, err := http.NewRequest("GET", url+"me.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil
 	}
 	var person *models.SinglePerson
@@ -287,6 +381,7 @@ func GetPeople(url string, username string, password string, params url.Values, 
 	req, err := http.NewRequest("GET", url+"companies/"+companyId+"/people.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
 	var people *models.People
@@ -300,11 +395,11 @@ func GetPeople(url string, username string, password string, params url.Values, 
 	return nil, people
 }
 
-func GetPersonsProjects(url string, id string, username string, password string, params url.Values) *models.MultiProject {
+func GetPersonsProjects(url string, id string, username string, password string, params url.Values) *models.ProjectResponseV3 {
 
 	customParams := make(map[string][]string)
 	customParams["fields[users]"] = append(customParams["fields[users]"], id)
-	_, projects := GetAllProjects(url, username, password, customParams, false)
+	_, projects := GetAllProjectsV3(url, username, password, customParams, false)
 	return projects
 }
 
@@ -315,6 +410,10 @@ func CreateProjectTimeEntry(url string, project_id string, username string, pass
 		return nil, err
 	}
 	req, err := http.NewRequest("POST", url+"projects/"+project_id+"/time_entries.json", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil, err
+	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	var createReply *models.CreatedTimeEntry
@@ -336,6 +435,7 @@ func GetAllTimeEntries(url string, username string, password string, params url.
 	req, err := http.NewRequest("GET", url+"time_entries.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
 	var timeEntries *models.ReturnedTimeEntries
@@ -358,6 +458,7 @@ func GetProjectTimeEntries(url string, project_id string, username string, passw
 	req, err := http.NewRequest("GET", url+"projects/"+project_id+"/time_entries.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
 	var timeEntries *models.ReturnedTimeEntries
@@ -375,6 +476,7 @@ func UpdateTimeEntry(url string, id string, username string, password string, ti
 
 	jsonReq, err := json.Marshal(timeentry)
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, err
 	}
 	req, err := http.NewRequest("PUT", url+"time_entries/"+id+".json", bytes.NewBuffer(jsonReq))
@@ -394,6 +496,7 @@ func DeleteTimeEntry(url string, id string, username string, password string, pa
 	req, err := http.NewRequest("DELETE", url+"time_entries/"+id+".json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return "", err
 	}
 	res := makeHttpReq(username, password, req, params)
@@ -406,12 +509,16 @@ func CreateProjectUpdate(url string, id string, username string, password string
 		return "", err
 	}
 	req, err := http.NewRequest("POST", url+"projects/"+id+"/update.json", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return "", err
+	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil
 }
 
-func GetAllProjectUpdates(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ProjectUpdateResponse) {
+func GetAllProjectUpdatesV3(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ProjectUpdateResponse) {
 	if getRespHeaders {
 		return GetResponseHeaders(username, password, url+"projects/api/v3/projects/updates.json", params), nil
 	}
@@ -419,9 +526,32 @@ func GetAllProjectUpdates(url string, username string, password string, params u
 	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/updates.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
 	var updates *models.ProjectUpdateResponse
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &updates)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, updates
+}
+
+func GetAllProjectUpdatesV1(url string, id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ProjectUpdateResponseV1) {
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/"+id+"/updates.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"projects/"+id+"/updates.json", nil)
+
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil, nil
+	}
+	var updates *models.ProjectUpdateResponseV1
 
 	res := makeHttpReq(username, password, req, params)
 	// Convert response body to target struct
@@ -439,6 +569,11 @@ func ModifyProjectUpdate(url string, id string, username string, password string
 		return "", err
 	}
 	req, err := http.NewRequest("PUT", url+"projects/updates/"+id+".json", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return "", err
+	}
+
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil
@@ -448,6 +583,7 @@ func DeleteProjectUpdate(url string, id string, username string, password string
 	req, err := http.NewRequest("DELETE", url+"projects/updates/"+id+".json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return "", err
 	}
 	res := makeHttpReq(username, password, req, params)
@@ -457,6 +593,7 @@ func DeleteProjectUpdate(url string, id string, username string, password string
 func CreateProjectRisk(url string, id string, username string, password string, risk *models.CreateRisk, params url.Values) (string, error) {
 	jsonReq, err := json.Marshal(risk)
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return "", err
 	}
 	req, err := http.NewRequest("POST", url+"projects/"+id+"/risks.json", bytes.NewBuffer(jsonReq))
@@ -468,7 +605,7 @@ func CreateProjectRisk(url string, id string, username string, password string, 
 	return string(makeHttpReq(username, password, req, params)), nil
 }
 
-func GetAllRisks(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisks) {
+func GetAllRisksV3(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisks) {
 	if getRespHeaders {
 		return GetResponseHeaders(username, password, url+"projects/api/v3/risks.json", params), nil
 	}
@@ -476,6 +613,7 @@ func GetAllRisks(url string, username string, password string, params url.Values
 	req, err := http.NewRequest("GET", url+"projects/api/v3/risks.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
 	var risks *models.ReturnedRisks
@@ -489,7 +627,52 @@ func GetAllRisks(url string, username string, password string, params url.Values
 	return nil, risks
 }
 
-func GetProjectRisks(url string, project_id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisks) {
+func GetAllRisksV1(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisksV1) {
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"risks.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"risks.json", nil)
+
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil, nil
+	}
+	var risks *models.ReturnedRisksV1
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &risks)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, risks
+}
+
+func GetProjectRisksV1(url string, project_id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisksV1) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/"+project_id+"/risks.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"projects/"+project_id+"/risks.json", nil)
+
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil, nil
+	}
+	var tasks *models.ReturnedRisksV1
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &tasks)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, tasks
+}
+
+func GetProjectRisksV3(url string, project_id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisks) {
 
 	if getRespHeaders {
 		return GetResponseHeaders(username, password, url+"projects/api/v3/projects/"+project_id+"/risks.json", params), nil
@@ -498,6 +681,7 @@ func GetProjectRisks(url string, project_id string, username string, password st
 	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/"+project_id+"/risks.json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return nil, nil
 	}
 	var tasks *models.ReturnedRisks
@@ -518,6 +702,10 @@ func UpdateRisks(url string, id string, username string, password string, risk *
 		return "", err
 	}
 	req, err := http.NewRequest("PUT", url+"risks/"+id+".json", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return "", err
+	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return string(makeHttpReq(username, password, req, params)), nil
@@ -527,6 +715,7 @@ func DeleteRisks(url string, id string, username string, password string, params
 	req, err := http.NewRequest("DELETE", url+"risks/"+id+".json", nil)
 
 	if err != nil {
+		fmt.Println("Error creating new request: ", err)
 		return "", err
 	}
 	res := makeHttpReq(username, password, req, params)

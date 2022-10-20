@@ -2,18 +2,20 @@ package models
 
 type OverallPerson struct {
 	Person      Person
-	Projects    []Project
+	Projects    []ProjectV3
 	Permissions Permissions
 }
 
 type SinglePerson struct {
-	Person Person `json:"person,omitempty"`
-	Status string `json:"STATUS,omitempty"`
+	Person  Person `json:"person,omitempty"`
+	Message string `json:"MESSAGE,omitempty"`
+	Status  string `json:"STATUS,omitempty"`
 }
 
 type People struct {
-	People []MinimalPerson `json:"people,omitempty"`
-	Status string          `json:"STATUS,omitempty"`
+	People  []MinimalPerson `json:"people,omitempty"`
+	Message string          `json:"MESSAGE,omitempty"`
+	Status  string          `json:"STATUS,omitempty"`
 }
 
 type MinimalPerson struct {
