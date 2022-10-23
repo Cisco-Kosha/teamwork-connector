@@ -10,7 +10,7 @@ on:
   
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: ${{ github.actor }}/twitter-connector
+  IMAGE_NAME: ${{ github.actor }}/teamwork-connector
 
 jobs:
   test:
