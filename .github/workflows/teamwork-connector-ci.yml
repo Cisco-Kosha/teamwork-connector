@@ -2,9 +2,15 @@ name: teamwork-connector CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+    - main
+    - 'releases/**'
+    tags:
+      - '*'
   pull_request:
-    branches: [ "main" ]
+    branches:
+    - main
+    - 'releases/**'
   
   workflow_dispatch:
   
