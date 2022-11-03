@@ -57,6 +57,15 @@ type ProjectV1 struct {
 	ShowAnnouncement bool          `json:"show-announcement,omitempty"`
 	SubStatus        string        `json:"subStatus,omitempty"`
 	Tags             []interface{} `json:"tags,omitempty"`
+	Owner            Owner         `json:"owner,omitempty"`
+}
+
+type Owner struct {
+	AvatarURL string `json:"avatarUrl,omitempty"`
+	FirstName string `json:"firstName,omitempty"`
+	FullName  string `json:"fullName,omitempty"`
+	Id        string `json:"id,omitempty"`
+	LastName  string `json:"basecurrency,omitempty"`
 }
 
 type Integrations struct {
