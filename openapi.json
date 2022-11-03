@@ -204,6 +204,22 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "description": "Adds project owner details to response",
+            "in": "query",
+            "name": "includeProjectOwner",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Adds tag details to response",
+            "in": "query",
+            "name": "includeTags",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -1975,6 +1991,26 @@
         },
         "type": "object"
       },
+      "models.Owner": {
+        "properties": {
+          "avatarUrl": {
+            "type": "string"
+          },
+          "basecurrency": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "models.People": {
         "properties": {
           "MESSAGE": {
@@ -2512,6 +2548,9 @@
           },
           "overview-start-page": {
             "type": "string"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/models.Owner"
           },
           "privacyEnabled": {
             "type": "boolean"

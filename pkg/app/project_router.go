@@ -53,6 +53,8 @@ func (a *App) getAllProjectsV3(w http.ResponseWriter, r *http.Request) {
 // @Param allPages query boolean false "Collates all pages"
 // @Param pageStart query integer false "First page to collate"
 // @Param pageEnd query integer false "Last page to collate"
+// @Param includeProjectOwner query boolean false "Adds project owner details to response"
+// @Param includeTags query boolean false "Adds tag details to response"
 // @Success 200 {object} models.ProjectResponseV1
 // @Router /api/v1/projects [get]
 func (a *App) getAllProjectsV1(w http.ResponseWriter, r *http.Request) {

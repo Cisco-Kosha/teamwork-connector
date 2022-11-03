@@ -211,6 +211,18 @@ const docTemplate = `{
                         "description": "Last page to collate",
                         "name": "pageEnd",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Adds project owner details to response",
+                        "name": "includeProjectOwner",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Adds tag details to response",
+                        "name": "includeTags",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1943,6 +1955,26 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Owner": {
+            "type": "object",
+            "properties": {
+                "avatarUrl": {
+                    "type": "string"
+                },
+                "basecurrency": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
         "models.People": {
             "type": "object",
             "properties": {
@@ -2477,6 +2509,9 @@ const docTemplate = `{
                 },
                 "overview-start-page": {
                     "type": "string"
+                },
+                "owner": {
+                    "$ref": "#/definitions/models.Owner"
                 },
                 "privacyEnabled": {
                     "type": "boolean"
