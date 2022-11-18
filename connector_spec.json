@@ -1,5 +1,38 @@
 {
-    "USERNAME":    "Teamwork Username",
-    "PASSWORD":    "Teamwork Password",
-    "DOMAIN_NAME": "Teamwork Domain Name"
-}
+    "version": "2.0.0",
+    "fields": [
+      {
+        "field": "USERNAME",
+        "displayName": "Teamwork Username",
+        "type": "String",
+        "minLength": 4,
+        "maxLength": 20,
+        "required": true,
+        "description": "Teamwork account username",
+        "example": "default",
+        "helpSection": "The username associated with your account"
+      },
+      {
+        "field": "PASSWORD",
+        "displayName": "Teamwork Password",
+        "type": "password",
+        "minLength": 4,
+        "maxLength": 20,
+        "required": true,
+        "description": "Teamwork account password",
+        "example": "s3cr3t",
+        "helpSection": "The password associated with your account"
+      },
+      {
+        "field": "DOMAIN_NAME",
+        "displayName": "Teamwork Domain Name",
+        "type": "String",
+        "minLength": 4,
+        "maxLength": 60,
+        "required": true,
+        "description": "Company name registered with teamwork account",
+        "example": "acmecorp",
+        "helpSection": "Enter the comapny name that you provided when you signed up to Teamwork \n If your teamwork account URL is: acmecorp.teamwork.com then your domain name is acmecorp"
+      }
+    ]
+  }
