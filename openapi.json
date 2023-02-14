@@ -37,6 +37,118 @@
         "summary": "Get current person's details"
       }
     },
+    "/api/v1/milestones": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ReturnedMilestones"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "milestones"
+        ],
+        "description": "Get a list of all milestones for which the current user has access.",
+        "summary": "Get all milestones."
+      }
+    },
+    "/api/v1/milestones/metadata": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
+      }
+    },
+    "/api/v1/milestones/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Enter milestone id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ReturnedMilestone"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "milestones"
+        ],
+        "description": "Get milestone information for the id specified.",
+        "summary": "Get the specified milestone."
+      }
+    },
     "/api/v1/people": {
       "get": {
         "parameters": [
@@ -308,6 +420,75 @@
         "summary": "Get number of pages and page length data"
       }
     },
+    "/api/v1/projects/tasks": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.Tasks"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Lists all tasks across all projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/54bdf625aa2f3-get-all-tasks-across-all-projects",
+        "summary": "Retrieves all tasks across all projects"
+      }
+    },
+    "/api/v1/projects/tasks/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
+      }
+    },
     "/api/v1/projects/update/{id}": {
       "delete": {
         "parameters": [
@@ -508,6 +689,70 @@
         ],
         "description": "List single project based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/da79573311f8a-retrieve-a-single-project for more parameter options.",
         "summary": "Get single project"
+      }
+    },
+    "/api/v1/projects/{id}/milestones": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ReturnedMilestones"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "milestones"
+        ],
+        "description": "Get a list of all milestones for a specified project for which the current user has access.",
+        "summary": "Get all milestones for a specified project."
       }
     },
     "/api/v1/projects/{id}/risks": {
@@ -803,8 +1048,8 @@
         "tags": [
           "projects"
         ],
-        "description": "Lists all tasks based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project",
-        "summary": "Retrieves all tasks in a project"
+        "description": "Lists all tasks for specified project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project",
+        "summary": "Retrieves all tasks for specified project"
       }
     },
     "/api/v1/projects/{id}/tasks/metadata": {
@@ -1774,6 +2019,72 @@
         },
         "type": "object"
       },
+      "models.Included": {
+        "properties": {
+          "tags": {
+            "properties": {
+              "25488": {
+                "properties": {
+                  "color": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "project": {
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "projectId": {
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              "30993": {
+                "properties": {
+                  "color": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "project": {
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "projectId": {
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
       "models.Integrations": {
         "properties": {
           "microsoftConnectors": {
@@ -1891,6 +2202,148 @@
           },
           "pageSize": {
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "models.Milestone": {
+        "properties": {
+          "tags": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "canComplete": {
+            "type": "boolean"
+          },
+          "canEdit": {
+            "type": "boolean"
+          },
+          "commentsCount": {
+            "type": "integer"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "integer"
+          },
+          "createdOn": {
+            "type": "string"
+          },
+          "creatorUserId": {
+            "type": "integer"
+          },
+          "deadline": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "descriptionHTML": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "lastChangedOn": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "originalDueDate": {
+            "type": "string"
+          },
+          "private": {
+            "type": "boolean"
+          },
+          "project": {
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "projectId": {
+            "type": "integer"
+          },
+          "reminder": {
+            "type": "boolean"
+          },
+          "responsibleParties": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "responsiblePartyIds": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "status": {
+            "type": "string"
+          },
+          "tagIds": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "tasklistIds": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "tasklists": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "updatedBy": {
+            "type": "integer"
+          },
+          "userFollowingChanges": {
+            "type": "boolean"
+          },
+          "userFollowingComments": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -3003,6 +3456,53 @@
           },
           "type": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "models.ReturnedMilestone": {
+        "properties": {
+          "included": {
+            "$ref": "#/components/schemas/models.Included"
+          },
+          "milestones": {
+            "$ref": "#/components/schemas/models.Milestone"
+          }
+        },
+        "type": "object"
+      },
+      "models.ReturnedMilestones": {
+        "properties": {
+          "included": {
+            "$ref": "#/components/schemas/models.Included"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  },
+                  "hasMore": {
+                    "type": "boolean"
+                  },
+                  "pageOffset": {
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "milestones": {
+            "items": {
+              "$ref": "#/components/schemas/models.Milestone"
+            },
+            "type": "array"
           }
         },
         "type": "object"

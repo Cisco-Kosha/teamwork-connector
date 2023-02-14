@@ -193,6 +193,48 @@ definitions:
       status:
         type: string
     type: object
+  models.Included:
+    properties:
+      tags:
+        properties:
+          "25488":
+            properties:
+              color:
+                type: string
+              id:
+                type: integer
+              name:
+                type: string
+              project:
+                properties:
+                  id:
+                    type: integer
+                  type:
+                    type: string
+                type: object
+              projectId:
+                type: integer
+            type: object
+          "30993":
+            properties:
+              color:
+                type: string
+              id:
+                type: integer
+              name:
+                type: string
+              project:
+                properties:
+                  id:
+                    type: integer
+                  type:
+                    type: string
+                type: object
+              projectId:
+                type: integer
+            type: object
+        type: object
+    type: object
   models.Integrations:
     properties:
       microsoftConnectors:
@@ -270,6 +312,99 @@ definitions:
         type: integer
       pageSize:
         type: integer
+    type: object
+  models.Milestone:
+    properties:
+      canComplete:
+        type: boolean
+      canEdit:
+        type: boolean
+      commentsCount:
+        type: integer
+      completed:
+        type: boolean
+      createdBy:
+        type: integer
+      createdOn:
+        type: string
+      creatorUserId:
+        type: integer
+      deadline:
+        type: string
+      description:
+        type: string
+      descriptionHTML:
+        type: string
+      id:
+        type: integer
+      isDeleted:
+        type: boolean
+      lastChangedOn:
+        type: string
+      name:
+        type: string
+      originalDueDate:
+        type: string
+      private:
+        type: boolean
+      project:
+        properties:
+          id:
+            type: integer
+          type:
+            type: string
+        type: object
+      projectId:
+        type: integer
+      reminder:
+        type: boolean
+      responsibleParties:
+        items:
+          properties:
+            id:
+              type: integer
+            type:
+              type: string
+          type: object
+        type: array
+      responsiblePartyIds:
+        items:
+          type: integer
+        type: array
+      status:
+        type: string
+      tagIds:
+        items:
+          type: integer
+        type: array
+      tags:
+        items:
+          properties:
+            id:
+              type: integer
+            type:
+              type: string
+          type: object
+        type: array
+      tasklistIds:
+        items:
+          type: integer
+        type: array
+      tasklists:
+        items:
+          properties:
+            id:
+              type: integer
+            type:
+              type: string
+          type: object
+        type: array
+      updatedBy:
+        type: integer
+      userFollowingChanges:
+        type: boolean
+      userFollowingComments:
+        type: boolean
     type: object
   models.MinimalPerson:
     properties:
@@ -1004,6 +1139,36 @@ definitions:
       type:
         type: string
     type: object
+  models.ReturnedMilestone:
+    properties:
+      included:
+        $ref: '#/definitions/models.Included'
+      milestones:
+        $ref: '#/definitions/models.Milestone'
+    type: object
+  models.ReturnedMilestones:
+    properties:
+      included:
+        $ref: '#/definitions/models.Included'
+      meta:
+        properties:
+          page:
+            properties:
+              count:
+                type: integer
+              hasMore:
+                type: boolean
+              pageOffset:
+                type: integer
+              pageSize:
+                type: integer
+            type: object
+        type: object
+      milestones:
+        items:
+          $ref: '#/definitions/models.Milestone'
+        type: array
+    type: object
   models.ReturnedRisks:
     properties:
       included: {}
@@ -1467,6 +1632,76 @@ paths:
       summary: Get current person's details
       tags:
       - people
+  /api/v1/milestones:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all milestones for which the current user has access.
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedMilestones'
+      summary: Get all milestones.
+      tags:
+      - milestones
+  /api/v1/milestones/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get milestone information for the id specified.
+      parameters:
+      - description: Enter milestone id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedMilestone'
+      summary: Get the specified milestone.
+      tags:
+      - milestones
+  /api/v1/milestones/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      parameters:
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
+      tags:
+      - projects
   /api/v1/people:
     get:
       consumes:
@@ -1656,6 +1891,43 @@ paths:
       summary: Get single project
       tags:
       - projects
+  /api/v1/projects/{id}/milestones:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all milestones for a specified project for which
+        the current user has access.
+      parameters:
+      - description: Enter project id
+        in: path
+        name: id
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ReturnedMilestones'
+      summary: Get all milestones for a specified project.
+      tags:
+      - milestones
   /api/v1/projects/{id}/risks:
     get:
       consumes:
@@ -1817,7 +2089,7 @@ paths:
       consumes:
       - application/json
       description: |-
-        Lists all tasks based on project ID
+        Lists all tasks for specified project
         Please refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project
       parameters:
       - description: Enter project id
@@ -1847,7 +2119,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Tasks'
-      summary: Retrieves all tasks in a project
+      summary: Retrieves all tasks for specified project
       tags:
       - projects
   /api/v1/projects/{id}/tasks/metadata:
@@ -1996,6 +2268,53 @@ paths:
       tags:
       - projects
   /api/v1/projects/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
+      tags:
+      - projects
+  /api/v1/projects/tasks:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Lists all tasks across all projects
+        Please refer to https://apidocs.teamwork.com/docs/teamwork/54bdf625aa2f3-get-all-tasks-across-all-projects
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      - description: Collates all pages
+        in: query
+        name: allPages
+        type: boolean
+      - description: First page to collate
+        in: query
+        name: pageStart
+        type: integer
+      - description: Last page to collate
+        in: query
+        name: pageEnd
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tasks'
+      summary: Retrieves all tasks across all projects
+      tags:
+      - projects
+  /api/v1/projects/tasks/metadata:
     get:
       consumes:
       - application/json

@@ -18,7 +18,7 @@ import (
 // @Param allPages query boolean false "Collates all pages"
 // @Param pageStart query integer false "First page to collate"
 // @Param pageEnd query integer false "Last page to collate"
-// @Success 200 {object} models.Milestones
+// @Success 200 {object} models.ReturnedMilestones
 // @Router /api/v1/milestones [get]
 func (a *App) getAllMilestones(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
@@ -96,7 +96,7 @@ func (a *App) getAllMilestonesMetadata(w http.ResponseWriter, r *http.Request) {
 // @Param allPages query boolean false "Collates all pages"
 // @Param pageStart query integer false "First page to collate"
 // @Param pageEnd query integer false "Last page to collate"
-// @Success 200 {object} models.Milestones
+// @Success 200 {object} models.ReturnedMilestones
 // @Router /api/v1/projects/{id}/milestones [get]
 func (a *App) getProjectMilestones(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
@@ -177,7 +177,7 @@ func (a *App) getProjectMilestonesMetadata(w http.ResponseWriter, r *http.Reques
 // @Accept json
 // @Produce json
 // @Param id path string false "Enter milestone id"
-// @Success 200 {object} models.Milestones
+// @Success 200 {object} models.ReturnedMilestone
 // @Router /api/v1/milestones/{id} [get]
 func (a *App) getSingleMilestone(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
