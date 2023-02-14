@@ -33,6 +33,7 @@ func getPageRange(params url.Values, respHeaders http.Header, pageCount int) (in
 			return 0, 0, err
 		}
 	}
+
 	if val, ok := params["pageEnd"]; ok {
 		pageEnd, err = strconv.Atoi(val[0])
 		if err != nil {
@@ -62,5 +63,6 @@ func getPageRange(params url.Values, respHeaders http.Header, pageCount int) (in
 		pageStart = 1
 		pageEnd = numPages
 	}
+
 	return pageStart, pageEnd, nil
 }

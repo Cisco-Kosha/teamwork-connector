@@ -44,20 +44,30 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc(apiV1+"/risks/{id}", a.deleteRisks).Methods("DELETE", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/risks", a.getAllRisksV1).Methods("GET", "OPTIONS")
 
+	//milestones
+	a.Router.HandleFunc(apiV1+"/milestones/metadata", a.getAllMilestonesMetadata).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/milestones/{id}", a.getSingleMilestone).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/milestones", a.getAllMilestones).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/{id}/milestones/metadata", a.getProjectMilestonesMetadata).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/{id}/milestones", a.getProjectMilestones).Methods("GET", "OPTIONS")
+
 	// projects
 	a.Router.HandleFunc(apiV1+"/projects/metadata", a.getAllProjectsMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/activity", a.getLatestActivityAllProjectsV1).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/tasks/metadata", a.getTasksAllProjectsMetadata).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/tasks", a.getTasksAllProjects).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/{id}/tasks/metadata", a.getProjectTasksMetadata).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/{id}/tasks", a.getProjectTasks).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}/updates/metadata", a.getAllProjectUpdatesMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}/updates", a.getAllProjectUpdatesV1).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}/update", a.createProjectUpdate).Methods("POST", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/update/{id}", a.modifyProjectUpdate).Methods("PUT", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/update/{id}", a.deleteProjectUpdate).Methods("DELETE", "OPTIONS")
-	a.Router.HandleFunc(apiV1+"/projects/{id}/tasks/metadata", a.getProjectTasksMetadata).Methods("GET", "OPTIONS")
-	a.Router.HandleFunc(apiV1+"/projects/{id}/tasks", a.getProjectTasks).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}", a.getSingleProjectV1).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects", a.getAllProjectsV1).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}", a.deleteProject).Methods("DELETE", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects", a.createProject).Methods("POST", "OPTIONS")
+
 
 	// tags
 	// a.Router.HandleFunc(apiV1+"/tags/{tag_id}}", a.getSingleTag).Methods("GET", "OPTIONS")

@@ -672,6 +672,30 @@ func GetProjectRisksV1(url string, project_id string, username string, password 
 	return nil, tasks
 }
 
+func GetTasksAllProjects(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.Tasks) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"tasks.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"tasks.json", nil)
+
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil, nil
+	}
+	var tasks *models.Tasks
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &tasks)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, tasks
+}
+
+
 func GetProjectRisksV3(url string, project_id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisks) {
 
 	if getRespHeaders {
@@ -720,4 +744,73 @@ func DeleteRisks(url string, id string, username string, password string, params
 	}
 	res := makeHttpReq(username, password, req, params)
 	return string(res), nil
+}
+
+func GetAllMilestones(url string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedMilestones) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/api/v3/milestones.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"projects/api/v3/milestones.json", nil)
+
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil, nil
+	}
+	var milestones *models.ReturnedMilestones
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &milestones)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, milestones
+}
+
+func GetProjectMilestones(url string, id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedMilestones) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/api/v3/projects/" + id + "/milestones.json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/" + id + "/milestones.json", nil)
+
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil, nil
+	}
+	var milestones *models.ReturnedMilestones
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &milestones)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, milestones
+}
+
+func GetSingleMilestone(url string, id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedMilestone) {
+
+	if getRespHeaders {
+		return GetResponseHeaders(username, password, url+"projects/api/v3/milestones/" + id + ".json", params), nil
+	}
+
+	req, err := http.NewRequest("GET", url+"projects/api/v3/milestones/" + id + ".json", nil)
+
+	if err != nil {
+		fmt.Println("Error creating new request: ", err)
+		return nil, nil
+	}
+	var milestones *models.ReturnedMilestone
+
+	res := makeHttpReq(username, password, req, params)
+	// Convert response body to target struct
+	err = json.Unmarshal(res, &milestones)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, milestones
 }

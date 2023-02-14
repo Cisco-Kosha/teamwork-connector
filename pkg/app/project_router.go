@@ -316,9 +316,88 @@ func (a *App) getProjectTasklistsMetadata(w http.ResponseWriter, r *http.Request
 	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
 
+// getTasksAllProjects godoc
+// @Summary Retrieves all tasks across all projects
+// @Description Lists all tasks across all projects
+// @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/54bdf625aa2f3-get-all-tasks-across-all-projects
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
+// @Success 200 {object} models.Tasks
+// @Router /api/v1/projects/tasks [get]
+func (a *App) getTasksAllProjects(w http.ResponseWriter, r *http.Request) {
+
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	var tasks []*models.Tasks
+
+	respHeaders, _ := httpclient.GetTasksAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	//fmt.Println(respHeaders)
+
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Invalid pageStart or pageEnd header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := r.URL.Query()
+	for i := pageStart; i <= pageEnd; i++ {
+		params["page"] = append(r.URL.Query()["page"], strconv.Itoa(i))
+		_, t := httpclient.GetTasksAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		tasks = append(tasks, t)
+	}
+
+	respondWithJSON(w, http.StatusOK, tasks)
+}
+
+// getTasksAllProjectsMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/projects/tasks/metadata [get]
+func (a *App) getTasksAllProjectsMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	respHeaders, _ := httpclient.GetTasksAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	var pageCount int
+	var err error
+
+	if respHeaders.Get("X-Pages") != "" {
+		pageCount, err = strconv.Atoi(respHeaders.Get("X-Pages"))
+	} else {
+		pageCount = 1
+	}
+	if err != nil {
+		a.Log.Errorf("Error getting x-pages header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: pageCount,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
+}
+
 // getProjectTasks godoc
-// @Summary Retrieves all tasks in a project
-// @Description Lists all tasks based on project ID
+// @Summary Retrieves all tasks for specified project
+// @Description Lists all tasks for specified project
 // @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project
 // @Tags projects
 // @Accept  json
@@ -343,6 +422,7 @@ func (a *App) getProjectTasks(w http.ResponseWriter, r *http.Request) {
 	var tasks []*models.Tasks
 
 	respHeaders, _ := httpclient.GetProjectTasks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	//fmt.Println(respHeaders)
 
 	//get page range data from headers
 	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
@@ -382,7 +462,15 @@ func (a *App) getProjectTasksMetadata(w http.ResponseWriter, r *http.Request) {
 	id := vars["id"]
 
 	respHeaders, _ := httpclient.GetProjectTasks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
-	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
+	var pageCount int
+	var err error
+
+	if respHeaders.Get("X-Pages") != "" {
+		pageCount, err = strconv.Atoi(respHeaders.Get("X-Pages"))
+	} else {
+		pageCount = 1
+	}
+
 	if err != nil {
 		a.Log.Errorf("Error getting x-pages header", err)
 		respondWithError(w, http.StatusBadRequest, err.Error())
@@ -394,6 +482,8 @@ func (a *App) getProjectTasksMetadata(w http.ResponseWriter, r *http.Request) {
 	}
 	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
+
+
 
 // createTaskList godoc
 // @Summary Create new tasklist
