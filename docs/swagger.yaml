@@ -1701,7 +1701,7 @@ paths:
           description: OK
       summary: Get number of pages and page length data
       tags:
-      - projects
+      - milestones
   /api/v1/people:
     get:
       consumes:

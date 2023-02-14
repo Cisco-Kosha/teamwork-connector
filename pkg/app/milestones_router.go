@@ -53,7 +53,7 @@ func (a *App) getAllMilestones(w http.ResponseWriter, r *http.Request) {
 // getAllMilestonesMetadata godoc
 // @Summary Get number of pages and page length data
 // @Description Get page metadata for endpoint
-// @Tags projects
+// @Tags milestones
 // @Accept  json
 // @Produce  json
 // @Success 200
@@ -134,7 +134,7 @@ func (a *App) getProjectMilestones(w http.ResponseWriter, r *http.Request) {
 // getProjectMilestonesMetadata godoc
 // @Summary Get number of pages and page length data
 // @Description Get page metadata for endpoint
-// @Tags projects
+// @Tags milestones
 // @Accept  json
 // @Produce  json
 // @Param id path string false "Enter project id"

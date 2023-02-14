@@ -101,7 +101,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "projects"
+                    "milestones"
                 ],
                 "summary": "Get number of pages and page length data",
                 "parameters": [

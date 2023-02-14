@@ -111,7 +111,7 @@
           }
         },
         "tags": [
-          "projects"
+          "milestones"
         ],
         "description": "Get page metadata for endpoint",
         "summary": "Get number of pages and page length data"
