@@ -139,7 +139,7 @@ func (a *App) getProjectMilestones(w http.ResponseWriter, r *http.Request) {
 // @Produce  json
 // @Param id path string false "Enter project id"
 // @Success 200
-// @Router /api/v1/milestones/metadata [get]
+// @Router /api/v1/projects/{id}/milestones [get]
 func (a *App) getProjectMilestonesMetadata(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
