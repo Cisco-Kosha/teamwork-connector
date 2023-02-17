@@ -339,7 +339,6 @@ func (a *App) getTasksAllProjects(w http.ResponseWriter, r *http.Request) {
 	var tasks []*models.Tasks
 
 	respHeaders, _ := httpclient.GetTasksAllProjects(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
-	//fmt.Println(respHeaders)
 
 	//get page range data from headers
 	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)

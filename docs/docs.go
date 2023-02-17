@@ -104,14 +104,6 @@ const docTemplate = `{
                     "milestones"
                 ],
                 "summary": "Get number of pages and page length data",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Enter project id",
-                        "name": "id",
-                        "in": "path"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -695,7 +687,7 @@ const docTemplate = `{
         },
         "/api/v1/projects/{id}/milestones": {
             "get": {
-                "description": "Get a list of all milestones for a specified project for which the current user has access.",
+                "description": "Get page metadata for endpoint",
                 "consumes": [
                     "application/json"
                 ],
@@ -705,45 +697,18 @@ const docTemplate = `{
                 "tags": [
                     "milestones"
                 ],
-                "summary": "Get all milestones for a specified project.",
+                "summary": "Get number of pages and page length data",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Enter project id",
                         "name": "id",
                         "in": "path"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Page number",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "boolean",
-                        "description": "Collates all pages",
-                        "name": "allPages",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "First page to collate",
-                        "name": "pageStart",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Last page to collate",
-                        "name": "pageEnd",
-                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.ReturnedMilestones"
-                        }
+                        "description": "OK"
                     }
                 }
             }

@@ -1689,11 +1689,6 @@ paths:
       consumes:
       - application/json
       description: Get page metadata for endpoint
-      parameters:
-      - description: Enter project id
-        in: path
-        name: id
-        type: string
       produces:
       - application/json
       responses:
@@ -1895,37 +1890,18 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a list of all milestones for a specified project for which
-        the current user has access.
+      description: Get page metadata for endpoint
       parameters:
       - description: Enter project id
         in: path
         name: id
         type: string
-      - description: Page number
-        in: query
-        name: page
-        type: string
-      - description: Collates all pages
-        in: query
-        name: allPages
-        type: boolean
-      - description: First page to collate
-        in: query
-        name: pageStart
-        type: integer
-      - description: Last page to collate
-        in: query
-        name: pageEnd
-        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
-          schema:
-            $ref: '#/definitions/models.ReturnedMilestones'
-      summary: Get all milestones for a specified project.
+      summary: Get number of pages and page length data
       tags:
       - milestones
   /api/v1/projects/{id}/risks:

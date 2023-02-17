@@ -94,17 +94,6 @@
     },
     "/api/v1/milestones/metadata": {
       "get": {
-        "parameters": [
-          {
-            "description": "Enter project id",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -702,57 +691,18 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Page number",
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Collates all pages",
-            "in": "query",
-            "name": "allPages",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "description": "First page to collate",
-            "in": "query",
-            "name": "pageStart",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Last page to collate",
-            "in": "query",
-            "name": "pageEnd",
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
         "responses": {
           "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/models.ReturnedMilestones"
-                }
-              }
-            },
             "description": "OK"
           }
         },
         "tags": [
           "milestones"
         ],
-        "description": "Get a list of all milestones for a specified project for which the current user has access.",
-        "summary": "Get all milestones for a specified project."
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
       }
     },
     "/api/v1/projects/{id}/risks": {

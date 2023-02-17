@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/kosha/teamwork-connector/pkg/httpclient"
 	"github.com/kosha/teamwork-connector/pkg/models"
@@ -29,14 +30,17 @@ func (a *App) getAllMilestones(w http.ResponseWriter, r *http.Request) {
 	var milestones []*models.ReturnedMilestones
 
 	respHeaders, _ := httpclient.GetAllMilestones(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	fmt.Println(respHeaders)
 
 	//get page range data from headers
 	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
 	if err != nil {
-		a.Log.Errorf("Error getting page range", err)
+		a.Log.Errorf("Invalid pageStart or pageEnd header", err)
 		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
+	fmt.Println(pageStart)
+	fmt.Println(pageEnd)
 
 	//get page data
 	params := r.URL.Query()
@@ -91,7 +95,6 @@ func (a *App) getAllMilestonesMetadata(w http.ResponseWriter, r *http.Request) {
 // @Tags milestones
 // @Accept json
 // @Produce json
-// @Param id path string false "Enter project id"
 // @Param page query string false "Page number"
 // @Param allPages query boolean false "Collates all pages"
 // @Param pageStart query integer false "First page to collate"
