@@ -96,7 +96,7 @@ type ToDoItem struct {
 	CreatorId                 int         `json:"creator-id,omitempty"`
 	CreatorFirstName          string      `json:"creator-firstname,omitempty"`
 	CreatorLastName           string      `json:"creator-lastname,omitempty"`
-	Completed                 bool        `json:"completed,omitempty"`
+	Completed                 bool        `json:"completed"`
 	StartDate                 string      `json:"start-date,omitempty"`
 	DueDateBase               string      `json:"due-date-base,omitempty"`
 	DueDate                   string      `json:"due-date,omitempty"`
