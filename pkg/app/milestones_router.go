@@ -1,10 +1,10 @@
 package app
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/kosha/teamwork-connector/pkg/httpclient"
 	"github.com/kosha/teamwork-connector/pkg/models"
+	"math"
 	"net/http"
 	"strconv"
 )
@@ -29,18 +29,22 @@ func (a *App) getAllMilestones(w http.ResponseWriter, r *http.Request) {
 
 	var milestones []*models.ReturnedMilestones
 
-	respHeaders, _ := httpclient.GetAllMilestones(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
-	fmt.Println(respHeaders)
+	_, data := httpclient.GetAllMilestones(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
 
-	//get page range data from headers
-	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
+	var pageCount int
+	pageCountFloat := float64(data.Meta.Page.Count) / float64(data.Meta.Page.PageSize)
+	if math.Mod(pageCountFloat, 1.0) != 0 {
+		pageCount = int(pageCountFloat) + 1
+	} else {
+		pageCount = int(pageCountFloat)
+	}
+
+	pageStart, pageEnd, err := getPageRange(r.URL.Query(), nil, pageCount)
 	if err != nil {
 		a.Log.Errorf("Invalid pageStart or pageEnd header", err)
 		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
-	fmt.Println(pageStart)
-	fmt.Println(pageEnd)
 
 	//get page data
 	params := r.URL.Query()
@@ -68,19 +72,14 @@ func (a *App) getAllMilestonesMetadata(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	respHeaders, _ := httpclient.GetAllMilestones(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
-	var pageCount int
-	var err error
+	_, data := httpclient.GetAllMilestones(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
 
-	if respHeaders.Get("X-Pages") != "" {
-		pageCount, err = strconv.Atoi(respHeaders.Get("X-Pages"))
+	var pageCount int
+	pageCountFloat := float64(data.Meta.Page.Count) / float64(data.Meta.Page.PageSize)
+	if math.Mod(pageCountFloat, 1.0) != 0 {
+		pageCount = int(pageCountFloat) + 1
 	} else {
-		pageCount = 1
-	}
-	if err != nil {
-		a.Log.Errorf("Error getting x-pages header", err)
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
+		pageCount = int(pageCountFloat)
 	}
 
 	endpointMetadata := models.EndpointMetadata{
