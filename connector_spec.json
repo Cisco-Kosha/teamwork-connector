@@ -16,7 +16,7 @@
         "field": "PASSWORD",
         "displayName": "Teamwork Password",
         "type": "password",
-        "minLength": 4,
+        "minLength": 1,
         "maxLength": 60,
         "required": true,
         "description": "Teamwork account password",
