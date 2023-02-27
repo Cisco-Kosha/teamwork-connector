@@ -546,7 +546,7 @@ const docTemplate = `{
         },
         "/api/v1/projects/updates": {
             "get": {
-                "description": "List all updates for a specific project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/277672affb50e-get-project-updates for more parameter options.",
+                "description": "List all updates across all projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.",
                 "consumes": [
                     "application/json"
                 ],
@@ -556,14 +556,8 @@ const docTemplate = `{
                 "tags": [
                     "projects"
                 ],
-                "summary": "Get all  updates for a specific project",
+                "summary": "Get updates across all projects",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Enter project id",
-                        "name": "id",
-                        "in": "path"
-                    },
                     {
                         "type": "string",
                         "description": "Page number",
@@ -593,36 +587,8 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ReturnedRisks"
+                            "$ref": "#/definitions/models.ProjectUpdateResponse"
                         }
-                    }
-                }
-            }
-        },
-        "/api/v1/projects/updates/metadata": {
-            "get": {
-                "description": "Get page metadata for endpoint",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "projects"
-                ],
-                "summary": "Get number of pages and page length data",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Enter project id",
-                        "name": "id",
-                        "in": "path"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
                     }
                 }
             }
@@ -1056,6 +1022,61 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/{id}/updates": {
+            "get": {
+                "description": "List all updates for a specific project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/277672affb50e-get-project-updates for more parameter options.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Get all  updates for a specific project",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Enter project id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Collates all pages",
+                        "name": "allPages",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "First page to collate",
+                        "name": "pageStart",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Last page to collate",
+                        "name": "pageEnd",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ReturnedRisks"
+                        }
                     }
                 }
             }
@@ -2818,6 +2839,1302 @@ const docTemplate = `{
                 },
                 "update": {
                     "$ref": "#/definitions/models.Update"
+                }
+            }
+        },
+        "models.ProjectUpdateResponse": {
+            "type": "object",
+            "properties": {
+                "included": {
+                    "type": "object",
+                    "properties": {
+                        "projects": {
+                            "type": "object",
+                            "properties": {
+                                "property1": {
+                                    "type": "object",
+                                    "properties": {
+                                        "activePages": {
+                                            "type": "object",
+                                            "properties": {
+                                                "billing": {
+                                                    "type": "boolean"
+                                                },
+                                                "board": {
+                                                    "type": "boolean"
+                                                },
+                                                "comments": {
+                                                    "type": "boolean"
+                                                },
+                                                "files": {
+                                                    "type": "boolean"
+                                                },
+                                                "finance": {
+                                                    "type": "boolean"
+                                                },
+                                                "forms": {
+                                                    "type": "boolean"
+                                                },
+                                                "gantt": {
+                                                    "type": "boolean"
+                                                },
+                                                "links": {
+                                                    "type": "boolean"
+                                                },
+                                                "list": {
+                                                    "type": "boolean"
+                                                },
+                                                "messages": {
+                                                    "type": "boolean"
+                                                },
+                                                "milestones": {
+                                                    "type": "boolean"
+                                                },
+                                                "notebooks": {
+                                                    "type": "boolean"
+                                                },
+                                                "riskRegister": {
+                                                    "type": "boolean"
+                                                },
+                                                "table": {
+                                                    "type": "boolean"
+                                                },
+                                                "tasks": {
+                                                    "type": "boolean"
+                                                },
+                                                "time": {
+                                                    "type": "boolean"
+                                                }
+                                            }
+                                        },
+                                        "announcement": {
+                                            "type": "string"
+                                        },
+                                        "category": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "categoryId": {
+                                            "type": "integer"
+                                        },
+                                        "company": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "companyId": {
+                                            "type": "integer"
+                                        },
+                                        "createdAt": {
+                                            "type": "string"
+                                        },
+                                        "createdBy": {
+                                            "type": "integer"
+                                        },
+                                        "customFieldValueIds": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "customFieldValues": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "customfieldValues": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "defaultPrivacy": {
+                                            "type": "string"
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "directFileUploadsEnabled": {
+                                            "type": "boolean"
+                                        },
+                                        "endAt": {
+                                            "type": "string"
+                                        },
+                                        "endDate": {
+                                            "type": "string"
+                                        },
+                                        "financialBudget": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "financialBudgetId": {
+                                            "type": "integer"
+                                        },
+                                        "harvestTimersEnabled": {
+                                            "type": "boolean"
+                                        },
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "integrations": {
+                                            "type": "object",
+                                            "properties": {
+                                                "oneDriveBusiness": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "account": {
+                                                            "type": "string"
+                                                        },
+                                                        "enabled": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "folder": {
+                                                            "type": "string"
+                                                        },
+                                                        "folderName": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "sharepoint": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "account": {
+                                                            "type": "string"
+                                                        },
+                                                        "enabled": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "folder": {
+                                                            "type": "string"
+                                                        },
+                                                        "folderName": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "xero": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "baseCurrency": {
+                                                            "type": "string"
+                                                        },
+                                                        "connected": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "countryCode": {
+                                                            "type": "string"
+                                                        },
+                                                        "enabled": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "organisation": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "isBillable": {
+                                            "type": "boolean"
+                                        },
+                                        "isOnBoardingProject": {
+                                            "type": "boolean"
+                                        },
+                                        "isProjectAdmin": {
+                                            "type": "boolean"
+                                        },
+                                        "isSampleProject": {
+                                            "type": "boolean"
+                                        },
+                                        "isStarred": {
+                                            "type": "boolean"
+                                        },
+                                        "lastWorkedOn": {
+                                            "type": "string"
+                                        },
+                                        "latestActivity": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "logo": {
+                                            "type": "string"
+                                        },
+                                        "minMaxAvailableDates": {
+                                            "type": "object",
+                                            "properties": {
+                                                "deadlinesFound": {
+                                                    "type": "boolean"
+                                                },
+                                                "maxEndDate": {
+                                                    "type": "string"
+                                                },
+                                                "minStartDate": {
+                                                    "type": "string"
+                                                },
+                                                "suggestedEndDate": {
+                                                    "type": "string"
+                                                },
+                                                "suggestedStartDate": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "notifyCommentIncludeCreator": {
+                                            "type": "boolean"
+                                        },
+                                        "notifyEveryone": {
+                                            "type": "boolean"
+                                        },
+                                        "notifyTaskAssignee": {
+                                            "type": "boolean"
+                                        },
+                                        "overviewStartPage": {
+                                            "type": "string"
+                                        },
+                                        "ownedBy": {
+                                            "type": "integer"
+                                        },
+                                        "ownerId": {
+                                            "type": "integer"
+                                        },
+                                        "portfolioCards": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "privacyEnabled": {
+                                            "type": "boolean"
+                                        },
+                                        "projectOwner": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "projectOwnerId": {
+                                            "type": "integer"
+                                        },
+                                        "replyByEmailEnabled": {
+                                            "type": "boolean"
+                                        },
+                                        "showAnnouncement": {
+                                            "type": "boolean"
+                                        },
+                                        "skipWeekends": {
+                                            "type": "boolean"
+                                        },
+                                        "startAt": {
+                                            "type": "string"
+                                        },
+                                        "startDate": {
+                                            "type": "string"
+                                        },
+                                        "startPage": {
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "subStatus": {
+                                            "type": "string"
+                                        },
+                                        "tagIds": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "tasksStartPage": {
+                                            "type": "string"
+                                        },
+                                        "timeBudget": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "timeBudgetId": {
+                                            "type": "integer"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "update": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "updateId": {
+                                            "type": "integer"
+                                        },
+                                        "updatedAt": {
+                                            "type": "string"
+                                        },
+                                        "updatedBy": {
+                                            "type": "integer"
+                                        },
+                                        "users": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "property2": {
+                                    "type": "object",
+                                    "properties": {
+                                        "activePages": {
+                                            "type": "object",
+                                            "properties": {
+                                                "billing": {
+                                                    "type": "boolean"
+                                                },
+                                                "board": {
+                                                    "type": "boolean"
+                                                },
+                                                "comments": {
+                                                    "type": "boolean"
+                                                },
+                                                "files": {
+                                                    "type": "boolean"
+                                                },
+                                                "finance": {
+                                                    "type": "boolean"
+                                                },
+                                                "forms": {
+                                                    "type": "boolean"
+                                                },
+                                                "gantt": {
+                                                    "type": "boolean"
+                                                },
+                                                "links": {
+                                                    "type": "boolean"
+                                                },
+                                                "list": {
+                                                    "type": "boolean"
+                                                },
+                                                "messages": {
+                                                    "type": "boolean"
+                                                },
+                                                "milestones": {
+                                                    "type": "boolean"
+                                                },
+                                                "notebooks": {
+                                                    "type": "boolean"
+                                                },
+                                                "riskRegister": {
+                                                    "type": "boolean"
+                                                },
+                                                "table": {
+                                                    "type": "boolean"
+                                                },
+                                                "tasks": {
+                                                    "type": "boolean"
+                                                },
+                                                "time": {
+                                                    "type": "boolean"
+                                                }
+                                            }
+                                        },
+                                        "announcement": {
+                                            "type": "string"
+                                        },
+                                        "category": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "categoryId": {
+                                            "type": "integer"
+                                        },
+                                        "company": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "companyId": {
+                                            "type": "integer"
+                                        },
+                                        "createdAt": {
+                                            "type": "string"
+                                        },
+                                        "createdBy": {
+                                            "type": "integer"
+                                        },
+                                        "customFieldValueIds": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "customFieldValues": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "customfieldValues": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "defaultPrivacy": {
+                                            "type": "string"
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "directFileUploadsEnabled": {
+                                            "type": "boolean"
+                                        },
+                                        "endAt": {
+                                            "type": "string"
+                                        },
+                                        "endDate": {
+                                            "type": "string"
+                                        },
+                                        "financialBudget": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "financialBudgetId": {
+                                            "type": "integer"
+                                        },
+                                        "harvestTimersEnabled": {
+                                            "type": "boolean"
+                                        },
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "integrations": {
+                                            "type": "object",
+                                            "properties": {
+                                                "oneDriveBusiness": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "account": {
+                                                            "type": "string"
+                                                        },
+                                                        "enabled": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "folder": {
+                                                            "type": "string"
+                                                        },
+                                                        "folderName": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "sharepoint": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "account": {
+                                                            "type": "string"
+                                                        },
+                                                        "enabled": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "folder": {
+                                                            "type": "string"
+                                                        },
+                                                        "folderName": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "xero": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "baseCurrency": {
+                                                            "type": "string"
+                                                        },
+                                                        "connected": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "countryCode": {
+                                                            "type": "string"
+                                                        },
+                                                        "enabled": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "organisation": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "isBillable": {
+                                            "type": "boolean"
+                                        },
+                                        "isOnBoardingProject": {
+                                            "type": "boolean"
+                                        },
+                                        "isProjectAdmin": {
+                                            "type": "boolean"
+                                        },
+                                        "isSampleProject": {
+                                            "type": "boolean"
+                                        },
+                                        "isStarred": {
+                                            "type": "boolean"
+                                        },
+                                        "lastWorkedOn": {
+                                            "type": "string"
+                                        },
+                                        "latestActivity": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "logo": {
+                                            "type": "string"
+                                        },
+                                        "minMaxAvailableDates": {
+                                            "type": "object",
+                                            "properties": {
+                                                "deadlinesFound": {
+                                                    "type": "boolean"
+                                                },
+                                                "maxEndDate": {
+                                                    "type": "string"
+                                                },
+                                                "minStartDate": {
+                                                    "type": "string"
+                                                },
+                                                "suggestedEndDate": {
+                                                    "type": "string"
+                                                },
+                                                "suggestedStartDate": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "notifyCommentIncludeCreator": {
+                                            "type": "boolean"
+                                        },
+                                        "notifyEveryone": {
+                                            "type": "boolean"
+                                        },
+                                        "notifyTaskAssignee": {
+                                            "type": "boolean"
+                                        },
+                                        "overviewStartPage": {
+                                            "type": "string"
+                                        },
+                                        "ownedBy": {
+                                            "type": "integer"
+                                        },
+                                        "ownerId": {
+                                            "type": "integer"
+                                        },
+                                        "portfolioCards": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "privacyEnabled": {
+                                            "type": "boolean"
+                                        },
+                                        "projectOwner": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "projectOwnerId": {
+                                            "type": "integer"
+                                        },
+                                        "replyByEmailEnabled": {
+                                            "type": "boolean"
+                                        },
+                                        "showAnnouncement": {
+                                            "type": "boolean"
+                                        },
+                                        "skipWeekends": {
+                                            "type": "boolean"
+                                        },
+                                        "startAt": {
+                                            "type": "string"
+                                        },
+                                        "startDate": {
+                                            "type": "string"
+                                        },
+                                        "startPage": {
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "subStatus": {
+                                            "type": "string"
+                                        },
+                                        "tagIds": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "tasksStartPage": {
+                                            "type": "string"
+                                        },
+                                        "timeBudget": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "timeBudgetId": {
+                                            "type": "integer"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "update": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "updateId": {
+                                            "type": "integer"
+                                        },
+                                        "updatedAt": {
+                                            "type": "string"
+                                        },
+                                        "updatedBy": {
+                                            "type": "integer"
+                                        },
+                                        "users": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "users": {
+                            "type": "object",
+                            "properties": {
+                                "property1": {
+                                    "type": "object",
+                                    "properties": {
+                                        "avatarUrl": {
+                                            "type": "string"
+                                        },
+                                        "canAddProjects": {
+                                            "type": "boolean"
+                                        },
+                                        "company": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "companyId": {
+                                            "type": "integer"
+                                        },
+                                        "companyRoleId": {
+                                            "type": "integer"
+                                        },
+                                        "deleted": {
+                                            "type": "boolean"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "firstName": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "isAdmin": {
+                                            "type": "boolean"
+                                        },
+                                        "isClientUser": {
+                                            "type": "boolean"
+                                        },
+                                        "isServiceAccount": {
+                                            "type": "boolean"
+                                        },
+                                        "lastName": {
+                                            "type": "string"
+                                        },
+                                        "lengthOfDay": {
+                                            "type": "integer"
+                                        },
+                                        "teams": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "userCost": {
+                                            "type": "integer"
+                                        },
+                                        "userRate": {
+                                            "type": "integer"
+                                        },
+                                        "workingHour": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "workingHoursId": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "property2": {
+                                    "type": "object",
+                                    "properties": {
+                                        "avatarUrl": {
+                                            "type": "string"
+                                        },
+                                        "canAddProjects": {
+                                            "type": "boolean"
+                                        },
+                                        "company": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "companyId": {
+                                            "type": "integer"
+                                        },
+                                        "companyRoleId": {
+                                            "type": "integer"
+                                        },
+                                        "deleted": {
+                                            "type": "boolean"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "firstName": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "isAdmin": {
+                                            "type": "boolean"
+                                        },
+                                        "isClientUser": {
+                                            "type": "boolean"
+                                        },
+                                        "isServiceAccount": {
+                                            "type": "boolean"
+                                        },
+                                        "lastName": {
+                                            "type": "string"
+                                        },
+                                        "lengthOfDay": {
+                                            "type": "integer"
+                                        },
+                                        "teams": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "meta": {
+                                                        "type": "object"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "userCost": {
+                                            "type": "integer"
+                                        },
+                                        "userRate": {
+                                            "type": "integer"
+                                        },
+                                        "workingHour": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "workingHoursId": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "meta": {
+                    "type": "object",
+                    "properties": {
+                        "limit": {
+                            "type": "integer"
+                        },
+                        "nextCursor": {
+                            "type": "string"
+                        },
+                        "page": {
+                            "type": "object",
+                            "properties": {
+                                "count": {
+                                    "type": "integer"
+                                },
+                                "hasMore": {
+                                    "type": "boolean"
+                                },
+                                "pageOffset": {
+                                    "type": "integer"
+                                },
+                                "pageSize": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "prevCursor": {
+                            "type": "string"
+                        },
+                        "totalCapacity": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "projectUpdates": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "color": {
+                                "type": "string"
+                            },
+                            "createdAt": {
+                                "type": "string"
+                            },
+                            "createdBy": {
+                                "type": "integer"
+                            },
+                            "deleted": {
+                                "type": "boolean"
+                            },
+                            "deletedAt": {
+                                "type": "string"
+                            },
+                            "deletedBy": {
+                                "type": "integer"
+                            },
+                            "health": {
+                                "type": "integer"
+                            },
+                            "healthLabel": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "likeFromUserIDs": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                }
+                            },
+                            "likeFromUsers": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "meta": {
+                                            "type": "object"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "project": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "meta": {
+                                        "type": "object"
+                                    },
+                                    "type": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "projectId": {
+                                "type": "integer"
+                            },
+                            "reactions": {
+                                "type": "object",
+                                "properties": {
+                                    "counts": {
+                                        "type": "object",
+                                        "properties": {
+                                            "dislike": {
+                                                "type": "integer"
+                                            },
+                                            "frown": {
+                                                "type": "integer"
+                                            },
+                                            "heart": {
+                                                "type": "integer"
+                                            },
+                                            "joy": {
+                                                "type": "integer"
+                                            },
+                                            "like": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "mine": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "text": {
+                                "type": "string"
+                            },
+                            "updatedAt": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 }
             }
         },
