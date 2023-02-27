@@ -421,7 +421,6 @@ func (a *App) getProjectTasks(w http.ResponseWriter, r *http.Request) {
 	var tasks []*models.Tasks
 
 	respHeaders, _ := httpclient.GetProjectTasks(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
-	//fmt.Println(respHeaders)
 
 	//get page range data from headers
 	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
@@ -481,8 +480,6 @@ func (a *App) getProjectTasksMetadata(w http.ResponseWriter, r *http.Request) {
 	}
 	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
-
-
 
 // createTaskList godoc
 // @Summary Create new tasklist
@@ -557,6 +554,19 @@ func (a *App) createProjectUpdate(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, res)
 }
 
+// getAllProjectUpdates godoc
+// @Summary Get updates across all projects
+// @Description List all updates across all projects
+// @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Param page query string false "Page number"
+// @Param allPages query boolean false "Collates all pages"
+// @Param pageStart query integer false "First page to collate"
+// @Param pageEnd query integer false "Last page to collate"
+// @Success 200 {object} models.ProjectUpdateResponse
+// @Router /api/v1/projects/updates [get]
 func (a *App) getAllProjectUpdatesV3(w http.ResponseWriter, r *http.Request) {
 
 	//Allow CORS here By * or specific origin
@@ -589,7 +599,27 @@ func (a *App) getAllProjectUpdatesV3(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, projectUpdates)
 }
 
-// getProjectUpdates godoc
+func (a *App) getAllProjectUpdatesMetadata(w http.ResponseWriter, r *http.Request) {
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	respHeaders, _ := httpclient.GetAllProjectUpdatesV3(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
+	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
+	if err != nil {
+		a.Log.Errorf("Error getting x-pages header", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	endpointMetadata := models.EndpointMetadata{
+		PageCount: pageCount,
+	}
+	respondWithJSON(w, http.StatusOK, endpointMetadata)
+}
+
+// getSingleProjectUpdates godoc
 // @Summary Get all  updates for a specific project
 // @Description List all updates for a specific project
 // @Description Please refer to https://apidocs.teamwork.com/docs/teamwork/277672affb50e-get-project-updates for more parameter options.
@@ -602,8 +632,8 @@ func (a *App) getAllProjectUpdatesV3(w http.ResponseWriter, r *http.Request) {
 // @Param pageStart query integer false "First page to collate"
 // @Param pageEnd query integer false "Last page to collate"
 // @Success 200 {object} models.ReturnedRisks
-// @Router /api/v1/projects/updates [get]
-func (a *App) getAllProjectUpdatesV1(w http.ResponseWriter, r *http.Request) {
+// @Router /api/v1/projects/{id}/updates [get]
+func (a *App) getSingleProjectUpdatesV1(w http.ResponseWriter, r *http.Request) {
 
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -639,16 +669,7 @@ func (a *App) getAllProjectUpdatesV1(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, projectUpdates)
 }
 
-// getAllProjectUpdatesMetadata godoc
-// @Summary Get number of pages and page length data
-// @Description Get page metadata for endpoint
-// @Tags projects
-// @Accept  json
-// @Produce  json
-// @Param id path string false "Enter project id"
-// @Success 200
-// @Router /api/v1/projects/updates/metadata [get]
-func (a *App) getAllProjectUpdatesMetadata(w http.ResponseWriter, r *http.Request) {
+func (a *App) getSingleProjectUpdatesMetadata(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
