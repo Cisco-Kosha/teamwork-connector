@@ -395,6 +395,27 @@
         "summary": "List latest activity across all projects"
       }
     },
+    "/api/v1/projects/allUpdates": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ProjectUpdateResponseV1"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Custom Kosha endpoint to list all updates across all projects",
+        "summary": "Get updates across all projects"
+      }
+    },
     "/api/v1/projects/metadata": {
       "get": {
         "responses": {
@@ -589,6 +610,20 @@
         ],
         "description": "List all updates across all projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.",
         "summary": "Get updates across all projects"
+      }
+    },
+    "/api/v1/projects/updates/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
       }
     },
     "/api/v1/projects/{id}": {
@@ -4178,6 +4213,72 @@
               "type": "object"
             },
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "models.ProjectUpdateResponseV1": {
+        "properties": {
+          "STATUS": {
+            "type": "string"
+          },
+          "updates": {
+            "items": {
+              "$ref": "#/components/schemas/models.ProjectUpdateV1"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "models.ProjectUpdateV1": {
+        "properties": {
+          "color": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedDate": {
+            "type": "string"
+          },
+          "health": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "projectStatus": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "user": {
+            "properties": {
+              "avatarUrl": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "fullName": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              }
+            },
+            "type": "object"
           }
         },
         "type": "object"

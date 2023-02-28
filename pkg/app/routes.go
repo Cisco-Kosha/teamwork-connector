@@ -57,10 +57,11 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc(apiV1+"/projects/tasks/metadata", a.getTasksAllProjectsMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/tasks", a.getTasksAllProjects).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/updates", a.getAllProjectUpdatesV3).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/allUpdates", a.getAllProjectsUpdates).Methods("GET", "OPTIONS")
 
 	//TODO: Project Updates is a paid feature on Teamwork so we can't see pagination headers for this endpoint
-	//a.Router.HandleFunc(apiV1+"/projects/updates/metadata", a.getAllProjectUpdatesMetadata).Methods("GET", "OPTIONS")
-	//a.Router.HandleFunc(apiV1+"/projects/{id}/updates/metadata", a.getSingleProjectUpdatesMetadata).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/updates/metadata", a.getAllProjectUpdatesMetadata).Methods("GET", "OPTIONS")
+	a.Router.HandleFunc(apiV1+"/projects/{id}/updates/metadata", a.getSingleProjectUpdatesMetadata).Methods("GET", "OPTIONS")
 
 	a.Router.HandleFunc(apiV1+"/projects/{id}/tasks/metadata", a.getProjectTasksMetadata).Methods("GET", "OPTIONS")
 	a.Router.HandleFunc(apiV1+"/projects/{id}/tasks", a.getProjectTasks).Methods("GET", "OPTIONS")

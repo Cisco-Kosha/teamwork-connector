@@ -393,6 +393,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/projects/allUpdates": {
+            "get": {
+                "description": "Custom Kosha endpoint to list all updates across all projects",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Get updates across all projects",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ProjectUpdateResponseV1"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/projects/metadata": {
             "get": {
                 "description": "Get page metadata for endpoint",
@@ -589,6 +612,26 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.ProjectUpdateResponse"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/projects/updates/metadata": {
+            "get": {
+                "description": "Get page metadata for endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "projects"
+                ],
+                "summary": "Get number of pages and page length data",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -4133,6 +4176,72 @@ const docTemplate = `{
                             "updatedAt": {
                                 "type": "string"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "models.ProjectUpdateResponseV1": {
+            "type": "object",
+            "properties": {
+                "STATUS": {
+                    "type": "string"
+                },
+                "updates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ProjectUpdateV1"
+                    }
+                }
+            }
+        },
+        "models.ProjectUpdateV1": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "dateCreated": {
+                    "type": "string"
+                },
+                "deleted": {
+                    "type": "boolean"
+                },
+                "deletedDate": {
+                    "type": "string"
+                },
+                "health": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "projectId": {
+                    "type": "string"
+                },
+                "projectStatus": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "object",
+                    "properties": {
+                        "avatarUrl": {
+                            "type": "string"
+                        },
+                        "firstName": {
+                            "type": "string"
+                        },
+                        "fullName": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "lastName": {
+                            "type": "string"
                         }
                     }
                 }

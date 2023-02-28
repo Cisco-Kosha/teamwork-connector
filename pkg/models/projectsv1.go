@@ -107,7 +107,7 @@ type ActivePagesV1 struct {
 }
 
 type ProjectUpdateResponseV1 struct {
-	Update []ProjectUpdateV1 `json:"update"`
+	Update []ProjectUpdateV1 `json:"updates"`
 	Status string            `json:"STATUS"`
 }
 

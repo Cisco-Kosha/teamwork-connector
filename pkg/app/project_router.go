@@ -3,6 +3,7 @@ package app
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -554,6 +555,68 @@ func (a *App) createProjectUpdate(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, res)
 }
 
+// getAllProjectsUpdates godoc
+// @Summary Get updates across all projects
+// @Description Custom Kosha endpoint to list all updates across all projects
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.ProjectUpdateResponseV1
+// @Router /api/v1/projects/allUpdates [get]
+func (a *App) getAllProjectsUpdates(w http.ResponseWriter, r *http.Request) {
+
+	//Allow CORS here By * or specific origin
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+
+	// get all projects across all pages using the allPages parameter
+	var projects []*models.ProjectResponseV1
+	values := url.Values{}
+	values.Set("allPages", "true")
+
+	respHeaders, _ := httpclient.GetAllProjectsV1(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), values, true)
+
+	//get page range data from headers
+	pageStart, pageEnd, err := getPageRange(values, respHeaders, 0)
+	if err != nil {
+		a.Log.Errorf("Error getting page range", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	//get page data
+	params := url.Values{}
+	for i := pageStart; i <= pageEnd; i++ {
+		params.Set("page", strconv.Itoa(i))
+		_, p := httpclient.GetAllProjectsV1(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+		projects = append(projects, p)
+	}
+
+	var projectUpdates []*models.ProjectUpdateResponseV1
+	for _, projectResponse := range projects {
+		for _, project := range projectResponse.Projects {
+			respHeaders, _ := httpclient.GetAllProjectUpdatesV1(a.Cfg.GetTeamworkURL(), project.ID, a.Cfg.GetUsername(), a.Cfg.GetPassword(), values, true)
+			//get page range data from headers
+			pageStart, pageEnd, err := getPageRange(values, respHeaders, 0)
+			if err != nil {
+				a.Log.Errorf("Error getting page range", err)
+				respondWithError(w, http.StatusBadRequest, err.Error())
+				return
+			}
+
+			//get page data
+			params := url.Values{}
+			for i := pageStart; i <= pageEnd; i++ {
+				params.Set("page", strconv.Itoa(i))
+				_, p := httpclient.GetAllProjectUpdatesV1(a.Cfg.GetTeamworkURL(), project.ID, a.Cfg.GetUsername(), a.Cfg.GetPassword(), params, false)
+				projectUpdates = append(projectUpdates, p)
+			}
+		}
+	}
+	respondWithJSON(w, http.StatusOK, projectUpdates)
+}
+
 // getAllProjectUpdates godoc
 // @Summary Get updates across all projects
 // @Description List all updates across all projects
@@ -599,22 +662,24 @@ func (a *App) getAllProjectUpdatesV3(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, projectUpdates)
 }
 
+// getAllProjectUpdatesMetadata godoc
+// @Summary Get number of pages and page length data
+// @Description Get page metadata for endpoint
+// @Tags projects
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /api/v1/projects/updates/metadata [get]
 func (a *App) getAllProjectUpdatesMetadata(w http.ResponseWriter, r *http.Request) {
 	//Allow CORS here By * or specific origin
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	respHeaders, _ := httpclient.GetAllProjectUpdatesV3(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
-	pageCount, err := strconv.Atoi(respHeaders.Get("X-Pages"))
-	if err != nil {
-		a.Log.Errorf("Error getting x-pages header", err)
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
-	}
+	_, data := httpclient.GetAllProjectUpdatesV3(a.Cfg.GetTeamworkURL(), a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), false)
 
 	endpointMetadata := models.EndpointMetadata{
-		PageCount: pageCount,
+		PageCount: data.Metadata.Page.Count,
 	}
 	respondWithJSON(w, http.StatusOK, endpointMetadata)
 }
@@ -648,7 +713,6 @@ func (a *App) getSingleProjectUpdatesV1(w http.ResponseWriter, r *http.Request) 
 	id := vars["id"]
 
 	respHeaders, _ := httpclient.GetAllProjectUpdatesV1(a.Cfg.GetTeamworkURL(), id, a.Cfg.GetUsername(), a.Cfg.GetPassword(), r.URL.Query(), true)
-
 	//get page range data from headers
 	pageStart, pageEnd, err := getPageRange(r.URL.Query(), respHeaders, 0)
 	if err != nil {

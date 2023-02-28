@@ -1622,6 +1622,49 @@ definitions:
           type: object
         type: array
     type: object
+  models.ProjectUpdateResponseV1:
+    properties:
+      STATUS:
+        type: string
+      updates:
+        items:
+          $ref: '#/definitions/models.ProjectUpdateV1'
+        type: array
+    type: object
+  models.ProjectUpdateV1:
+    properties:
+      color:
+        type: string
+      dateCreated:
+        type: string
+      deleted:
+        type: boolean
+      deletedDate:
+        type: string
+      health:
+        type: string
+      id:
+        type: string
+      projectId:
+        type: string
+      projectStatus:
+        type: string
+      text:
+        type: string
+      user:
+        properties:
+          avatarUrl:
+            type: string
+          firstName:
+            type: string
+          fullName:
+            type: string
+          id:
+            type: string
+          lastName:
+            type: string
+        type: object
+    type: object
   models.ProjectV1:
     properties:
       active-pages:
@@ -3126,6 +3169,21 @@ paths:
       summary: List latest activity across all projects
       tags:
       - projects
+  /api/v1/projects/allUpdates:
+    get:
+      consumes:
+      - application/json
+      description: Custom Kosha endpoint to list all updates across all projects
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProjectUpdateResponseV1'
+      summary: Get updates across all projects
+      tags:
+      - projects
   /api/v1/projects/metadata:
     get:
       consumes:
@@ -3262,6 +3320,19 @@ paths:
           schema:
             $ref: '#/definitions/models.ProjectUpdateResponse'
       summary: Get updates across all projects
+      tags:
+      - projects
+  /api/v1/projects/updates/metadata:
+    get:
+      consumes:
+      - application/json
+      description: Get page metadata for endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get number of pages and page length data
       tags:
       - projects
   /api/v1/risks:
