@@ -37,6 +37,107 @@
         "summary": "Get current person's details"
       }
     },
+    "/api/v1/milestones": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ReturnedMilestones"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "milestones"
+        ],
+        "description": "Get a list of all milestones for which the current user has access.",
+        "summary": "Get all milestones."
+      }
+    },
+    "/api/v1/milestones/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "milestones"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
+      }
+    },
+    "/api/v1/milestones/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Enter milestone id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ReturnedMilestone"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "milestones"
+        ],
+        "description": "Get milestone information for the id specified.",
+        "summary": "Get the specified milestone."
+      }
+    },
     "/api/v1/people": {
       "get": {
         "parameters": [
@@ -294,7 +395,97 @@
         "summary": "List latest activity across all projects"
       }
     },
+    "/api/v1/projects/allUpdates": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ProjectUpdateResponseV1"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Custom Kosha endpoint to list all updates across all projects",
+        "summary": "Get updates across all projects"
+      }
+    },
     "/api/v1/projects/metadata": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
+      }
+    },
+    "/api/v1/projects/tasks": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.Tasks"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "Lists all tasks across all projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/54bdf625aa2f3-get-all-tasks-across-all-projects",
+        "summary": "Retrieves all tasks across all projects"
+      }
+    },
+    "/api/v1/projects/tasks/metadata": {
       "get": {
         "responses": {
           "200": {
@@ -370,15 +561,6 @@
       "get": {
         "parameters": [
           {
-            "description": "Enter project id",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "description": "Page number",
             "in": "query",
             "name": "page",
@@ -416,7 +598,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/models.ReturnedRisks"
+                  "$ref": "#/components/schemas/models.ProjectUpdateResponse"
                 }
               }
             },
@@ -426,23 +608,12 @@
         "tags": [
           "projects"
         ],
-        "description": "List all updates for a specific project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/277672affb50e-get-project-updates for more parameter options.",
-        "summary": "Get all  updates for a specific project"
+        "description": "List all updates across all projects\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/2e4f8bf140cab-get-all-project-updates for more parameter options.",
+        "summary": "Get updates across all projects"
       }
     },
     "/api/v1/projects/updates/metadata": {
       "get": {
-        "parameters": [
-          {
-            "description": "Enter project id",
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -508,6 +679,31 @@
         ],
         "description": "List single project based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/da79573311f8a-retrieve-a-single-project for more parameter options.",
         "summary": "Get single project"
+      }
+    },
+    "/api/v1/projects/{id}/milestones": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "milestones"
+        ],
+        "description": "Get page metadata for endpoint",
+        "summary": "Get number of pages and page length data"
       }
     },
     "/api/v1/projects/{id}/risks": {
@@ -803,8 +999,8 @@
         "tags": [
           "projects"
         ],
-        "description": "Lists all tasks based on project ID\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project",
-        "summary": "Retrieves all tasks in a project"
+        "description": "Lists all tasks for specified project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/6e3da2c04d779-get-all-tasks-on-a-given-project",
+        "summary": "Retrieves all tasks for specified project"
       }
     },
     "/api/v1/projects/{id}/tasks/metadata": {
@@ -865,6 +1061,70 @@
           "description": "Enter project update properties"
         },
         "summary": "Add an update for a project"
+      }
+    },
+    "/api/v1/projects/{id}/updates": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Enter project id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Collates all pages",
+            "in": "query",
+            "name": "allPages",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "First page to collate",
+            "in": "query",
+            "name": "pageStart",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Last page to collate",
+            "in": "query",
+            "name": "pageEnd",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ReturnedRisks"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "projects"
+        ],
+        "description": "List all updates for a specific project\nPlease refer to https://apidocs.teamwork.com/docs/teamwork/277672affb50e-get-project-updates for more parameter options.",
+        "summary": "Get all  updates for a specific project"
       }
     },
     "/api/v1/projects/{project_id}/timeentry": {
@@ -1774,6 +2034,72 @@
         },
         "type": "object"
       },
+      "models.Included": {
+        "properties": {
+          "tags": {
+            "properties": {
+              "25488": {
+                "properties": {
+                  "color": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "project": {
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "projectId": {
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              "30993": {
+                "properties": {
+                  "color": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "project": {
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "projectId": {
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
       "models.Integrations": {
         "properties": {
           "microsoftConnectors": {
@@ -1891,6 +2217,148 @@
           },
           "pageSize": {
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "models.Milestone": {
+        "properties": {
+          "tags": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "canComplete": {
+            "type": "boolean"
+          },
+          "canEdit": {
+            "type": "boolean"
+          },
+          "commentsCount": {
+            "type": "integer"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "createdBy": {
+            "type": "integer"
+          },
+          "createdOn": {
+            "type": "string"
+          },
+          "creatorUserId": {
+            "type": "integer"
+          },
+          "deadline": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "descriptionHTML": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "lastChangedOn": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "originalDueDate": {
+            "type": "string"
+          },
+          "private": {
+            "type": "boolean"
+          },
+          "project": {
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "projectId": {
+            "type": "integer"
+          },
+          "reminder": {
+            "type": "boolean"
+          },
+          "responsibleParties": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "responsiblePartyIds": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "status": {
+            "type": "string"
+          },
+          "tagIds": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "tasklistIds": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "tasklists": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "updatedBy": {
+            "type": "integer"
+          },
+          "userFollowingChanges": {
+            "type": "boolean"
+          },
+          "userFollowingComments": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -2453,6 +2921,1368 @@
         },
         "type": "object"
       },
+      "models.ProjectUpdateResponse": {
+        "properties": {
+          "included": {
+            "properties": {
+              "projects": {
+                "properties": {
+                  "property1": {
+                    "properties": {
+                      "tags": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "activePages": {
+                        "properties": {
+                          "billing": {
+                            "type": "boolean"
+                          },
+                          "board": {
+                            "type": "boolean"
+                          },
+                          "comments": {
+                            "type": "boolean"
+                          },
+                          "files": {
+                            "type": "boolean"
+                          },
+                          "finance": {
+                            "type": "boolean"
+                          },
+                          "forms": {
+                            "type": "boolean"
+                          },
+                          "gantt": {
+                            "type": "boolean"
+                          },
+                          "links": {
+                            "type": "boolean"
+                          },
+                          "list": {
+                            "type": "boolean"
+                          },
+                          "messages": {
+                            "type": "boolean"
+                          },
+                          "milestones": {
+                            "type": "boolean"
+                          },
+                          "notebooks": {
+                            "type": "boolean"
+                          },
+                          "riskRegister": {
+                            "type": "boolean"
+                          },
+                          "table": {
+                            "type": "boolean"
+                          },
+                          "tasks": {
+                            "type": "boolean"
+                          },
+                          "time": {
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "announcement": {
+                        "type": "string"
+                      },
+                      "category": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "categoryId": {
+                        "type": "integer"
+                      },
+                      "company": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "companyId": {
+                        "type": "integer"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "createdBy": {
+                        "type": "integer"
+                      },
+                      "customFieldValueIds": {
+                        "items": {
+                          "type": "integer"
+                        },
+                        "type": "array"
+                      },
+                      "customFieldValues": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "customfieldValues": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "defaultPrivacy": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "directFileUploadsEnabled": {
+                        "type": "boolean"
+                      },
+                      "endAt": {
+                        "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      },
+                      "financialBudget": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "financialBudgetId": {
+                        "type": "integer"
+                      },
+                      "harvestTimersEnabled": {
+                        "type": "boolean"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "integrations": {
+                        "properties": {
+                          "oneDriveBusiness": {
+                            "properties": {
+                              "account": {
+                                "type": "string"
+                              },
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "folder": {
+                                "type": "string"
+                              },
+                              "folderName": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "sharepoint": {
+                            "properties": {
+                              "account": {
+                                "type": "string"
+                              },
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "folder": {
+                                "type": "string"
+                              },
+                              "folderName": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "xero": {
+                            "properties": {
+                              "baseCurrency": {
+                                "type": "string"
+                              },
+                              "connected": {
+                                "type": "boolean"
+                              },
+                              "countryCode": {
+                                "type": "string"
+                              },
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "organisation": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "isBillable": {
+                        "type": "boolean"
+                      },
+                      "isOnBoardingProject": {
+                        "type": "boolean"
+                      },
+                      "isProjectAdmin": {
+                        "type": "boolean"
+                      },
+                      "isSampleProject": {
+                        "type": "boolean"
+                      },
+                      "isStarred": {
+                        "type": "boolean"
+                      },
+                      "lastWorkedOn": {
+                        "type": "string"
+                      },
+                      "latestActivity": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "logo": {
+                        "type": "string"
+                      },
+                      "minMaxAvailableDates": {
+                        "properties": {
+                          "deadlinesFound": {
+                            "type": "boolean"
+                          },
+                          "maxEndDate": {
+                            "type": "string"
+                          },
+                          "minStartDate": {
+                            "type": "string"
+                          },
+                          "suggestedEndDate": {
+                            "type": "string"
+                          },
+                          "suggestedStartDate": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "notifyCommentIncludeCreator": {
+                        "type": "boolean"
+                      },
+                      "notifyEveryone": {
+                        "type": "boolean"
+                      },
+                      "notifyTaskAssignee": {
+                        "type": "boolean"
+                      },
+                      "overviewStartPage": {
+                        "type": "string"
+                      },
+                      "ownedBy": {
+                        "type": "integer"
+                      },
+                      "ownerId": {
+                        "type": "integer"
+                      },
+                      "portfolioCards": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "privacyEnabled": {
+                        "type": "boolean"
+                      },
+                      "projectOwner": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "projectOwnerId": {
+                        "type": "integer"
+                      },
+                      "replyByEmailEnabled": {
+                        "type": "boolean"
+                      },
+                      "showAnnouncement": {
+                        "type": "boolean"
+                      },
+                      "skipWeekends": {
+                        "type": "boolean"
+                      },
+                      "startAt": {
+                        "type": "string"
+                      },
+                      "startDate": {
+                        "type": "string"
+                      },
+                      "startPage": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "subStatus": {
+                        "type": "string"
+                      },
+                      "tagIds": {
+                        "items": {
+                          "type": "integer"
+                        },
+                        "type": "array"
+                      },
+                      "tasksStartPage": {
+                        "type": "string"
+                      },
+                      "timeBudget": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "timeBudgetId": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "update": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "updateId": {
+                        "type": "integer"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "updatedBy": {
+                        "type": "integer"
+                      },
+                      "users": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "property2": {
+                    "properties": {
+                      "tags": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "activePages": {
+                        "properties": {
+                          "billing": {
+                            "type": "boolean"
+                          },
+                          "board": {
+                            "type": "boolean"
+                          },
+                          "comments": {
+                            "type": "boolean"
+                          },
+                          "files": {
+                            "type": "boolean"
+                          },
+                          "finance": {
+                            "type": "boolean"
+                          },
+                          "forms": {
+                            "type": "boolean"
+                          },
+                          "gantt": {
+                            "type": "boolean"
+                          },
+                          "links": {
+                            "type": "boolean"
+                          },
+                          "list": {
+                            "type": "boolean"
+                          },
+                          "messages": {
+                            "type": "boolean"
+                          },
+                          "milestones": {
+                            "type": "boolean"
+                          },
+                          "notebooks": {
+                            "type": "boolean"
+                          },
+                          "riskRegister": {
+                            "type": "boolean"
+                          },
+                          "table": {
+                            "type": "boolean"
+                          },
+                          "tasks": {
+                            "type": "boolean"
+                          },
+                          "time": {
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "announcement": {
+                        "type": "string"
+                      },
+                      "category": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "categoryId": {
+                        "type": "integer"
+                      },
+                      "company": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "companyId": {
+                        "type": "integer"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "createdBy": {
+                        "type": "integer"
+                      },
+                      "customFieldValueIds": {
+                        "items": {
+                          "type": "integer"
+                        },
+                        "type": "array"
+                      },
+                      "customFieldValues": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "customfieldValues": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "defaultPrivacy": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "directFileUploadsEnabled": {
+                        "type": "boolean"
+                      },
+                      "endAt": {
+                        "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      },
+                      "financialBudget": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "financialBudgetId": {
+                        "type": "integer"
+                      },
+                      "harvestTimersEnabled": {
+                        "type": "boolean"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "integrations": {
+                        "properties": {
+                          "oneDriveBusiness": {
+                            "properties": {
+                              "account": {
+                                "type": "string"
+                              },
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "folder": {
+                                "type": "string"
+                              },
+                              "folderName": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "sharepoint": {
+                            "properties": {
+                              "account": {
+                                "type": "string"
+                              },
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "folder": {
+                                "type": "string"
+                              },
+                              "folderName": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "xero": {
+                            "properties": {
+                              "baseCurrency": {
+                                "type": "string"
+                              },
+                              "connected": {
+                                "type": "boolean"
+                              },
+                              "countryCode": {
+                                "type": "string"
+                              },
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "organisation": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "isBillable": {
+                        "type": "boolean"
+                      },
+                      "isOnBoardingProject": {
+                        "type": "boolean"
+                      },
+                      "isProjectAdmin": {
+                        "type": "boolean"
+                      },
+                      "isSampleProject": {
+                        "type": "boolean"
+                      },
+                      "isStarred": {
+                        "type": "boolean"
+                      },
+                      "lastWorkedOn": {
+                        "type": "string"
+                      },
+                      "latestActivity": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "logo": {
+                        "type": "string"
+                      },
+                      "minMaxAvailableDates": {
+                        "properties": {
+                          "deadlinesFound": {
+                            "type": "boolean"
+                          },
+                          "maxEndDate": {
+                            "type": "string"
+                          },
+                          "minStartDate": {
+                            "type": "string"
+                          },
+                          "suggestedEndDate": {
+                            "type": "string"
+                          },
+                          "suggestedStartDate": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "notifyCommentIncludeCreator": {
+                        "type": "boolean"
+                      },
+                      "notifyEveryone": {
+                        "type": "boolean"
+                      },
+                      "notifyTaskAssignee": {
+                        "type": "boolean"
+                      },
+                      "overviewStartPage": {
+                        "type": "string"
+                      },
+                      "ownedBy": {
+                        "type": "integer"
+                      },
+                      "ownerId": {
+                        "type": "integer"
+                      },
+                      "portfolioCards": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "privacyEnabled": {
+                        "type": "boolean"
+                      },
+                      "projectOwner": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "projectOwnerId": {
+                        "type": "integer"
+                      },
+                      "replyByEmailEnabled": {
+                        "type": "boolean"
+                      },
+                      "showAnnouncement": {
+                        "type": "boolean"
+                      },
+                      "skipWeekends": {
+                        "type": "boolean"
+                      },
+                      "startAt": {
+                        "type": "string"
+                      },
+                      "startDate": {
+                        "type": "string"
+                      },
+                      "startPage": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "subStatus": {
+                        "type": "string"
+                      },
+                      "tagIds": {
+                        "items": {
+                          "type": "integer"
+                        },
+                        "type": "array"
+                      },
+                      "tasksStartPage": {
+                        "type": "string"
+                      },
+                      "timeBudget": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "timeBudgetId": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "update": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "updateId": {
+                        "type": "integer"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "updatedBy": {
+                        "type": "integer"
+                      },
+                      "users": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "users": {
+                "properties": {
+                  "property1": {
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "canAddProjects": {
+                        "type": "boolean"
+                      },
+                      "company": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "companyId": {
+                        "type": "integer"
+                      },
+                      "companyRoleId": {
+                        "type": "integer"
+                      },
+                      "deleted": {
+                        "type": "boolean"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "firstName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "isAdmin": {
+                        "type": "boolean"
+                      },
+                      "isClientUser": {
+                        "type": "boolean"
+                      },
+                      "isServiceAccount": {
+                        "type": "boolean"
+                      },
+                      "lastName": {
+                        "type": "string"
+                      },
+                      "lengthOfDay": {
+                        "type": "integer"
+                      },
+                      "teams": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "userCost": {
+                        "type": "integer"
+                      },
+                      "userRate": {
+                        "type": "integer"
+                      },
+                      "workingHour": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "workingHoursId": {
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "property2": {
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "canAddProjects": {
+                        "type": "boolean"
+                      },
+                      "company": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "companyId": {
+                        "type": "integer"
+                      },
+                      "companyRoleId": {
+                        "type": "integer"
+                      },
+                      "deleted": {
+                        "type": "boolean"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "firstName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "isAdmin": {
+                        "type": "boolean"
+                      },
+                      "isClientUser": {
+                        "type": "boolean"
+                      },
+                      "isServiceAccount": {
+                        "type": "boolean"
+                      },
+                      "lastName": {
+                        "type": "string"
+                      },
+                      "lengthOfDay": {
+                        "type": "integer"
+                      },
+                      "teams": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "meta": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "userCost": {
+                        "type": "integer"
+                      },
+                      "userRate": {
+                        "type": "integer"
+                      },
+                      "workingHour": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "meta": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "workingHoursId": {
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "meta": {
+            "properties": {
+              "limit": {
+                "type": "integer"
+              },
+              "nextCursor": {
+                "type": "string"
+              },
+              "page": {
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  },
+                  "hasMore": {
+                    "type": "boolean"
+                  },
+                  "pageOffset": {
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              "prevCursor": {
+                "type": "string"
+              },
+              "totalCapacity": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "projectUpdates": {
+            "items": {
+              "properties": {
+                "color": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "createdBy": {
+                  "type": "integer"
+                },
+                "deleted": {
+                  "type": "boolean"
+                },
+                "deletedAt": {
+                  "type": "string"
+                },
+                "deletedBy": {
+                  "type": "integer"
+                },
+                "health": {
+                  "type": "integer"
+                },
+                "healthLabel": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "likeFromUserIDs": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "likeFromUsers": {
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "meta": {
+                        "type": "object"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "project": {
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "meta": {
+                      "type": "object"
+                    },
+                    "type": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "projectId": {
+                  "type": "integer"
+                },
+                "reactions": {
+                  "properties": {
+                    "counts": {
+                      "properties": {
+                        "dislike": {
+                          "type": "integer"
+                        },
+                        "frown": {
+                          "type": "integer"
+                        },
+                        "heart": {
+                          "type": "integer"
+                        },
+                        "joy": {
+                          "type": "integer"
+                        },
+                        "like": {
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "mine": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "models.ProjectUpdateResponseV1": {
+        "properties": {
+          "STATUS": {
+            "type": "string"
+          },
+          "updates": {
+            "items": {
+              "$ref": "#/components/schemas/models.ProjectUpdateV1"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "models.ProjectUpdateV1": {
+        "properties": {
+          "color": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedDate": {
+            "type": "string"
+          },
+          "health": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "projectStatus": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "user": {
+            "properties": {
+              "avatarUrl": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "fullName": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
       "models.ProjectV1": {
         "properties": {
           "tags": {
@@ -3003,6 +4833,53 @@
           },
           "type": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "models.ReturnedMilestone": {
+        "properties": {
+          "included": {
+            "$ref": "#/components/schemas/models.Included"
+          },
+          "milestones": {
+            "$ref": "#/components/schemas/models.Milestone"
+          }
+        },
+        "type": "object"
+      },
+      "models.ReturnedMilestones": {
+        "properties": {
+          "included": {
+            "$ref": "#/components/schemas/models.Included"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  },
+                  "hasMore": {
+                    "type": "boolean"
+                  },
+                  "pageOffset": {
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "milestones": {
+            "items": {
+              "$ref": "#/components/schemas/models.Milestone"
+            },
+            "type": "array"
           }
         },
         "type": "object"
