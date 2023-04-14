@@ -1,43 +1,36 @@
 # Kosha Teamwork Connector
 
-Teamwork is a project management platform that provides a variety of tools to keep teams on track.
+Teamwork is a project management and collaboration platform that helps teams plan, manage, adn deliver projects of any size.
 
-The connector APIs allow you to perform 'RESTful' operations such as reading, modifying, adding or deleting data from your projects. The APIs also support Cross-Origin Resource Sharing (CORS).
+![Teamwork](images/teamwork.png)
 
+Using the Kosha Teamwork connector, you can perform REST API operations such as reading, modifying, adding, or deleting data from your projects. The connector also supports Cross-Origin Resource Sharing (CORS).
 
-![Teamwork](images/teamwork.jpg)
-
-
-## What is possible with Teamwork APIs?
-
-The Teamwork APIs provide your applications with direct access to the Teamwork, giving you the ability to:
+This Kosha Teamwork connector exposes REST API endpoints to perform any operations on Teamwork APIs in a simple, quick and intuitive fashion. Using the Teamwork API, your Kosha workflow or application can directly access the Teamwork platform to:
 
 * Manage people information
 * Get milestones
 * Manage project lifecycle
 * Manage project risks
-* Manage projects tasks and tasklists
-* Manage timeentry information
-and much more!
-
-
-This Connector API exposes REST API endpoints to perform any operations on Teamwork APIs in a simple, quick and intuitive fashion.
-
-It describes various API operations, related request and response structures, and error codes.
+* Manage projects tasks and task lists
+* Manage time entry information
+* and much more!
 
 ## Useful Actions 
 
+Use the Kosha Teamwork connector to perform several useful operations to manage your Teamwork resources.
+
 ### People
 
-Get all available people data over projects, milestones, for a task etc.
+Get all available people data for projects, milestones, and tasks
 
 ### Projects
 
-Retrieve all available projects within Teamwork, and manage their lifecycle (for resources that the authenticated user is associated with)
+Retrieve all available projects within Teamwork and manage their life cycles (for resources that the authenticated user is associated with)
 
 ### Milestones
 
-All milestones are returned on projects that the authenticated user is associated with. You can use the provided filters to return only those milestones that are incomplete, completed, upcoming or late.
+Get all milestones for on projects that the authenticated user is associated with. Use filters to return only those milestones that are incomplete, completed, upcoming, or late.
 
 ### Risks
 
@@ -45,9 +38,9 @@ Manage project risks.
 
 ### Tasks / Tasklist
 
-Manage projects tasks / taskslist.
+Manage projects tasks and task lists.
 
-Refer to the Teamwork connector [API specification](openapi.json) for details.
+Refer to the Kosha Teamwork connector [API specification](openapi.json) for details.
 
 ## Example Usage
 
@@ -55,9 +48,7 @@ Refer to the Teamwork connector [API specification](openapi.json) for details.
 
 ## Authentication
 
-To use the Teamwork Connector, you need your Teamwork URL and API Key.
+To use the Kosha Teamwork Connector, you need your Teamwork URL and API Key.
 
-Your URL can be found in the settings of your Teamwork site. If you navigate to the settings tab on the top right corner of your site and click on general. Your main project settings will appear you will see your URL there under 'Site Address'. You use this when pinging the API.
-
-Your API token can be found by logging into your Teamwork account, clicking your avatar in the top right and choosing Edit my details. On the API tab of the dialog click the "Show your token" at the bottom (under "API Authentication tokens").
+See the [Teamwork API docs](https://apidocs.teamwork.com/docs/teamwork/d1b2de52c3cec-api-key-and-url) for details. 
 
