@@ -4,7 +4,7 @@ Teamwork is a project management and collaboration platform that helps teams pla
 
 ![Teamwork](images/teamwork.png)
 
-Using the Kosha Teamwork connector, you can perform REST API operations such as reading, modifying, adding, or deleting data from your projects. The connector also supports Cross-Origin Resource Sharing (CORS).
+Using the Kosha Teamwork connector, you can perform REST API operations such as reading, modifying, adding, or deleting data from your projects.
 
 This Kosha Teamwork connector exposes REST API endpoints to perform any operations on Teamwork APIs in a simple, quick and intuitive fashion. Using the Teamwork API, your Kosha workflow or application can directly access the Teamwork platform to:
 
