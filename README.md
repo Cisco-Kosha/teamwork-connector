@@ -14,7 +14,6 @@ This Kosha Teamwork connector exposes REST API endpoints to perform any operatio
 * Manage project risks
 * Manage projects tasks and task lists
 * Manage time entry information
-* and much more!
 
 ## Useful Actions 
 
