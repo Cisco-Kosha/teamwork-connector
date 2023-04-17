@@ -21,11 +21,11 @@ Use the Kosha Teamwork connector to perform several useful operations to manage 
 
 ### People
 
-Get all available people data for projects, milestones, and tasks
+Get all available people data for projects, milestones, and tasks.
 
 ### Projects
 
-Retrieve all available projects within Teamwork and manage their life cycles (for resources that the authenticated user is associated with)
+Retrieve all available projects within Teamwork and manage their life cycles (for resources that the authenticated user is associated with).
 
 ### Milestones
 
@@ -41,7 +41,21 @@ Manage projects tasks and task lists.
 
 ## Example Usage
 
-< sdk example? >
+The following request creates a new project: 
+
+```
+curl --request POST \
+  --url https://stoplight.io/mocks/teamwork-dot-com/teamwork/42258908/projects.json \
+  --header 'Authorization: Basic aXNhYWM6' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "project": {
+    "name": "New Project",
+    "description": "My Big New Project",
+    "start-date": "20230131",
+    "end-date": "20230131",
+  }
+```
 
 ## Authentication
 
