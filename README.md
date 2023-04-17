@@ -17,7 +17,7 @@ This Kosha Teamwork connector exposes REST API endpoints to perform any operatio
 
 ## Useful Actions 
 
-Use the Kosha Teamwork connector to perform several useful operations to manage your Teamwork resources.
+Use the Kosha Teamwork connector to perform several useful operations to manage your Teamwork resources. Refer to the Kosha Teamwork connector [API specification](openapi.json) for details.
 
 ### People
 
@@ -38,8 +38,6 @@ Manage project risks.
 ### Tasks / Tasklist
 
 Manage projects tasks and task lists.
-
-Refer to the Kosha Teamwork connector [API specification](openapi.json) for details.
 
 ## Example Usage
 
