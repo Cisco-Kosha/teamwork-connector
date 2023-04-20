@@ -4,14 +4,12 @@
 
 Teamwork is a project management and collaboration platform that helps teams plan, manage, and deliver projects of any size.
 
-The Kosha Teamwork connector exposes REST API endpoints to perform any operations on Teamwork APIs in a quick and intuitive fashion. Using the Teamwork API, your Kosha workflow or custom application can directly access the Teamwork platform to:
+The Kosha Teamwork connector enables you to perform REST API operations from the Teamwork API in your Kosha workflow or custom application. Using the Kosha Teamwork connector, you can directly access the Teamwork platform to:
 
 * Manage people information
 * Get milestones
-* Manage project lifecycle
+* Manage project lifecycles, risks, and tasks
 * Manage project risks
-* Manage projects tasks and task lists
-* Manage time entry information
 
 ## Useful Actions 
 
