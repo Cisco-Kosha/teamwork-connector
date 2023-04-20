@@ -43,7 +43,7 @@ curl --request POST \
 
 ## Authentication
 
-To use the Kosha Teamwork Connector, you need your Teamwork URL and API Key.
+To use the Kosha Teamwork Connector, you need your Teamwork URL and API key.
 
-See the [Teamwork API docs](https://apidocs.teamwork.com/docs/teamwork/d1b2de52c3cec-api-key-and-url) for details. 
+See the [Teamwork API docs](https://apidocs.teamwork.com/docs/teamwork/d1b2de52c3cec-api-key-and-url) for details on retrieving your URL and API key. 
 
