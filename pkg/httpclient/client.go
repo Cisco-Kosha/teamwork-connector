@@ -695,7 +695,6 @@ func GetTasksAllProjects(url string, username string, password string, params ur
 	return nil, tasks
 }
 
-
 func GetProjectRisksV3(url string, project_id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedRisks) {
 
 	if getRespHeaders {
@@ -772,10 +771,10 @@ func GetAllMilestones(url string, username string, password string, params url.V
 func GetProjectMilestones(url string, id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedMilestones) {
 
 	if getRespHeaders {
-		return GetResponseHeaders(username, password, url+"projects/api/v3/projects/" + id + "/milestones.json", params), nil
+		return GetResponseHeaders(username, password, url+"projects/api/v3/projects/"+id+"/milestones.json", params), nil
 	}
 
-	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/" + id + "/milestones.json", nil)
+	req, err := http.NewRequest("GET", url+"projects/api/v3/projects/"+id+"/milestones.json", nil)
 
 	if err != nil {
 		fmt.Println("Error creating new request: ", err)
@@ -795,10 +794,10 @@ func GetProjectMilestones(url string, id string, username string, password strin
 func GetSingleMilestone(url string, id string, username string, password string, params url.Values, getRespHeaders bool) (http.Header, *models.ReturnedMilestone) {
 
 	if getRespHeaders {
-		return GetResponseHeaders(username, password, url+"projects/api/v3/milestones/" + id + ".json", params), nil
+		return GetResponseHeaders(username, password, url+"projects/api/v3/milestones/"+id+".json", params), nil
 	}
 
-	req, err := http.NewRequest("GET", url+"projects/api/v3/milestones/" + id + ".json", nil)
+	req, err := http.NewRequest("GET", url+"projects/api/v3/milestones/"+id+".json", nil)
 
 	if err != nil {
 		fmt.Println("Error creating new request: ", err)

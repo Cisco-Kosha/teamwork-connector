@@ -14,7 +14,7 @@ type Config struct {
 func Get() *Config {
 	conf := &Config{}
 
-	flag.StringVar(&conf.username, "username", os.Getenv("USERNAME"), "Teamwork Username")
+	flag.StringVar(&conf.username, "username", os.Getenv("USERNAMES"), "Teamwork Username")
 	flag.StringVar(&conf.password, "password", os.Getenv("PASSWORD"), "Teamwork Password")
 	flag.StringVar(&conf.domainName, "teamworkDomainName", os.Getenv("DOMAIN_NAME"), "Teamwork Domain Name")
 
