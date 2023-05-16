@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	MQTT_SVC_PUBLISH_URL = "http://localhost:19000/publish" //TODO add to pkg/config/
+	MQTT_SVC_PUBLISH_URL = "http://localhost:19000/api/v1/publish" //TODO add to pkg/config/
 )
 
 //Event body to be sent in Publish API call to mqtt-svc

@@ -84,12 +84,14 @@ func (a *App) getAllProjectsV1(w http.ResponseWriter, r *http.Request) {
 		projects = append(projects, p)
 	}
 
-	//custom logic to handle project created event successful
-	err = httpclient.ProcessCreateProjectEvent(projects)
+	/////////////////////////////////////////////////////
+	//custom logic to handle get projects event successful
+	/*err = httpclient.ProcessCreateProjectEvent(projects)
 	if err != nil {
 		a.Log.Errorf("Error ProcessCreateProjectEvent", err)
 		respondWithError(w, http.StatusInternalServerError, err.Error())
-	}
+	}*/
+	/////////////////////////////////////////////////////
 
 	respondWithJSON(w, http.StatusOK, projects)
 }
@@ -180,12 +182,14 @@ func (a *App) createProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	/////////////////////////////////////////////////////
 	//custom logic to handle project created event successful
 	err = httpclient.ProcessCreateProjectEvent(res)
 	if err != nil {
 		a.Log.Errorf("Error ProcessCreateProjectEvent", err)
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 	}
+	////////////////////////////////////////////////////////
 
 	respondWithJSON(w, http.StatusOK, res)
 }
