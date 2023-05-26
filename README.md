@@ -38,6 +38,10 @@ Manage projects tasks and task lists.
 To authenticate when provisioning the Kosha Teamwork connector, you need your:
 
 * Teamwork URL
-* API key.
+* API key
 
-See the [Teamwork API docs](https://apidocs.teamwork.com/docs/teamwork/d1b2de52c3cec-api-key-and-url) for details on retrieving your URL and API key. 
+## Kosha Connector Open Source Development
+
+All connectors Kosha shares on the marketplace are open source. We believe in fostering collaboration and open development. Everyone is welcome to contribute their ideas, improvements, and feedback for any Kosha connector. We encourage community engagement and appreciate any contributions that align with our goals of an open and collaborative API management platform.
+
+Refer to the contribution guidelines for details.
